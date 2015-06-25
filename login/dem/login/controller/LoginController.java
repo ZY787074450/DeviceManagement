@@ -74,7 +74,7 @@ public class LoginController {
 				map.addAttribute("msg", "系统异常无法登录！");
 				return "redirect:/index/login.html?msg=系统异常无法登录！";
 			}
-		} else {// 已登录则跳至主页
+		} else {// 已登录则跳至主页    
 			return "redirect:/index/index.html?username="+username;
 		}
 	}
