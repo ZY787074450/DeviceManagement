@@ -64,12 +64,12 @@
 		<!-- 加载本地mybatis配置路径 -->
 		<property name="configLocation" value="classpath:mybatis-config.xml" />
 		<!-- 加载xml映射配置文件 -->
-		<property name="mapperLocations" value="classpath*:easybuy/**/mapper/*.xml"></property>
+		<property name="mapperLocations" value="classpath*:dem/**/mapper/*.xml"></property>
 	</bean>
 	
 	<!-- 配置接口方式产生dao bean -->
 	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-		<property name="basePackage" value="easybuy.managers.mapper" />
+		<property name="basePackage" value="dem.login.mapper" />
 		<property name="sqlSessionFactoryBeanName" value="sessionFactory" />
 	</bean>
 	<!-- 配置mybatis的操作模板工具类 -->
@@ -113,7 +113,7 @@
 	</tx:advice>
 	
 	<aop:config>
-		<aop:pointcut id="transactionPointcut"	expression="execution(* easybuy.*.service.impl.*.*(..))" />
+		<aop:pointcut id="transactionPointcut"	expression="execution(* dem.*.service.impl.*.*(..))" />
 		<aop:advisor pointcut-ref="transactionPointcut"	advice-ref="transactionAdvice" />
 	</aop:config>
 	

@@ -27,17 +27,7 @@
 	<!-- 配置类型别名，可以在xml中用别名取代全限定名 -->
 	<typeAliases>
 	    <!-- 扫描包中所有的类  -->
-	    <package name="easybuy.buyers.model"/>
-		<package name="easybuy.sellers.model"/> 
-		<package name="easybuy.managers.model"/>
-		<package name="easybuy.shop.model"/>
+	    <package name="*.mapper"/>
 	</typeAliases>
-	
-	<!-- 配置映射类
-	<mappers>
-	  <package name="easybuy.buyers.mapper"/>
-	  <package name="easybuy.sellers.mapper"/>
-	</mappers>
-	-->
 	
 </configuration>
