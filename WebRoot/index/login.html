@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<link href="../bootstrap/css/bootstrap.css" type="text/css" rel="stylesheet" />
+<style type="text/css">
+	body{
+		background: url("login_background.png") no-repeat;
+		background-position: top;
+	}
+	.div_center{
+		position: absolute;
+		top: 30%;
+		left: 25%;
+		transform: translate(-30%, -25%)
+	}
+	#loginarea{
+		width : 350px;
+		display: block;
+		float: left;
+		padding: 20px 50px 5px 0px;
+		background-color: gray;
+	}
+	#logindiv{
+		float: right;
+		display: block;
+	}
+</style>
+<title>用户登录</title>
+</head>
+<body>
+	<div class="div_center">
+		<div id="loginarea">
+			<div id="logindiv">
+				<form id="login_message" class="form-horizontal">
+					<div class="control-group">
+						<label class="control-label" for="username">用户名：</label>
+						<div class="controls">
+							<input id="loginname" type="text" />
+						</div>
+					</div>
+					<div class="control-group">
+						<label class="control-label" for="password">密码：</label>
+						<div class="controls">
+							<input id="password" type="password" />
+						</div>
+					</div>
+					<div class="control-group">
+						<div class="controls">
+							<a class="btn btn-primary" href="#" onclick="click_submit()">登录</a>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
+<script src="jquery.js" type="text/javascript"></script>
+<script src="../bootstrap/js/bootstrap.js" type="text/javascript"></script>
+<script src="login.js" type="text/javascript"></script>

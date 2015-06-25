@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:util="http://www.springframework.org/schema/util" 
+       xsi:schemaLocation="http://www.springframework.org/schema/beans   
+                           http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.springframework.org/schema/context 
+                           http://www.springframework.org/schema/context/spring-context-2.5.xsd
+                           http://www.springframework.org/schema/util 
+                           http://www.springframework.org/schema/util/spring-util-3.1.xsd">
+    <!-- spring基础配置 -->
+
+	<!-- 读取属性配置文件 -->
+	<context:property-placeholder location="classpath:config.properties" /> 
+	
+	<!-- 构造spring容器自己的属性对象
+                        以便spring使用@Value("#{messagesettings['url']}")在程序内部注入 
+                        主要针对短息通道相关参数的注入
+      -->     
+    <util:properties id="messagesettings">
+       <prop key="url">${message.url}</prop>
+       <prop key="account">${message.account}</prop>
+       <prop key="password">${message.password}</prop>
+       <prop key="connectTimeout">${message.connectTimeout}</prop>
+       <prop key="socketTimeout">${message.socketTimeout}</prop>
+       <prop key="sendok">${message.sendok}</prop>
+       <prop key="sendflag">${message.sendflag}</prop>
+    </util:properties>
+
+    <!-- 构造上传图片的压缩属性 -->
+    <util:properties id="picsettings">
+       <prop key="qality">${pic.qality}</prop>
+       <prop key="fix">${pic.fix}</prop>
+       <prop key="maxSize">${file.maxUploadSize}</prop>
+    </util:properties>
+   
+    <!-- 构造webpath上传图片属性 -->
+    <util:properties id="serversettings">
+       <prop key="url">${server.url}</prop>
+    </util:properties>
+    
+    <!-- SpringMVC上传文件时，需要配置MultipartResolver处理器 -->
+	<bean id="multipartResolver"
+		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<property name="defaultEncoding" value="${file.defaultEncoding}" />
+		<property name="maxUploadSize" value="${file.maxUploadSize}" />
+		<property name="maxInMemorySize" value="${file.maxInMemorySize}"/>
+	</bean>
+</beans>
