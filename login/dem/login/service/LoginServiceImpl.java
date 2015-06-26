@@ -47,8 +47,8 @@ public class LoginServiceImpl implements LoginService {
 		Map<String, String> m = new HashMap<String, String>();
 		m.put("userid", loginner.getUserid());
 		m.put("menucode", menucode);
-		List list = (List)baseDao.selectList("dem.login.mapper.LoginMapper.loginnerSelect", m);
-		return null;
+		List list = (List)baseDao.selectList("dem.login.mapper.LoginMapper.menusSelect", m);
+		return list;
 	}
 
 }
