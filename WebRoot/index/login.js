@@ -2,18 +2,18 @@
  * 
  */
 FormOp={
-	loginname : "",
-	password : "",
+	userid : "",
+	userpass : "",
 	
 	initdata : function(){
-		FormOp.loginname = $("#loginname").val();
-		FormOp.password = $("#password").val();
+		FormOp.userid = $("#userid").val();
+		FormOp.userpass = $("#userpass").val();
 	},
 	validate : function(){
 		FormOp.initdata();
-		if(FormOp.loginname=="")
+		if(FormOp.userid=="")
 			return false;
-		if(FormOp.password=="")
+		if(FormOp.userpass=="")
 			return false;
 		return true;
 	}
@@ -21,14 +21,8 @@ FormOp={
 
 function click_submit(){
 	if(FormOp.validate()){
-		$.ajax({
-			url : "/DeviceManagement/user/login.do",
-			type : "POST",
-			data : FormOp,
-			success : function(data){
-				
-			}
-		});
+		$("#login_message").submit();
+		
 	}else{
 		alert("用户名、密码不能为空!");
 	}

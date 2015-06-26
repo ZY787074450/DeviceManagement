@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dem.login.mapper.LoginMapper">
+
+<!-- 用户登录验证 -->
+<select id="loginnerSelect"  parameterType="dem.login.model.Loginner"  resultType="dem.login.model.Loginner" >
+	SELECT * 
+	FROM ss_user 
+	WHERE userpass = #{userpass}
+	AND  userid = #{userid}
+</select>
+
+<!-- 用户登录验证 -->
+<select id="menusSelect"  parameterType="Map"  resultType="List" >
+	SELECT * 
+	FROM ss_menu 
+	WHERE menu_pid = #{menucode}
+	AND menu_id in (select menu_id from ss_privilege where userid = #{userid})
+</select>
+
+</mapper>

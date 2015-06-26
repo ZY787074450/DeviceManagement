@@ -1,5 +1,9 @@
 package dem.login.service;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
@@ -29,9 +33,22 @@ public class LoginServiceImpl implements LoginService {
 	 */
 	@Override
 	public Loginner userLogin(Loginner loginner) {
-		loginner.setPassword(SHA.instance.getEncryptResult(loginner.getPassword()));
-		Loginner l= (Loginner)baseDao.selectOne("SQL语句地址", loginner);
+		loginner.setUserpass(SHA.instance.getEncryptResult(loginner.getUserpass()));
+		Loginner l= (Loginner)baseDao.selectOne("dem.login.mapper.LoginMapper.loginnerSelect", loginner);
 		return l;
+	}
+
+	/**
+	 * 获取用户对应可执行菜单
+	 * @author zhangah
+	 */
+	@Override
+	public List getMenus(Loginner loginner, String menucode) {
+		Map<String, String> m = new HashMap<String, String>();
+		m.put("userid", loginner.getUserid());
+		m.put("menucode", menucode);
+		List list = (List)baseDao.selectList("dem.login.mapper.LoginMapper.loginnerSelect", m);
+		return null;
 	}
 
 }

@@ -27,6 +27,7 @@
 	<!-- 配置类型别名，可以在xml中用别名取代全限定名 -->
 	<typeAliases>
 	    <!-- 扫描包中所有的类  -->
+	    <package name="*"/>
 	    <package name="*.mapper"/>
 	</typeAliases>
 	
