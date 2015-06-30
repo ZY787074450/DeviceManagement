@@ -10,8 +10,8 @@
 	AND  userid = #{userid}
 </select>
 
-<!-- 用户登录验证 -->
-<select id="menusSelect"  parameterType="Map"  resultType="List" >
+<!-- 获取菜单 -->
+<select id="menusSelect"  parameterType="Map"  resultType="Map" >
 	SELECT * 
 	FROM ss_menu 
 	WHERE menu_pid = #{menucode}

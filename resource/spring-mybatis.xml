@@ -70,7 +70,6 @@
 	<!-- 配置接口方式产生dao bean -->
 	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
 		<property name="basePackage" value="dem.login.mapper" />
-		<property name="basePackage" value="dem.login.model" />
 		<property name="sqlSessionFactoryBeanName" value="sessionFactory" />
 	</bean>
 	<!-- 配置mybatis的操作模板工具类 -->
