@@ -51,4 +51,11 @@ public class LoginServiceImpl implements LoginService {
 		return list;
 	}
 
+	@Override
+	public List getMenucodeList(Loginner loginner) {
+		List list = null;
+		list = (List)baseDao.selectList("dem.login.mapper.LoginMapper.menucodeListSelect", loginner.getUserid());
+		return list;
+	}
+
 }

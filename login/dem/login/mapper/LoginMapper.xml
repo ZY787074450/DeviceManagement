@@ -2,6 +2,13 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="dem.login.mapper.LoginMapper">
 
+<!-- 查询用户对应所有菜单权限代码 -->
+<select id="menucodeListSelect"  parameterType="String"  resultType="Map" >
+	select ss_privilege.menu_id,ss_menu.menu_mc,ss_privilege.userid 
+	from ss_privilege left join ss_menu on ss_privilege.menu_id = ss_menu.menu_id 
+	where userid = #{userid}
+</select>
+
 <!-- 用户登录验证 -->
 <select id="loginnerSelect"  parameterType="dem.login.model.Loginner"  resultType="dem.login.model.Loginner" >
 	SELECT * 
@@ -16,6 +23,7 @@
 	FROM ss_menu 
 	WHERE menu_pid = #{menucode}
 	AND menu_id in (select menu_id from ss_privilege where userid = #{userid})
+	ORDER BY tjpx
 </select>
 
 </mapper>

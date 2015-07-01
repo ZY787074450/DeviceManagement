@@ -17,20 +17,18 @@ function getTime(){
 			weektime = str[i];
 		}
 	}
-	$("#nowtime").text(datestr.getFullYear()+"-"+datestr.getMonth()+"-"+datestr.getDate()+" "+weektime);
+	$("#nowtime").text(datestr.getFullYear()+"-"+(datestr.getMonth()+1)+"-"+datestr.getDate()+" "+weektime);
 }
 function setLoginname(){
-	var loginname = "未知";
-	var str = (window.location.href).split("?");
-	if(str.length>1){
-		var params = str[1].split("&");
-		for(var i=0;i<params.length;i++){
-			if((params[i].split("="))[0]=="username"){
-				loginname = decodeURI((params[i].split("="))[1]);
-			}
+	$.ajax({
+		url : "/DeviceManagement/user/getusername.do",
+		type : "POST",
+		data : "",
+		success : function(data){
+			$("#userid").html(data.name);
 		}
-	}
-	$("#userid").html(loginname);
+	});
+	
 }
 //加载一级父菜单并布局操作区
 function fatherMenuList(){
@@ -76,25 +74,39 @@ function menulist(dividname,menucode,fathername){
 							+'<a href="#" >'
 							+'<i class="icon-list"></i>'
 							+'<span class="menu-text">'+fathername+'</span>'
-							+'</a><ul class="submenu" id="ul_'+dividname+'">';
+							+'</a><ul class="nav nav-list" id="ul_'+dividname+'">';
 			if(data.menudatas != null && data.menudatas != 'null' && data.menudatas.length > 0){
 				var menuArray = data.menudatas;
 				for(var i=0;i<menuArray.length;i++){
-					menu_html += '<li id="li_'+menuArray[i].MENU_CJ+'_'+menuArray[i].TJPX+'"><a href="#" onclick="openWin(\'此处为菜单对应的URL地址\')"><i class="icon-double-angle-right"></i>'+menuArray[i].MENU_MC+'</a></li>';
+					menu_html += '<li class="SecondLevelMenu" id="li_'+menuArray[i].MENU_ID+'"><a href="#" onclick="openWin(\''+menuArray[i].MENU_URL+'\',\''+menuArray[i].MENU_ID+'\',\''+dividname+'\')"><i class="icon-double-angle-right"></i>'+menuArray[i].MENU_MC+'</a></li>';
 				}
 			}
 			menu_html += '</ul></li></ul>';
-			$("#"+dividname).html(menu_html);
+			$("#"+dividname+"_menulist").html(menu_html);
+			
 		}
 	});
+	$("#"+dividname+"_workarea").html("");
 }
 //递归函数，装载多级菜单列表,fathercode父菜单代码,menulist菜单列表data数组(暂不使用)
 function repeatLoad(fathercode,menulist){	
 }
 
-//操作区加载菜单对应功能地址页面
-function openWin(urlstr){
+//点击菜单后操作区加载菜单对应功能地址页面(菜单代码无效,暂不使用)，对应菜单样式激活，其他菜单样式冻结
+function openWin(urlstr,menucode,dividname){
+	menuStateSet(menucode);
 	
+	var htmlstr = '<iframe src="'+urlstr+'" width="98%" height="98%" frameborder="no" border="0" marginwidth="0" marginheight="0" scrolling="no" allowtransparency="yes"></iframe>';
+	$("#"+dividname+"_workarea").html(htmlstr);
 }
 
+//对应菜单样式激活，其他菜单样式冻结
+function menuStateSet(menucode){
+	$(".SecondLevelMenu").each(function(i){
+		if($(this).hasClass("btn-info")){
+			$(this).removeClass("btn-info");
+		}
+	});
+	$("#li_"+menucode).addClass("btn-info");
+}
 

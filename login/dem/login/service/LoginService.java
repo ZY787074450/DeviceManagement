@@ -12,4 +12,7 @@ public interface LoginService {
 	//获取用户对应可执行菜单
 	public List getMenus(Loginner loginner, String menucode);
 	
+	//用户对应所有菜单代码
+	public List getMenucodeList(Loginner loginner);
+	
 }

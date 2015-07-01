@@ -4,6 +4,10 @@
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/login"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/comm"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/resource"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/jcxx"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/sbgl"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/yjgl"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/tjcx"/>
         <property name="java-output-path" value="/DeviceManagement/build/classes"/>
         <property name="context-root" value="DeviceManagement"/>
     </wb-module>

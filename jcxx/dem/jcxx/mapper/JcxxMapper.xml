@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dem.jcxx.mapper.JcxxMapper">
+
+
+
+<!-- 条件查询系统操作人员 -->
+<select id="userlistQuery" parameterType="dem.jcxx.model.UserQueryCondition" resultType="Map">
+	select userid,mc,jgid,tel,userzt,note 
+	from ss_user
+	where 1=1 
+	<if test="userid != null and userid != ''">
+		and userid like "%"#{userid}"%" 
+	</if>
+	<if test="mc != null and mc != ''">
+		and mc like "%"#{mc}"%" 
+	</if>
+	<if test="jgid != null and jgid != ''">
+		and jgid like "%"#{jgid}"%" 
+	</if>
+	<if test="tel != null and tel != ''">
+		and tel like "%"#{tel}"%" 
+	</if>
+	<if test="userzt != null and userzt != ''">
+		and userzt = #{userzt} 
+	</if>
+	<if test="lrrq_start != null and lrrq_start != ''">
+		and lrrq &gt; #{lrrq_start} 
+	</if>
+	<if test="lrrq_end != null and lrrq_end != ''">
+		and lrrq &lt; #{lrrq_end} 
+	</if>
+</select>
+
+</mapper>
