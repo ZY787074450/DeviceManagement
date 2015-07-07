@@ -2,16 +2,199 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<link href="../bootstrap/css/bootstrap.css" type="text/css" rel="stylesheet" />
+<style type="text/css">
+	#data_table tr>th{
+		text-align: center;
+	}
+	#data_table tr>td{
+		text-align: center;
+	}
+	#condition_table tr>th{
+		text-align: right;
+	}
+	#greyground{
+		display:none;
+		width:100%;
+		height:100%;
+		background-color: #CFCFCF;
+		filter: Alpha(Opacity=50);
+	 	-moz-opacity:0.8; 
+     	opacity:0.8; 
+
+	 	background-position:center;
+		z-index:111;
+		position:absolute;
+		top:0;
+		left:0;
+	}
+	#loading{
+		position: absolute;
+		top: 30%;
+		left: 40%;
+		transform: translate(-30%, -15%);
+		display:none;
+		background-color: #E0F2F7;
+		z-index:1111;
+	}
+	.floatarea{
+		position: absolute;
+		top: 30%;
+		left: 40%;
+		transform: translate(-30%, -15%);
+		display:none;
+		background-color: #E0F2F7;
+		z-index:1111;
+		border: 1px solid grey;
+	}
+	input.sel{
+		width: 170px;
+		margin: 0px 0px 0px 0px;
+	}
+</style>
 <title>人员维护</title>
 </head>
-<body>
+<body style="height: 100%;background-color: #E0F2F7">
 	<div id="czq">
-		<div>
+		<div class="well well-small" style="margin-bottom: 0px"><font color="#0088CC" size="+1"><i class="icon-wrench"></i><b>人员维护</b></font></div>
+		<div style="background-color: #E0F2F7">
+			<ul class="nav nav-tabs" style="margin-bottom: 0px;">
+				<li class="active" style="width: 100px;"><a href="#conditionarea" data-toggle="tab" style="background-color: #CBF0FA;"><font color="#777777"><b>查询条件:</b></font></a></li>
+			</ul>
+			<div id="conditionarea" class="tab-pane fade in active" style="padding-top: 10px;padding-left: 15px;padding-right: 15px;padding-bottom: 10px;background-color: #CBF0FA;border-left: 1px solid #DDDDDD;border-right: 1px solid #DDDDDD;border-bottom: 1px solid #DDDDDD;">
+				<table id="condition_table" style="width: 100%">
+					<tr style="width: 100%">
+						<td>&nbsp;人员编号：</td>
+						<td><input class="sel" type="text" placeholder="模糊匹配..." id="condition_userid" />&nbsp;</td>
+						<td>&nbsp;所属机构编号：</td>
+						<td><input class="sel" type="text" placeholder="模糊匹配..." id="condition_jgid" />&nbsp;</td>
+						<td>&nbsp;姓名：</td>
+						<td><input class="sel" type="text" placeholder="模糊匹配..." id="condition_mc" />&nbsp;</td>
+						<td>&nbsp;人员状态：</td>
+						<td>
+							<input type="radio" name="condition_userzt" value="" checked="checked" />全部&nbsp;
+							<input type="radio" name="condition_userzt" value="0" />正常&nbsp;
+							<input type="radio" name="condition_userzt" value="1" />注销&nbsp;
+						</td>
+					</tr>
+					<tr>
+						<td>&nbsp;联系电话：</td>
+						<td><input class="sel" type="text" placeholder="模糊匹配..." id="condition_tel" />&nbsp;</td>
+						<td></td><td></td><td></td><td></td>
+						<!-- <td>&nbsp;录入日期：</td>
+						<td>
+							<input class="sel" type="text" placeholder="之前所有..." id="condition_lrrq_start" />
+						</td>
+						<td style="text-align: center">&nbsp;至&nbsp;</td>
+						<td>
+							<input class="sel" type="text" placeholder="之后所有..." id="condition_lrrq_end" />
+						</td> -->
+						<td colspan="2">
+							<a href="#" class="btn btn-primary" title="查询" onclick="queryuserlist()"><i class="icon-search"></i>查询</a>	
+						</td>
+					</tr>
+				</table>
+			</div>
+		</div>
+		<div style="height: 425px; background-color: white">
 			<table class="table" id="data_table">
-				表格数据区域
+				
+			</table>
+		</div>
+		<div style="background-color: #E0F2F7;padding-top: 3px;">
+			<a href="#" class="btn btn-primary" title="添加人员" onclick="addmanager()"><i class="icon-pencil"></i>添加人员</a>
+		</div>
+		
+	</div>
+	<div id="greyground"><div></div></div>
+	<div id="loading"><font color="grey">数据正在处理，请稍等...</font></div>
+	
+	<div class="floatarea" id="add">
+		<div style="background-color: #A7E8FA;height: 30px;padding: 5px 10px 0px 10px;"><font color="#0088CC" size="+1">新增人员</font></div>
+		<div style="padding: 10px 15px 10px 15px;">
+			<table>
+				<tr>
+					<td>姓名：</td>
+					<td><input type="text" placeholder="真实姓名" class="nav-search-input" id="addmc" autocomplete="off" /></td>
+				</tr>
+				<tr>
+					<td>所属机构编号：</td>
+					<td><input type="text" placeholder="机构编号" class="nav-search-input" id="addjgid" autocomplete="off" /></td>
+				</tr>
+				<tr>
+					<td>联系电话：</td>
+					<td><input type="text" placeholder="常用手机号" class="nav-search-input" id="addtel" autocomplete="off" /></td>
+				</tr>
+				<tr>
+					<td>备注：</td>
+					<td><input type="text" placeholder="..." class="nav-search-input" id="addnote" autocomplete="off" /></td>
+				</tr>
+				<tr>
+					<td colspan="2" style="text-align: center"><a href="#" class="btn btn-primary" onclick="addmember()">激活</a>&nbsp; &nbsp;<a href="#" class="btn btn-primary" onclick="greyback()">退出</a></td>
+				</tr>
+				<tr>
+					<td colspan="2">注意事项：<br/>
+					新增人员的初始密码由系统产生，初始密码为‘222222’，<br/>
+					新人员需登录系统修改自身登录密码；<br/>
+					新增员工的初始状态为‘正常’；<br/>
+					激活当前人员时，系统会返回人员编号，<br/>
+					人员编号为登录系统时的用户账号，请牢记。</td>
+				</tr>
 			</table>
 		</div>
 	</div>
+	<div class="floatarea" id="update">
+		<div style="background-color: #A7E8FA;height: 30px;padding: 5px 10px 0px 10px;"><font color="#0088CC" size="+1">更新人员信息</font></div>
+		<div style="padding: 10px 15px 10px 15px;">
+			<table>
+				<tr>
+					<td>人员编号：</td>
+					<td><input type="text" placeholder="人员编号" class="nav-search-input" id="updateuserid" autocomplete="off" readonly="readonly" /></td>
+				</tr>
+				<tr>
+					<td>姓名：</td>
+					<td><input type="text" placeholder="真实姓名" class="nav-search-input" id="updatemc" autocomplete="off" /></td>
+				</tr>
+				<tr>
+					<td>所属机构编号：</td>
+					<td><input type="text" placeholder="机构编号" class="nav-search-input" id="updatejgid" autocomplete="off" /></td>
+				</tr>
+				<tr>
+					<td>联系电话：</td>
+					<td><input type="text" placeholder="常用手机号" class="nav-search-input" id="updatetel" autocomplete="off" /></td>
+				</tr>
+				<tr>
+					<td>备注：</td>
+					<td><input type="text" placeholder="..." class="nav-search-input" id="updatenote" autocomplete="off" /></td>
+				</tr>
+				<tr>
+					<td colspan="2" style="text-align: center"><a href="#" class="btn btn-primary" onclick="updatemember()">保存</a>&nbsp; &nbsp;<a href="#" class="btn btn-primary" onclick="greyback()">关闭</a></td>
+				</tr>
+			</table>
+		</div>
+	</div>
+	<div class="floatarea" id="remove">
+		<div style="background-color: #A7E8FA;height: 30px;padding: 5px 10px 0px 10px;"><font color="#0088CC" size="+1">注销人员</font></div>
+		<div style="padding: 10px 15px 10px 15px;">
+			<table>
+				<tr>
+					<td>人员编号为【<span id="removeuserid"></span>】的用户即将被系统注销，请确认？</td>
+				</tr>
+				<tr><td> &nbsp; </td></tr>
+				<tr>
+					<td style="text-align: center"><a href="#" class="btn btn-primary" onclick="removemember()">确定</a>&nbsp; &nbsp;<a href="#" class="btn btn-primary" onclick="greyback()">返回</a></td>
+				</tr>
+			</table>
+		</div>
+	</div>
+	<div class="floatarea" id="grant">
+		<div style="background-color: #A7E8FA;height: 30px;padding: 5px 10px 0px 10px;"><font color="#0088CC" size="+1">人员权限分配</font></div>
+		<div style="padding: 10px 15px 10px 15px;" id="menuarea">
+			菜单权限数据正在加载，请稍等...
+		</div>
+		<div style="text-align: center;margin: 5px 5px 5px 5px;"><a href="#" id="qd" class="btn btn-primary" onclick="grantmember()" disabled="true">确定</a>&nbsp; &nbsp;<a href="#" class="btn btn-primary" onclick="greyback()">返回</a></div>
+	</div>
+	
 </body>
 </html>
 <script src="../bootstrap/jquery.js" type="text/javascript"></script>

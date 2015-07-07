@@ -42,8 +42,8 @@ public class LoginUserFilter extends OncePerRequestFilter {
 				}else{
 					if(uriStr.indexOf(".do") > 0 && uriStr.indexOf("/getmemus.do")<=0){
 						//配置所有菜单名称对应请求字段
-						String[] menunames = {"人员维护","气象站点及部门维护"};//菜单名称数组
-						String[] menuuris = {"/jcxx/rywh","/jcxx/qxzdjbmwh"};//菜单通用请求地址(与menunames一一对应,需加上父菜单的通用请求地址作为前缀)
+						String[] menunames = {"人员维护","气象站点及部门维护","密码修改"};//菜单名称数组
+						String[] menuuris = {"/jcxx/rywh","/jcxx/qxzdjbmwh","/jcxx/mmxg"};//菜单通用请求地址(与menunames一一对应,需加上父菜单的通用请求地址作为前缀)
 						//此处编写恶意非法请求拦截代码
 						List list = (List)request.getSession().getAttribute("session_menulist");
 						if(null == list){

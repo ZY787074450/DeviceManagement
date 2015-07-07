@@ -6,30 +6,81 @@
 
 <!-- 条件查询系统操作人员 -->
 <select id="userlistQuery" parameterType="dem.jcxx.model.UserQueryCondition" resultType="Map">
-	select userid,mc,jgid,tel,userzt,note 
+	select userid,mc,jgid,tel,userzt,note,to_char(lrrq,'YYYY-mm-dd') as lrrq 
 	from ss_user
 	where 1=1 
 	<if test="userid != null and userid != ''">
-		and userid like "%"#{userid}"%" 
+		and userid like '%'||#{userid}||'%' 
 	</if>
 	<if test="mc != null and mc != ''">
-		and mc like "%"#{mc}"%" 
+		and mc like '%'||#{mc}||'%' 
 	</if>
 	<if test="jgid != null and jgid != ''">
-		and jgid like "%"#{jgid}"%" 
+		and jgid like '%'||#{jgid}||'%' 
 	</if>
 	<if test="tel != null and tel != ''">
-		and tel like "%"#{tel}"%" 
+		and tel like '%'||#{tel}||'%' 
 	</if>
 	<if test="userzt != null and userzt != ''">
-		and userzt = #{userzt} 
+		and userzt = #{userzt}
 	</if>
-	<if test="lrrq_start != null and lrrq_start != ''">
-		and lrrq &gt; #{lrrq_start} 
+	<!-- <if test="lrrq_start != null and lrrq_start != '' and lrrq_start like '%-%-%'">
+		and lrrq &gt; to_date(#{lrrq_start},"YYYY-mm-dd") 
 	</if>
-	<if test="lrrq_end != null and lrrq_end != ''">
-		and lrrq &lt; #{lrrq_end} 
-	</if>
+	<if test="lrrq_end != null and lrrq_end != '' and lrrq_end like '%-%-%'">
+		and lrrq &lt; to_date(#{lrrq_end},"YYYY-mm-dd")  
+	</if> -->
+	order by userid
 </select>
+
+<select id="getLastUserid" parameterType="String" resultType="String">
+	select userid from (select userid,(row_number() over (order by userid desc)) as row_id from ss_user) where row_id=1
+</select>
+
+<insert id="addUser" parameterType="dem.login.model.Loginner" keyColumn="userid">
+	insert into ss_user(userid,mc,userpass,jgid,tel,userzt,note,lrrq) values(#{userid},#{mc},#{userpass},#{jgid},#{tel},'0',#{note},sysdate)
+</insert>
+
+<update id="updateUser" parameterType="dem.login.model.Loginner">
+	update ss_user
+	set mc = #{mc},
+		jgid = #{jgid},
+		tel = #{tel},
+		note = #{note}
+	where userid = #{userid}
+</update>
+
+<update id="removeUser" parameterType="dem.login.model.Loginner">
+	update ss_user
+	set userzt = '1'
+	where userid = #{userid}
+</update>
+
+<select id="getMenusList" parameterType="dem.login.model.Loginner" resultType="Map">
+	select menu_id,menu_mc,menu_pid,tjpx from ss_menu ORDER BY tjpx
+</select>
+
+<select id="getUserMenusList" parameterType="dem.login.model.Loginner" resultType="Map">
+	select menu_id from ss_privilege where userid = #{userid}
+</select>
+
+<delete id="deleteUserMenus" parameterType="String">
+	delete from ss_privilege where userid = #{usercode}
+</delete>
+
+<insert id="setUserMenus" parameterType="Map">
+	insert into ss_privilege(userid,menu_id) values(#{usercode},#{menucode})
+</insert>
+
+<select id="userPasswordSelect"  parameterType="String"  resultType="String" >
+	SELECT userpass 
+	FROM ss_user 
+	where  userid = #{userid} 
+</select>
+<update id="userPasswordSet" parameterType="Map">
+	update ss_user
+	set userpass = #{newpassword}
+	where userid = #{userid}
+</update>
 
 </mapper>

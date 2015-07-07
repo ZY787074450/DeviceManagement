@@ -19,6 +19,12 @@ public interface JcxxService {
 	//系统人员注销
 	public Map<String, Object> userDelete(Loginner loginner, String userid);
 	
-	//系统操作人员权限分配
-	public Map<String, Object> userMenusSet(Loginner loginner, String userid);
+	//系统菜单、用户当前菜单查询
+	public Map<String, Object> getMenusList(Loginner loginner, String userid);
+	
+	//系统角色权限分配
+	public Map<String, Object> userMenusSet(String usermlist, String userid);
+	
+	//人员密码修改
+	public Map<String, Object> setUserPassword(String userid, String oldpassword, String newpassword);
 }

@@ -7,8 +7,8 @@ public class UserQueryCondition {
 	private String jgid;//人员所属机构编号
 	private String tel;//联系电话
 	private String userzt;//人员状态
-	private String lrrq_start;//注册(添加)时间起
-	private String lrrq_zend;//注册(添加)时间止
+	private String lrrq_start;//注册(添加、录入)时间起
+	private String lrrq_zend;//注册(添加、录入)时间止
 	
 	public String getUserid() {
 		return userid;

@@ -27,6 +27,10 @@ function click_submit(){
 		alert("用户名、密码不能为空!");
 	}
 }
+function click_reset(){
+	$("#userid").val("");
+	$("#userpass").val("");
+}
 
 $(document).ready(function(){
 	var str = (window.location.href).split("?");
@@ -38,4 +42,12 @@ $(document).ready(function(){
 			}
 		}
 	}
+	
+	$("#userpass").bind("keyup", function(event) {
+        if (event.keyCode == "13") {
+            //回车执行查询
+            $("#dl").click();
+        }
+    });
+	
 });

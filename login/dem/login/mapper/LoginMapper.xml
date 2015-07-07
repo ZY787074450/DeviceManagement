@@ -14,7 +14,8 @@
 	SELECT * 
 	FROM ss_user 
 	WHERE userpass = #{userpass}
-	AND  userid = #{userid}
+	AND  userid = #{userid} 
+	AND  userzt = '0'
 </select>
 
 <!-- 获取菜单 -->
