@@ -14,8 +14,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import dem.jcxx.model.JgQueryCondition;
 import dem.jcxx.model.UserQueryCondition;
 import dem.jcxx.service.JcxxService;
+import dem.login.model.Department;
 import dem.login.model.Loginner;
 
 
@@ -150,6 +152,67 @@ public class JcxxController {
 			m.put("msg", "系统异常，密码修改失败！");
 		}
 		return m;
+	}
+	
+	//气象站点及部门维护机构条件查询
+	@RequestMapping(value = "/qxzdjbmwh/cx.do", method = RequestMethod.POST,  produces = "application/json")
+	@ResponseBody
+	public Map<String, Object> qxzdjbmwh_cx(JgQueryCondition jgQueryCondition, HttpServletRequest request, HttpServletResponse response){
+		Map<String, Object> map = new HashMap<String, Object>();
+		try{
+			String userid = ((Loginner)(request.getSession().getAttribute("session_loginner"))).getUserid();
+			map = jcxxService.jglistQuery(jgQueryCondition,userid);
+		}catch(Exception e){
+			map.put("code", "888");
+			map.put("info", "查询失败");
+			map.put("jglist", null);
+		}
+		return map;
+	}
+	
+	//气象站点及部门维护新增部门
+	@RequestMapping(value = "/qxzdjbmwh/add.do", method = RequestMethod.POST,  produces = "application/json")
+	@ResponseBody
+	public Map<String, Object> qxzdjbmwh_add(Department department, HttpServletRequest request, HttpServletResponse response){
+		Map<String, Object> map = new HashMap<String, Object>();
+		try{
+			String userid = ((Loginner)(request.getSession().getAttribute("session_loginner"))).getUserid();
+			map = jcxxService.jgInsert(department,userid);
+		}catch(Exception e){
+			map.put("code", "888");
+			map.put("info", "新增失败");
+		}
+		return map;
+	}
+	
+	//气象站点及部门维护信息更新
+	@RequestMapping(value = "/qxzdjbmwh/update.do", method = RequestMethod.POST,  produces = "application/json")
+	@ResponseBody
+	public Map<String, Object> qxzdjbmwh_update(Department department, HttpServletRequest request, HttpServletResponse response){
+		Map<String, Object> map = new HashMap<String, Object>();
+		try{
+			String userid = ((Loginner)(request.getSession().getAttribute("session_loginner"))).getUserid();
+			map = jcxxService.jgUpdate(department,userid);
+		}catch(Exception e){
+			map.put("code", "888");
+			map.put("info", "更新失败");
+		}
+		return map;
+	}
+	
+	//气象站点及部门维护注销部门
+	@RequestMapping(value = "/qxzdjbmwh/remove.do", method = RequestMethod.POST,  produces = "application/json")
+	@ResponseBody
+	public Map<String, Object> qxzdjbmwh_remove(Department department, HttpServletRequest request, HttpServletResponse response){
+		Map<String, Object> map = new HashMap<String, Object>();
+		try{
+			String userid = ((Loginner)(request.getSession().getAttribute("session_loginner"))).getUserid();
+			map = jcxxService.jgDelete(department,userid);
+		}catch(Exception e){
+			map.put("code", "888");
+			map.put("info", "注销失败");
+		}
+		return map;
 	}
 	
 }

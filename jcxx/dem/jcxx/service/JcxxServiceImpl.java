@@ -11,7 +11,9 @@ import org.springframework.stereotype.Service;
 
 import dem.comm.dao.BaseDao;
 import dem.comm.encrypt.SHA;
+import dem.jcxx.model.JgQueryCondition;
 import dem.jcxx.model.UserQueryCondition;
+import dem.login.model.Department;
 import dem.login.model.Loginner;
 
 @Service("jcxxService")
@@ -153,6 +155,79 @@ private BaseDao baseDao;
 			map.put("info", "原密码输入错误！");
 			map.put("userid", userid);
 		}
+
+		return map;
+	}
+
+	//查询机构列表
+	@Override
+	public Map<String, Object> jglistQuery(JgQueryCondition jgQueryCondition, String userid) {
+		Map<String, Object> map = new HashMap<String, Object>();
+
+		List list = new ArrayList();
+		list = baseDao.selectList("dem.jcxx.mapper.JcxxMapper.jglistQuery", jgQueryCondition);
+		map.put("code", "200");
+		map.put("info", "查询成功！");
+		map.put("jglist", list);
+		return map;
+	}
+	
+	//机构新增
+	@Override
+	public Map<String, Object> jgInsert(Department department, String userid) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		String newId = "";
+		try{
+			String sum = (String)baseDao.selectOne("dem.jcxx.mapper.JcxxMapper.getLastJgid", department.getJglx());
+			Integer s = Integer.parseInt(sum);
+			int num = (int)((s + 1)/100000);
+			if(num == 0){
+				newId = ""+(s+1);
+				for(int i=newId.length();i<6;i++){
+					newId = "0"+newId;
+				}
+			}
+		}catch(Exception e){
+			newId = department.getJglx()+"00001";
+			department.setJgid(newId);
+			baseDao.insert("dem.jcxx.mapper.JcxxMapper.addJg",department);
+			map.put("code", "200");
+			map.put("info", "新增成功！");
+			map.put("mc", department.getMc());
+			map.put("jgid", newId);
+
+			return map;
+		}
+		
+		baseDao.insert("dem.jcxx.mapper.JcxxMapper.addJg",department);
+		map.put("code", "200");
+		map.put("info", "新增成功！");
+		map.put("mc", department.getMc());
+		map.put("userid", newId);
+
+		return map;
+	}
+
+	//机构信息数据更新
+	@Override
+	public Map<String, Object> jgUpdate(Department department, String userid) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		baseDao.update("dem.jcxx.mapper.JcxxMapper.updateJg",department);
+		map.put("code", "200");
+		map.put("info", "更新成功！");
+		map.put("jgid", department.getJgid());
+
+		return map;
+	}
+
+	//机构注销
+	@Override
+	public Map<String, Object> jgDelete(Department department, String userid) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		baseDao.update("dem.jcxx.mapper.JcxxMapper.removeJg",department);
+		map.put("code", "200");
+		map.put("info", "注销成功！");
+		map.put("jgid", department.getJgid());
 
 		return map;
 	}

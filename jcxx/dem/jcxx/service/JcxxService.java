@@ -2,7 +2,9 @@ package dem.jcxx.service;
 
 import java.util.Map;
 
+import dem.jcxx.model.JgQueryCondition;
 import dem.jcxx.model.UserQueryCondition;
+import dem.login.model.Department;
 import dem.login.model.Loginner;
 
 public interface JcxxService {
@@ -27,4 +29,17 @@ public interface JcxxService {
 	
 	//人员密码修改
 	public Map<String, Object> setUserPassword(String userid, String oldpassword, String newpassword);
+	
+	//机构条件查询
+	public Map<String, Object> jglistQuery(JgQueryCondition jgQueryCondition, String userid);
+	
+	//机构信息修改更新
+	public Map<String, Object> jgUpdate(Department department, String userid);
+	
+	//机构新增
+	public Map<String, Object> jgInsert(Department department, String userid);
+	
+	//机构注销
+	public Map<String, Object> jgDelete(Department department, String userid);
+	
 }
