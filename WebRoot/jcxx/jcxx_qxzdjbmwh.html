@@ -3,58 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <link href="../bootstrap/css/bootstrap.css" type="text/css" rel="stylesheet" />
-<style type="text/css">
-	#data_table tr>th{
-		text-align: center;
-	}
-	#data_table tr>td{
-		text-align: center;
-	}
-	#condition_table tr>th{
-		text-align: right;
-	}
-	#greyground{
-		display:none;
-		width:100%;
-		height:100%;
-		background-color: #CFCFCF;
-		filter: Alpha(Opacity=50);
-	 	-moz-opacity:0.8; 
-     	opacity:0.8; 
-
-	 	background-position:center;
-		z-index:111;
-		position:absolute;
-		top:0;
-		left:0;
-	}
-	#loading{
-		position: absolute;
-		top: 30%;
-		left: 40%;
-		transform: translate(-30%, -15%);
-		display:none;
-		background-color: #E0F2F7;
-		z-index:1111;
-	}
-	.floatarea{
-		position: absolute;
-		top: 30%;
-		left: 40%;
-		transform: translate(-30%, -15%);
-		display:none;
-		background-color: #E0F2F7;
-		z-index:1111;
-		border: 1px solid grey;
-	}
-	input.sel{
-		width: 170px;
-		margin: 0px 0px 0px 0px;
-	}
-</style>
+<link href="../commstyle/commcss.css" type="text/css" rel="stylesheet" />
 <title>气象站点及部门维护</title>
 </head>
-<body style="height: 100%;background-color: #E0F2F7">
+<body>
 	<div id="czq">
 		<div class="well well-small" style="margin-bottom: 0px"><font color="#0088CC" size="+1"><i class="icon-wrench"></i><b>人员维护</b></font></div>
 		<div style="background-color: #E0F2F7">
@@ -69,7 +21,7 @@
 						<td>&nbsp;机构名称：</td>
 						<td><input class="sel" type="text" placeholder="模糊匹配..." id="condition_jgmc" />&nbsp;</td>
 						<td>
-							<a href="#" class="btn btn-primary" title="查询" onclick=""><i class="icon-search"></i>查询</a>	
+							<a href="#" class="btn btn-primary" title="查询" onclick="queryuserlist()"><i class="icon-search"></i>查询</a>	
 						</td>
 					</tr>
 				</table>
@@ -81,7 +33,7 @@
 			</table>
 		</div>
 		<div style="background-color: #E0F2F7;padding-top: 3px;">
-			<a href="#" class="btn btn-primary" title="新增站点/部门" onclick=""><i class="icon-pencil"></i>新增站点/部门</a>
+			<a href="#" class="btn btn-primary" title="新增站点/部门" onclick="addjg()"><i class="icon-pencil"></i>新增站点/部门</a>
 		</div>
 		
 	</div>
@@ -137,11 +89,9 @@
 				</tr>
 				<tr>
 					<td colspan="2">注意事项：<br/>
-					新增人员的初始密码由系统产生，初始密码为‘222222’，<br/>
-					新人员需登录系统修改自身登录密码；<br/>
-					新增人员的初始状态为‘正常’；<br/>
-					激活当前人员时，系统会返回人员编号，<br/>
-					人员编号为登录系统时的用户账号，请牢记。</td>
+					新增机构时请<font color="red">谨慎填写机构类型</font>，后续数据维护机构类型不可改变；<br/>
+					新增机构的机构编号由系统产生，规则（1位机构类型+5位机构序号）；<br/>
+					机构序号为当前机构类型下最大机构编号后五位+1。</td>
 				</tr>
 			</table>
 		</div>

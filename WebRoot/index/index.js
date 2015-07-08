@@ -43,15 +43,15 @@ function fatherMenuList(){
 			if(data.menudatas != null && data.menudatas != 'null' && data.menudatas.length > 0){
 				var menuArray = data.menudatas;
 				for(var i=0;i<menuArray.length;i++){
-					menu_html += ('<li style="width: 100px;"><a href="#bj_'+menuArray[i].MENU_CJ+'_'+menuArray[i].TJPX
-								+'" data-toggle="tab" onclick="menulist(\'bj_'+menuArray[i].MENU_CJ+'_'+menuArray[i].TJPX
-								+'\',\''+menuArray[i].MENU_ID+'\',\''+menuArray[i].MENU_MC+'\')">'+menuArray[i].MENU_MC+'</a></li>');
-					dealarea_html += ('<div id="bj_'+menuArray[i].MENU_CJ+'_'+menuArray[i].TJPX+'" class="tab-pane fade">'
-										 +'<div style="background-color: #E0F2F7;">'
-										 	+'<div class="container-fluid" style="padding: 0px 0px 0px 0px;padding-top: 10px;">'
+					menu_html += ('<li style="width: 100px;"><a href="#bj_'+menuArray[i].menu_cj+'_'+menuArray[i].tjpx
+								+'" data-toggle="tab" onclick="menulist(\'bj_'+menuArray[i].menu_cj+'_'+menuArray[i].tjpx
+								+'\',\''+menuArray[i].menu_id+'\',\''+menuArray[i].menu_mc+'\')">'+menuArray[i].menu_mc+'</a></li>');
+					dealarea_html += ('<div id="bj_'+menuArray[i].menu_cj+'_'+menuArray[i].tjpx+'" class="tab-pane fade">'
+										 +'<div>'
+										 	+'<div class="container-fluid" style="padding: 0px 0px 0px 0px;padding-top: 5px;">'
 										 		+'<div class="row-fluid">'
-										 			+'<div id="bj_'+menuArray[i].MENU_CJ+'_'+menuArray[i].TJPX+'_menulist" class="span2" style="background-color: #E0F2F7;height: 640px;margin-left: 0px;padding-left: 10px;border-right: 3px solid #BCE0F5;"></div>'
-										 			+'<div id="bj_'+menuArray[i].MENU_CJ+'_'+menuArray[i].TJPX+'_workarea" class="span10" style="background-color: #E0F2F7;height: 640px;margin-left: 0px;padding-left: 18px;">'
+										 			+'<div id="bj_'+menuArray[i].menu_cj+'_'+menuArray[i].tjpx+'_menulist" class="span2 air" style="background-color: #E0F2F7;height: 640px;margin-left: 10px;padding-left: 10px;padding-top: 10px;padding-right: 10px;padding-bottom: 10px;"></div>'
+										 			+'<div id="bj_'+menuArray[i].menu_cj+'_'+menuArray[i].tjpx+'_workarea" class="span10 air" style="background-color: #E0F2F7;height: 640px;margin-left: 10px;padding-left: 5px;padding-top: 10px;">'
 									+'</div></div></div></div></div>');
 				}
 			}
@@ -86,7 +86,7 @@ function menulist(dividname,menucode,fathername){
 				if(data.menudatas != null && data.menudatas != 'null' && data.menudatas.length > 0){
 					var menuArray = data.menudatas;
 					for(var i=0;i<menuArray.length;i++){
-						menu_html += '<li class="alert-block SecondLevelMenu leftmenu" id="li_'+menuArray[i].MENU_ID+'"><a href="#" onclick="openWin(\''+menuArray[i].MENU_URL+'\',\''+menuArray[i].MENU_ID+'\',\''+dividname+'\')"><i class="icon-hand-right"></i>'+menuArray[i].MENU_MC+'</a></li>';
+						menu_html += '<li class="alert-block SecondLevelMenu leftmenu" id="li_'+menuArray[i].menu_id+'"><a href="#" onclick="openWin(\''+menuArray[i].menu_url+'\',\''+menuArray[i].menu_id+'\',\''+dividname+'\')"><i class="icon-hand-right"></i>'+menuArray[i].menu_mc+'</a></li>';
 					}
 				}
 				menu_html += '</ul></li></ul>';

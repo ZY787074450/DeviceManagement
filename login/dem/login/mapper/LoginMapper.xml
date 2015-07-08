@@ -20,7 +20,7 @@
 
 <!-- 获取菜单 -->
 <select id="menusSelect"  parameterType="Map"  resultType="Map" >
-	SELECT * 
+	SELECT yxbz,menu_mc,menu_pid,tjpx, menu_id,menu_cj,menu_url
 	FROM ss_menu 
 	WHERE menu_pid = #{menucode}
 	AND menu_id in (select menu_id from ss_privilege where userid = #{userid})

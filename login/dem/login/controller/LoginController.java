@@ -118,14 +118,14 @@ public class LoginController {
 	}
 	
 	//请求非法/恶意请求时，打回登录界面，原登录用户失效
-	@RequestMapping(value="/roolbacklogin.do",method = RequestMethod.GET)
+	@RequestMapping(value="/roolbacklogin.do")
 	public String rollbackLogin(HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException {
 		request.getSession().setAttribute("session_loginner", null);
 		request.getSession().setAttribute("session_menulist", null);
 		return new String("redirect:/index/login.html?msg=检测到恶意非法请求，当前登录用户失效，请重新登录！".getBytes("utf-8"),"iso8859-1");
 	}
 	//过滤后无提示返回登录界面
-	@RequestMapping(value="/backlogin.do",method = RequestMethod.GET)
+	@RequestMapping(value="/backlogin.do")
 	public String backLogin(HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException {
 		request.getSession().setAttribute("session_loginner", null);
 		request.getSession().setAttribute("session_menulist", null);

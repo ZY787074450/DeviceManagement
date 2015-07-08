@@ -48,18 +48,18 @@ function queryuserlist(){
 				var userList = data.userlist;
 				for(var i=0;i<userList.length;i++){
 					tablehtml += ('<tr>'
-									+'<td>'+(userList[i].USERID?userList[i].USERID:'暂无数据')+'</td>'
-									+'<td>'+(userList[i].MC?userList[i].MC:'暂无数据')+'</td>'
-									+'<td>'+(userList[i].JGID?userList[i].JGID:'暂无数据')+'</td>'
-									+'<td>'+(userList[i].TEL?userList[i].TEL:'暂无数据')+'</td>'
-									+'<td>'+(userList[i].USERZT=="0"?'正常':'注销')+'</td>'
-									+'<td>'+(userList[i].NOTE?userList[i].NOTE:'')+'</td>'
-									+'<td>'+(userList[i].LRRQ?userList[i].LRRQ:'时间不明')+'</td>'
-									+(userList[i].USERZT=="0"?('<td><a href="#" title="编辑" onclick="updatemanager(\''+(userList[i].USERID?userList[i].USERID:'none')+'\',\''+(userList[i].MC?userList[i].MC:'')+'\',\''+(userList[i].JGID?userList[i].JGID:'')+'\',\''+(userList[i].TEL?userList[i].TEL:'')+'\',\''+(userList[i].NOTE?userList[i].NOTE:'')+'\')">'
+									+'<td>'+(userList[i].userid?userList[i].userid:'暂无数据')+'</td>'
+									+'<td>'+(userList[i].mc?userList[i].mc:'暂无数据')+'</td>'
+									+'<td>'+(userList[i].jgid?userList[i].jgid:'暂无数据')+'</td>'
+									+'<td>'+(userList[i].tel?userList[i].tel:'暂无数据')+'</td>'
+									+'<td>'+(userList[i].userzt=="0"?'正常':'注销')+'</td>'
+									+'<td>'+(userList[i].note?userList[i].note:'')+'</td>'
+									+'<td>'+(userList[i].lrrq?userList[i].lrrq:'时间不明')+'</td>'
+									+(userList[i].userzt=="0"?('<td><a href="#" title="编辑" onclick="updatemanager(\''+(userList[i].userid?userList[i].userid:'none')+'\',\''+(userList[i].mc?userList[i].mc:'')+'\',\''+(userList[i].jgid?userList[i].jgid:'')+'\',\''+(userList[i].tel?userList[i].tel:'')+'\',\''+(userList[i].note?userList[i].note:'')+'\')">'
 									+'<i class="icon-edit"></i></a> &nbsp;&nbsp;&nbsp;&nbsp; '
-									+'<a href="#" title="注销" onclick="removemanager(\''+(userList[i].USERID?userList[i].USERID:'none')+'\')">'
+									+'<a href="#" title="注销" onclick="removemanager(\''+(userList[i].userid?userList[i].userid:'none')+'\')">'
 									+'<i class="icon-trash"></i></a> &nbsp;&nbsp;&nbsp;&nbsp; '
-									+'<a href="#" title="权限分配" onclick="grantmenu(\''+(userList[i].USERID?userList[i].USERID:'none')+'\')">'
+									+'<a href="#" title="权限分配" onclick="grantmenu(\''+(userList[i].userid?userList[i].userid:'none')+'\')">'
 									+'<i class="icon-list"></i></a></td>'):('<td><i class="icon-ban-circle"></i></td>'))
 								+'</tr>');
 				}
@@ -135,13 +135,13 @@ function grantmenu(userid){
 				if(data.menulist && data.menulist.length > 0){
 					var mlist = data.menulist;
 					for(var i=0;i<mlist.length;i++){//父菜单装载
-						if(mlist[i].MENU_PID=='0'){
+						if(mlist[i].menu_pid=='0'){
 							menu_table +='|-';
-							menu_table += '<input name="menu" onclick="selectOther(\''+mlist[i].MENU_ID+'\',\'0\')" type="checkbox" value="'+mlist[i].MENU_ID+'" class="parentcode_0">'+mlist[i].MENU_MC+'<br />';
+							menu_table += '<input name="menu" onclick="selectOther(\''+mlist[i].menu_id+'\',\'0\')" type="checkbox" value="'+mlist[i].menu_id+'" class="parentcode_0">'+mlist[i].menu_mc+'<br />';
 							for(var j=0;j<mlist.length;j++){//子菜单装载
-								if(mlist[j].MENU_PID == mlist[i].MENU_ID){
+								if(mlist[j].menu_pid == mlist[i].menu_id){
 									menu_table +='|&nbsp;&nbsp;|--'
-									menu_table += '<input name="menu" onclick="selectOther(\''+mlist[j].MENU_ID+'\',\''+mlist[j].MENU_PID+'\')" type="checkbox" value="'+mlist[j].MENU_ID+'" class="parentcode_'+mlist[j].MENU_PID+'">'+mlist[j].MENU_MC+'<br />';
+									menu_table += '<input name="menu" onclick="selectOther(\''+mlist[j].menu_id+'\',\''+mlist[j].menu_pid+'\')" type="checkbox" value="'+mlist[j].menu_id+'" class="parentcode_'+mlist[j].menu_pid+'">'+mlist[j].menu_mc+'<br />';
 								}
 							}
 						}
@@ -153,7 +153,7 @@ function grantmenu(userid){
 				if(data.usermenulist && data.usermenulist.length > 0){
 					var usermlist = data.usermenulist;
 					for(var i=0;i<usermlist.length;i++){
-						$("input:checkbox[value='"+usermlist[i].MENU_ID+"']").attr('checked','true');
+						$("input:checkbox[value='"+usermlist[i].menu_id+"']").attr('checked','true');
 					}
 				}
 				$("#qd").attr("disabled",false);

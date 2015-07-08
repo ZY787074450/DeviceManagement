@@ -57,7 +57,7 @@ public class LoginUserFilter extends OncePerRequestFilter {
 								}
 							}
 							for(Object m : list){
-								if(menuname.equals(((Map<String, String>)m).get("MENU_MC"))){
+								if(menuname.equals(((Map<String, String>)m).get("menu_mc"))){
 									isWrongAsk = false;
 								}
 							}

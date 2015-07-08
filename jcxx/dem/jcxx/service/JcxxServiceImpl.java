@@ -176,13 +176,18 @@ private BaseDao baseDao;
 	@Override
 	public Map<String, Object> jgInsert(Department department, String userid) {
 		Map<String, Object> map = new HashMap<String, Object>();
+		if("".equals(department.getJglx())){
+			map.put("code", "202");
+			map.put("info", "新增失败，未检测到机构类型！");
+			return map;
+		}
 		String newId = "";
 		try{
 			String sum = (String)baseDao.selectOne("dem.jcxx.mapper.JcxxMapper.getLastJgid", department.getJglx());
 			Integer s = Integer.parseInt(sum);
 			int num = (int)((s + 1)/100000);
+			newId = ""+(s+1);
 			if(num == 0){
-				newId = ""+(s+1);
 				for(int i=newId.length();i<6;i++){
 					newId = "0"+newId;
 				}
@@ -192,18 +197,18 @@ private BaseDao baseDao;
 			department.setJgid(newId);
 			baseDao.insert("dem.jcxx.mapper.JcxxMapper.addJg",department);
 			map.put("code", "200");
-			map.put("info", "新增成功！");
+			map.put("info", "新增成功！当前机构为对应类型首发机构！");
 			map.put("mc", department.getMc());
 			map.put("jgid", newId);
 
 			return map;
 		}
-		
+		department.setJgid(newId);
 		baseDao.insert("dem.jcxx.mapper.JcxxMapper.addJg",department);
 		map.put("code", "200");
 		map.put("info", "新增成功！");
 		map.put("mc", department.getMc());
-		map.put("userid", newId);
+		map.put("jgid", newId);
 
 		return map;
 	}

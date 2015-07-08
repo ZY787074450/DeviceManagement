@@ -3,23 +3,22 @@
 <mapper namespace="dem.jcxx.mapper.JcxxMapper">
 
 
-
 <!-- 条件查询系统操作人员 -->
 <select id="userlistQuery" parameterType="dem.jcxx.model.UserQueryCondition" resultType="Map">
-	select userid,mc,jgid,tel,userzt,note,to_char(lrrq,'YYYY-mm-dd') as lrrq 
+	select userid,mc,jgid,tel,userzt,note,date_format(lrrq,'%Y-%m-%d %H:%i:%s') as lrrq 
 	from ss_user
 	where 1=1 
 	<if test="userid != null and userid != ''">
-		and userid like '%'||#{userid}||'%' 
+		and userid like "%"#{userid}"%" 
 	</if>
 	<if test="mc != null and mc != ''">
-		and mc like '%'||#{mc}||'%' 
+		and mc like "%"#{mc}"%" 
 	</if>
 	<if test="jgid != null and jgid != ''">
-		and jgid like '%'||#{jgid}||'%' 
+		and jgid like "%"#{jgid}"%" 
 	</if>
 	<if test="tel != null and tel != ''">
-		and tel like '%'||#{tel}||'%' 
+		and tel like "%"#{tel}"%" 
 	</if>
 	<if test="userzt != null and userzt != ''">
 		and userzt = #{userzt}
@@ -34,11 +33,11 @@
 </select>
 
 <select id="getLastUserid" parameterType="String" resultType="String">
-	select userid from (select userid,(row_number() over (order by userid desc)) as row_id from ss_user) where row_id=1
+	select userid from ss_user order by userid limit 1
 </select>
 
 <insert id="addUser" parameterType="dem.login.model.Loginner" keyColumn="userid">
-	insert into ss_user(userid,mc,userpass,jgid,tel,userzt,note,lrrq) values(#{userid},#{mc},#{userpass},#{jgid},#{tel},'0',#{note},sysdate)
+	insert into ss_user(userid,mc,userpass,jgid,tel,userzt,note,lrrq) values(#{userid},#{mc},#{userpass},#{jgid},#{tel},'0',#{note},now())
 </insert>
 
 <update id="updateUser" parameterType="dem.login.model.Loginner">
@@ -85,25 +84,25 @@
 
 <!-- 条件查询系统站点/部门 -->
 <select id="jglistQuery" parameterType="dem.jcxx.model.JgQueryCondition" resultType="Map">
-	select s1.jgid jgid,s1.mc mc,s1.jglx jglx,s2.mc jglxmc,s1.jgqy jgqy,s3.mc jgqymc,jgjd,jgwd,jghb,jgdz,jglxr,jglxdh,jgzt,note,to_char(lrrq,'YYYY-mm-dd') as lrrq 
+	select s1.jgid jgid,s1.mc mc,s1.jglx jglx,s2.mc jglxmc,s1.jgqy jgqy,s3.mc jgqymc,jgjd,jgwd,jghb,jgdz,jglxr,jglxdh,jgzt,note,date_format(lrrq,'%Y-%m-%d %H:%i:%s') as lrrq 
 	from ss_jg s1 left join ss_jglx s2 on s1.jglx=s2.jglx
 				  left join ss_jgqy s3 on s1.jgqy=s3.jgqy
 	where 1=1 
 	<if test="jgid != null and jgid != ''">
-		and jgid like '%'||#{jgid}||'%' 
+		and jgid like "%"#{jgid}"%" 
 	</if>
 	<if test="mc != null and mc != ''">
-		and mc like '%'||#{mc}||'%' 
+		and mc like "%"#{mc}"%" 
 	</if>
 	order by jgid
 </select>
 
 <select id="getLastJgid" parameterType="String" resultType="String">
-	select jgid from (select jgid,(row_number() over (order by jgid desc)) as row_id from ss_user where jglx=#{jglx}) where row_id=1
+	select jgid from ss_jg where jglx=#{jglx} order by jgid desc limit 1
 </select>
 
 <insert id="addJg" parameterType="dem.login.model.Department" keyColumn="jgid">
-	insert into ss_jg(jgid,mc,jglx,jgqy,jgjd,jgwd,jghb,jgdz,jglxr,jglxdh,jgzt,note,lrrq) values(#{jgid},#{mc},#{jglx},#{jgqy},#{jgjd},#{jgwd},#{jghb},#{jgdz},#{jglxr},#{jglxdh},'0',#{note},sysdate)
+	insert into ss_jg(jgid,mc,jglx,jgqy,jgjd,jgwd,jghb,jgdz,jglxr,jglxdh,jgzt,note,lrrq) values(#{jgid},#{mc},#{jglx},#{jgqy},#{jgjd},#{jgwd},#{jghb},#{jgdz},#{jglxr},#{jglxdh},'0',#{note},now())
 </insert>
 <update id="updateJg" parameterType="dem.login.model.Department">
 	update ss_jg

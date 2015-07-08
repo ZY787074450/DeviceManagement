@@ -4,6 +4,11 @@
 <meta charset="UTF-8">
 <link href="../bootstrap/css/bootstrap.css" type="text/css" rel="stylesheet" />
 <style type="text/css">
+	body{
+		background-color: #C6F0FA;
+		background-image: url("main_background.png");
+		background-repeat: no-repeat;
+	}
 	li{
 		text-align: center;
 	}
@@ -27,7 +32,7 @@
 
 	 	background-position:center;
 		z-index:111;
-		position:absolute;
+		position:fixed;
 		top:0;
 		left:0;
 	}
@@ -50,12 +55,17 @@
 		z-index:1111;
 		border: 1px solid grey;
 	}
+	div.air{
+		filter:alpha(Opacity=90);
+		-moz-opacity:0.9;
+		opacity: 0.9;
+	}
 </style>
 <title>常州气象探测设备管理系统</title>
 </head>
-<body style="background-color: #C6F0FA">
+<body>
 <div>
-	<div class="page-header" style="margin-top: 0px;margin-bottom: 0px;padding-top: 10px;background-color: #3B71B9;">
+	<div class="page-header" style="margin-top: 0px;margin-bottom: 0px;padding-top: 10px;">
 		<div class="container-fluid">
 			<div class="row-fluid">
 				<div class="span2" align="center">图标</div>
@@ -69,7 +79,7 @@
 	</div>
 	<div class="page-header" style="margin-top: 0px;margin-bottom: 0px;padding-bottom: 0px;">
 		<div class="navbar" style="margin-bottom: 0px;">
-			<div class="navbar-inner" style="background-color: #98AAB9;">
+			<div class="navbar-inner air" style="background-color: #98AAB9;">
 				<ul class="nav nav-tabs" style="float: right;" id="fathermenus">
 					
 				</ul>
@@ -80,10 +90,10 @@
 	<div id="navtabsarea" class="tab-content">
 		<div id="home" class="tab-pane fade in active">
 		
-			<div style="background-color: #E0F2F7;">
-				<div class="container-fluid" style="padding: 0px 0px 0px 0px;padding-top: 10px;">
+			<div>
+				<div class="container-fluid" style="padding: 0px 0px 0px 0px;padding-top: 2px;">
 					<div class="row-fluid">
-						<div class="span12" style="background-color: #E0F2F7;height: 622px;margin-left: 0px;">首页界面部分</div>
+						<div class="span12 air" style="background-color: #E0F2F7;height: 622px;margin-left: 0px;">首页界面部分</div>
 					</div>
 				</div>
 			</div>
