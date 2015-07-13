@@ -1,5 +1,6 @@
 package dem.jcxx.service;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -11,15 +12,33 @@ import org.springframework.stereotype.Service;
 
 import dem.comm.dao.BaseDao;
 import dem.comm.encrypt.SHA;
+import dem.comm.file.FileUpLoadManager;
+import dem.comm.util.CommonUtil;
 import dem.jcxx.model.JgQueryCondition;
+import dem.jcxx.model.SbflwhObject;
 import dem.jcxx.model.UserQueryCondition;
+import dem.jcxx.model.YjzwhObject;
 import dem.login.model.Department;
 import dem.login.model.Loginner;
+import dem.login.model.PagingAction;
 
 @Service("jcxxService")
 public class JcxxServiceImpl implements JcxxService {
+	
+	private FileUpLoadManager fileUpLoadManager;
 
-private BaseDao baseDao;
+	public FileUpLoadManager getFileUpLoadManager() {
+		return fileUpLoadManager;
+	}
+
+	@Resource
+	public void setFileUpLoadManager(FileUpLoadManager fileUpLoadManager) {
+		this.fileUpLoadManager = fileUpLoadManager;
+		// 设置将头像保存在当前的工程下的upload/buyers中
+		this.fileUpLoadManager.setPathDir("upload/buyers");
+	}
+
+	private BaseDao baseDao;
 	
 	public BaseDao getBaseDao() {
 		return baseDao;
@@ -37,9 +56,11 @@ private BaseDao baseDao;
 
 		List list = new ArrayList();
 		list = baseDao.selectList("dem.jcxx.mapper.JcxxMapper.userlistQuery", userQueryCondition);
+		int sum = (Integer)baseDao.selectOne("dem.jcxx.mapper.JcxxMapper.userCount", userQueryCondition);
 		map.put("code", "200");
 		map.put("info", "查询成功！");
 		map.put("userlist", list);
+		map.put("sum", sum);
 		return map;
 	}
 
@@ -166,9 +187,11 @@ private BaseDao baseDao;
 
 		List list = new ArrayList();
 		list = baseDao.selectList("dem.jcxx.mapper.JcxxMapper.jglistQuery", jgQueryCondition);
+		int sum = (Integer)baseDao.selectOne("dem.jcxx.mapper.JcxxMapper.departmentCount", jgQueryCondition);
 		map.put("code", "200");
 		map.put("info", "查询成功！");
 		map.put("jglist", list);
+		map.put("sum", sum);
 		return map;
 	}
 	
@@ -233,6 +256,90 @@ private BaseDao baseDao;
 		map.put("code", "200");
 		map.put("info", "注销成功！");
 		map.put("jgid", department.getJgid());
+
+		return map;
+	}
+
+	//预警值维护查询
+	@Override
+	public Map<String, Object> yjlistQuery(YjzwhObject yjzwhObject,String userid) {
+		Map<String, Object> map = new HashMap<String, Object>();
+
+		List list = new ArrayList();
+		list = baseDao.selectList("dem.jcxx.mapper.JcxxMapper.yjlistQuery", yjzwhObject);
+		int sum = (Integer)baseDao.selectOne("dem.jcxx.mapper.JcxxMapper.yjzCount", yjzwhObject);
+		map.put("code", "200");
+		map.put("info", "查询成功！");
+		map.put("yjlist", list);
+		map.put("sum", sum);
+		return map;
+	}
+
+	//预警值维护信息更新
+	@Override
+	public Map<String, Object> yjUpdate(YjzwhObject yjzwhObject, String userid) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		baseDao.update("dem.jcxx.mapper.JcxxMapper.updateYj",yjzwhObject);
+		map.put("code", "200");
+		map.put("info", "更新成功！");
+		map.put("jgid", yjzwhObject.getYjid());
+
+		return map;
+	}
+	
+	//设备分类维护查询
+	@Override
+	public Map<String, Object> sblblistQuery(String userid) {
+		Map<String, Object> map = new HashMap<String, Object>();
+
+		List list = new ArrayList();
+		list = baseDao.selectList("dem.jcxx.mapper.JcxxMapper.sblblistQuery", "");
+		map.put("code", "200");
+		map.put("info", "查询成功！");
+		map.put("sblblist", list);
+		return map;
+	}
+
+	//设备类别新增
+	@Override
+	public Map<String, Object> sblbInsert(SbflwhObject sbflwhObject, String userid) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		
+		String url = "/DeviceManagement/";//请求地址http://localhost:8080
+		String pathDiv = "tpzy/sbtp";//图片存储路径(当前工程下的路径)"+File.separator+"
+		fileUpLoadManager.setPathDir(pathDiv);
+		String fix = "jpg";//文件类型(后缀)
+		String newUUID = (CommonUtil.getUUID()).toUpperCase();//产生UUID用于生成设备分类ID和设备图片名
+		String fileName = null;
+		fileName="sbtp_"+newUUID+"."+fix;//设备图片名称规范:sbtp_32位UUID.jpg
+		boolean judge = fileUpLoadManager.upload(sbflwhObject.getSbtpfile(), fileName);//生成服务器端图片文件
+		if(!judge){
+			map.put("code", "202");
+			map.put("info", "图片上传失败！");
+			map.put("sblbmc", sbflwhObject.getSblbmc());
+			return map;
+		}
+		sbflwhObject.setSbtpdz(url+pathDiv+"/"+fileName);//设置数据库中存储的服务器端图片地址
+		
+		sbflwhObject.setSbflid(newUUID);//设备分类ID
+		baseDao.update("dem.jcxx.mapper.JcxxMapper.updatesfzl",sbflwhObject);//更新父分类“是否子类”状态为父类0
+		
+		baseDao.insert("dem.jcxx.mapper.JcxxMapper.sblbInsert",sbflwhObject);
+		map.put("code", "200");
+		map.put("info", "新增成功！");
+		map.put("sblbmc", sbflwhObject.getSblbmc());
+
+		return map;
+	}
+
+	//设备类别删除
+	@Override
+	public Map<String, Object> sblbDelete(SbflwhObject sbflwhObject, String userid) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		baseDao.update("dem.jcxx.mapper.JcxxMapper.sblbDelete",sbflwhObject);
+		map.put("code", "200");
+		map.put("info", "注销成功！");
+		map.put("sblbmc", sbflwhObject.getSblbmc());
 
 		return map;
 	}

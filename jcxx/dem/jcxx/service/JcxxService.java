@@ -2,10 +2,15 @@ package dem.jcxx.service;
 
 import java.util.Map;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import dem.jcxx.model.JgQueryCondition;
+import dem.jcxx.model.SbflwhObject;
 import dem.jcxx.model.UserQueryCondition;
+import dem.jcxx.model.YjzwhObject;
 import dem.login.model.Department;
 import dem.login.model.Loginner;
+import dem.login.model.PagingAction;
 
 public interface JcxxService {
 
@@ -41,5 +46,20 @@ public interface JcxxService {
 	
 	//机构注销
 	public Map<String, Object> jgDelete(Department department, String userid);
+	
+	//预警条件查询
+	public Map<String, Object> yjlistQuery(YjzwhObject yjzwhObject, String userid);
+	
+	//预警修改更新
+	public Map<String, Object> yjUpdate(YjzwhObject yjzwhObject, String userid);
+	
+	//设备分类(类别)维护查询
+	public Map<String, Object> sblblistQuery(String userid);
+	
+	//设备类别新增
+	public Map<String, Object> sblbInsert(SbflwhObject sbflwhObject, String userid);
+	
+	//设备类别注销
+	public Map<String, Object> sblbDelete(SbflwhObject sbflwhObject, String userid);
 	
 }

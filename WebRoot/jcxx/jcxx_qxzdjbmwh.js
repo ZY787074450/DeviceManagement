@@ -6,14 +6,17 @@ $(document).ready(function(){
 	queryuserlist();
 });
 
-function queryuserlist(){
+function queryuserlist(actionstr){
 	greybackadd();
+	var urlparm = commask(actionstr,"jgid");
 	$.ajax({
-		url : "/DeviceManagement/jcxx/qxzdjbmwh/cx.do?time="+new Date(),
+		url : "/DeviceManagement/jcxx/qxzdjbmwh/cx.do?time="+new Date()+urlparm,
 		type : "POST",
 		data : "&jgid="+$("#condition_jgid").val()+"&mc="+$("#condition_jgmc").val(),
 		success : function(data){
 			greyback();
+			$("#sum").text(data.sum?data.sum:'0');
+			disOrEnable();
 			var tablehtml = '<tr>'
 								+'<th>机构编号</th>'
 								+'<th>机构名称</th>'

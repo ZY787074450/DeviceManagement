@@ -29,11 +29,53 @@
 	<if test="lrrq_end != null and lrrq_end != '' and lrrq_end like '%-%-%'">
 		and lrrq &lt; to_date(#{lrrq_end},"YYYY-mm-dd")  
 	</if> -->
-	order by userid
+	${sql_paging_sort}
+</select>
+<select id="userCount" parameterType="dem.jcxx.model.UserQueryCondition" resultType="int">
+	select count(*) from ss_user
+	where 1=1 
+	<if test="userid != null and userid != ''">
+		and userid like "%"#{userid}"%" 
+	</if>
+	<if test="mc != null and mc != ''">
+		and mc like "%"#{mc}"%" 
+	</if>
+	<if test="jgid != null and jgid != ''">
+		and jgid like "%"#{jgid}"%" 
+	</if>
+	<if test="tel != null and tel != ''">
+		and tel like "%"#{tel}"%" 
+	</if>
+	<if test="userzt != null and userzt != ''">
+		and userzt = #{userzt}
+	</if>
+</select>
+<select id="departmentCount" parameterType="dem.jcxx.model.JgQueryCondition" resultType="int">
+	select count(*) from ss_jg
+	where 1=1 
+	<if test="jgid != null and jgid != ''">
+		and jgid like "%"#{jgid}"%" 
+	</if>
+	<if test="mc != null and mc != ''">
+		and s1.mc like "%"#{mc}"%" 
+	</if>
+</select>
+<select id="yjzCount" parameterType="dem.jcxx.model.YjzwhObject" resultType="int">
+	select count(*) from ss_yjfl
+	where 1=1 
+	<if test="jgid != null and jgid != ''">
+		and jgid like "%"#{jgid}"%" 
+	</if>
+	<if test="mc != null and mc != ''">
+		and mc like "%"#{mc}"%" 
+	</if>
+	<if test="yjid != null and yjid != ''">
+		and yjid = #{yjid} 
+	</if>
 </select>
 
 <select id="getLastUserid" parameterType="String" resultType="String">
-	select userid from ss_user order by userid limit 1
+	select userid from ss_user order by userid desc limit 1
 </select>
 
 <insert id="addUser" parameterType="dem.login.model.Loginner" keyColumn="userid">
@@ -83,7 +125,7 @@
 </update>
 
 <!-- 条件查询系统站点/部门 -->
-<select id="jglistQuery" parameterType="dem.jcxx.model.JgQueryCondition" resultType="Map">
+<select id="jglistQuery" parameterType="Map" resultType="Map">
 	select s1.jgid jgid,s1.mc mc,s1.jglx jglx,s2.mc jglxmc,s1.jgqy jgqy,s3.mc jgqymc,jgjd,jgwd,jghb,jgdz,jglxr,jglxdh,jgzt,note,date_format(lrrq,'%Y-%m-%d %H:%i:%s') as lrrq 
 	from ss_jg s1 left join ss_jglx s2 on s1.jglx=s2.jglx
 				  left join ss_jgqy s3 on s1.jgqy=s3.jgqy
@@ -92,9 +134,9 @@
 		and jgid like "%"#{jgid}"%" 
 	</if>
 	<if test="mc != null and mc != ''">
-		and mc like "%"#{mc}"%" 
+		and s1.mc like "%"#{mc}"%" 
 	</if>
-	order by jgid
+	${sql_paging_sort}
 </select>
 
 <select id="getLastJgid" parameterType="String" resultType="String">
@@ -121,6 +163,53 @@
 	update ss_jg
 	set jgzt = '1'
 	where jgid = #{jgid}
+</update>
+
+<!-- 条件查询预警信息 -->
+<select id="yjlistQuery" parameterType="dem.jcxx.model.YjzwhObject" resultType="Map">
+	select yjid,jgid,mc,yjz,note
+	from ss_yjfl
+	where 1=1 
+	<if test="jgid != null and jgid != ''">
+		and jgid like "%"#{jgid}"%" 
+	</if>
+	<if test="mc != null and mc != ''">
+		and mc like "%"#{mc}"%" 
+	</if>
+	<if test="yjid != null and yjid != ''">
+		and yjid = #{yjid} 
+	</if>
+	${sql_paging_sort}
+</select>
+
+<update id="updateYj" parameterType="dem.jcxx.model.YjzwhObject">
+	update ss_yjfl
+	set yjz = #{yjz},
+		note = #{note}
+	where jgid = #{jgid} 
+		and yjid = #{yjid} 
+		and mc = #{mc}
+</update>
+
+<!-- 查询设备分类类别 -->
+<select id="sblblistQuery" parameterType="String" resultType="Map">
+	select sbflid,sbcj,fsbflid,sfzl,sblbmc,sbtpdz
+	from ss_sbfl
+	where yxbz='Y' 
+	order by sbcj
+</select>
+<insert id="sblbInsert" parameterType="dem.jcxx.model.SbflwhObject" keyColumn="sbid">
+	insert into ss_sbfl(sbflid,sbcj,fsbflid,sfzl,sblbmc,sbtpdz,yxbz) values(#{sbflid},#{sbcj},#{fsbflid},'1',#{sblbmc},#{sbtpdz},'Y')
+</insert>
+<update id="sblbDelete" parameterType="dem.jcxx.model.SbflwhObject">
+	update ss_sbfl
+	set yxbz = 'N'
+	where sbflid = #{sbflid}
+</update>
+<update id="updatesfzl" parameterType="dem.jcxx.model.SbflwhObject">
+	update ss_sbfl
+	set sfzl = '0'
+	where sbflid = #{fsbflid}
 </update>
 
 </mapper>

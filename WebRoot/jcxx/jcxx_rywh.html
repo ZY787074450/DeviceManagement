@@ -54,7 +54,15 @@
 			</table>
 		</div>
 		<div style="background-color: #E0F2F7;padding-top: 3px;">
-			<a href="#" class="btn btn-primary" title="添加人员" onclick="addmanager()"><i class="icon-pencil"></i>添加人员</a>
+			<span style="float: left;"><a href="#" class="btn btn-primary" title="添加人员" onclick="addmanager()"><i class="icon-pencil"></i>添加人员</a></span>
+			<span style="text-align: right;float: right;">
+				共<span id="sum"></span>条记录；&nbsp;
+				每页条数<input type="text" id="countline" style="width:30px;" />&nbsp;
+				<a href="#" id="pageup" class="btn btn-primary" title="上一页" onclick="queryuserlist('上一页')">上一页</a>
+				当前页<input type="text" id="currpage" style="width:30px;" />/共<span id="sum_page"></span>页
+				<a href="#" id="pagedown" class="btn btn-primary" title="下一页" onclick="queryuserlist('下一页')">下一页</a>&nbsp;
+				<a href="#" id="pagereset" class="btn btn-primary" title="跳转" onclick="queryuserlist('跳转指定页')">跳转指定页</a>
+			</span>
 		</div>
 		
 	</div>
@@ -151,4 +159,5 @@
 </html>
 <script src="../bootstrap/jquery.js" type="text/javascript"></script>
 <script src="../bootstrap/js/bootstrap.js" type="text/javascript"></script>
+<script src="../commscript/commjs.js" type="text/javascript"></script>
 <script src="jcxx_rywh.js" type="text/javascript"></script>

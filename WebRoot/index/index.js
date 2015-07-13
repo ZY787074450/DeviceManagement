@@ -50,9 +50,9 @@ function fatherMenuList(){
 										 +'<div>'
 										 	+'<div class="container-fluid" style="padding: 0px 0px 0px 0px;padding-top: 5px;">'
 										 		+'<div class="row-fluid">'
-										 			+'<div id="bj_'+menuArray[i].menu_cj+'_'+menuArray[i].tjpx+'_menulist" class="span2 air" style="background-color: #E0F2F7;height: 640px;margin-left: 10px;padding-left: 10px;padding-top: 10px;padding-right: 10px;padding-bottom: 10px;"></div>'
-										 			+'<div id="bj_'+menuArray[i].menu_cj+'_'+menuArray[i].tjpx+'_workarea" class="span10 air" style="background-color: #E0F2F7;height: 640px;margin-left: 10px;padding-left: 5px;padding-top: 10px;">'
-									+'</div></div></div></div></div>');
+										 			+'<div class="span2"><div id="bj_'+menuArray[i].menu_cj+'_'+menuArray[i].tjpx+'_menulist" class="air" style="background-color: #E0F2F7;height: 640px;margin-left: 10px;padding-left: 10px;padding-top: 10px;padding-right: 10px;"></div></div>'
+										 			+'<div class="span10" style="margin-left: 10px;"><div id="bj_'+menuArray[i].menu_cj+'_'+menuArray[i].tjpx+'_workarea" class="air" style="background-color: #E0F2F7;height: 640px;margin-left: 0px;padding-left: 5px;padding-top: 10px;"></div></div>'
+									+'</div></div></div></div>');
 				}
 			}
 			$("#fathermenus").html(menu_html);
@@ -107,9 +107,12 @@ function openWin(urlstr,menucode,dividname){
 	if(curr_menucode != menucode){
 		curr_menucode = menucode;
 		menuStateSet(menucode);
-		
-		var htmlstr = '<iframe src="'+urlstr+'" width="99%" height="99%" frameborder="no" border="0" marginwidth="0" marginheight="0" allowtransparency="yes" scrolling="auto"></iframe>';
-		$("#"+dividname+"_workarea").html(htmlstr);
+		if(urlstr.indexOf("undefined") >= 0){
+			$("#"+dividname+"_workarea").html('<font size="+2" color="red">该功能正在开发中，敬请等待！</font>');
+		}else{
+			var htmlstr = '<iframe src="'+urlstr+'" width="99%" height="99%" frameborder="no" border="0" marginwidth="0" marginheight="0" allowtransparency="yes" scrolling="auto"></iframe>';
+			$("#"+dividname+"_workarea").html(htmlstr);
+		}
 	}
 }
 

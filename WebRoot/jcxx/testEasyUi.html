@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Basic TreeGrid - jQuery EasyUI Demo</title>
+    <link rel="stylesheet" type="text/css" href="../jquery-easyui/themes/default/easyui.css">
+    <link rel="stylesheet" type="text/css" href="../jquery-easyui/themes/icon.css">
+    <link rel="stylesheet" type="text/css" href="../jquery-easyui/demo/demo.css">
+</head>
+<body>
+    <h2>Basic TreeGrid</h2>
+    <p>TreeGrid allows you to expand or collapse group rows.</p>
+    <div style="margin:20px 0;"></div>
+    <table title="Folder Browser" class="easyui-treegrid" style="width:700px;height:250px"
+            data-options="
+                url: '/DeviceManagement/jcxx/sbflwh/cx1.do',
+                method: 'post',
+                rownumbers: true,
+                idField: 'fsbflid',
+                treeField: 'sblbmc'
+            ">
+        <thead>
+            <tr>
+                <th data-options="field:'sblbmc'" width="220">设备类别名称</th>
+                <th data-options="field:'sbcj'" width="100" align="right">设备层级</th>
+                <th data-options="field:'sfzl'" width="150">是否子类</th>
+            </tr>
+        </thead>
+    </table>
+ 
+</body>
+</html>
+<script type="text/javascript" src="../jquery-easyui/jquery.min.js"></script>
+<script type="text/javascript" src="../jquery-easyui/jquery.easyui.min.js"></script>
+<script src="testEasyUi.js" type="text/javascript"></script>

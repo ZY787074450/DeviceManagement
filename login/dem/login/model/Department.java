@@ -1,6 +1,6 @@
 package dem.login.model;
 
-public class Department {
+public class Department{
 
 	private String jgid;//机构编号
 	private String mc;//机构名称

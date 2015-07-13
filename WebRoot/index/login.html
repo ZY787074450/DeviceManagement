@@ -11,20 +11,20 @@
 	.div_center{
 		position: absolute;
 		top: 30%;
-		left: 15%;
-		transform: translate(-30%, -15%)
+		left: 10%;
+		transform: translate(-30%, -10%);
 	}
 	.div_center_top{
 		position: absolute;
 		top: 5%;
 		left: 10%;
-		transform: translate(-5%, -10%)
+		transform: translate(-5%, -10%);
 	}
 	.div_center_bottom{
 		position: absolute;
 		top: 55%;
 		left: 20%;
-		transform: translate(-55%, -20%)
+		transform: translate(-55%, -20%);
 	}
 	#loginarea{
 		width : 350px;
@@ -50,7 +50,37 @@
 		<div id="loginarea">
 			<div id="logindiv">
 				<form id="login_message" action="/DeviceManagement/user/login.do" method="post" class="form-horizontal">
-					<div class="control-group">
+					<table>
+						<tr>
+							<td><font color="#2A5DA5">用户账号：</font></td>
+							<td><input id="userid" name="userid" type="text" /></td>
+						</tr>
+						<tr>
+							<td><font color="#2A5DA5">登录密码：</font></td>
+							<td><input id="userpass" name="userpass" type="password" /></td>
+						</tr>
+						<tr><td colspan="2">&nbsp;</td></tr>
+						<tr>
+							<td colspan="2" align="center">
+								<a id="dl" class="btn btn-primary" href="#" onclick="click_submit()"><i class="icon-user"></i>登录</a>&nbsp;
+								<a class="btn btn-primary" href="#" onclick="click_reset()"><i class="icon-repeat"></i>重置</a>
+							</td>
+						</tr>
+						<tr><td colspan="2">&nbsp;</td></tr>
+						<tr><td colspan="2">&nbsp;</td></tr>
+						<tr>
+							<td colspan="2">
+								<div>
+									<font size="+1">登录须知：</font><br/>
+									用户账户为人员编号(默认为六位纯数字);<br/>
+									用户首次登录系统初始密码为222222;<br/>
+									用户首次登录系统后请及时修改登录密码。<br/>
+									如若忘记密码，点击<a href="#"><u>这里</u></a>联系系统管理员！
+								</div>
+							</td>
+						</tr>
+					</table>
+					<!-- <div class="control-group">
 						<label class="control-label" for="userid"><font color="#2A5DA5">用户账号：</font></label>
 						<div class="controls">
 							<input id="userid" name="userid" type="text" />
@@ -67,19 +97,11 @@
 							<a id="dl" class="btn btn-primary" href="#" onclick="click_submit()"><i class="icon-user"></i>登录</a>&nbsp;
 							<a class="btn btn-primary" href="#" onclick="click_reset()"><i class="icon-repeat"></i>重置</a>
 						</div>
-					</div>	
+					</div> -->	
 				</form>
 			</div>
 		</div>
-	</div>
-	<div class="div_center_bottom">
-		<div>
-			<font size="+1">登录须知：</font><br/>
-			用户账户为人员编号(默认为六位纯数字);<br/>
-			用户首次登录系统初始密码为222222;<br/>
-			用户首次登录系统后请及时修改登录密码。<br/>
-			如若忘记密码，点击<a href="#"><u>这里</u></a>联系系统管理员！
-		</div>
+		
 	</div>
 </body>
 </html>

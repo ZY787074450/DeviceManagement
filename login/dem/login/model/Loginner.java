@@ -1,6 +1,6 @@
 package dem.login.model;
 
-public class Loginner {
+public class Loginner{
 
 	private String userid;//主键 人员编号
 	private String mc;//姓名

@@ -1,6 +1,8 @@
 package dem.jcxx.model;
 
-public class UserQueryCondition {
+import dem.login.model.PagingAction;
+
+public class UserQueryCondition extends PagingAction {
 
 	private String userid;//人员编号
 	private String mc;//姓名

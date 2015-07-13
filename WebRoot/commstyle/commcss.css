@@ -27,7 +27,7 @@ body{
 
  	background-position:center;
 	z-index:111;
-	position:absolute;
+	position:fixed;
 	top:0;
 	left:0;
 }
@@ -43,7 +43,7 @@ body{
 .floatarea{
 	position: absolute;
 	top: 30%;
-	left: 40%;
+	left: 35%;
 	transform: translate(-30%, -15%);
 	display:none;
 	background-color: #E0F2F7;

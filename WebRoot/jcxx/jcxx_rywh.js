@@ -25,15 +25,18 @@ $(document).ready(function(){
 	queryuserlist();
 });
 
-function queryuserlist(){
-	greybackadd()
+function queryuserlist(actionstr){
+	greybackadd();
 	initCondition();
+	var urlparm = commask(actionstr,"userid");
 	$.ajax({
-		url : "/DeviceManagement/jcxx/rywh/cx.do?time="+new Date(),
+		url : "/DeviceManagement/jcxx/rywh/cx.do?time="+new Date()+urlparm,
 		type : "POST",
 		data : FormOp,
 		success : function(data){
 			greyback();
+			$("#sum").text(data.sum?data.sum:'0');
+			disOrEnable();
 			var tablehtml = '<tr>'
 								+'<th>人员编号</th>'
 								+'<th>姓名</th>'

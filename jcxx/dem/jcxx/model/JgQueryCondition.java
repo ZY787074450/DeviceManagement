@@ -1,6 +1,8 @@
 package dem.jcxx.model;
 
-public class JgQueryCondition {
+import dem.login.model.PagingAction;
+
+public class JgQueryCondition extends PagingAction {
 
 	private String jgid;//机构编号
 	private String mc;//机构名称
@@ -16,7 +18,7 @@ public class JgQueryCondition {
 	public String getMc() {
 		return mc;
 	}
-	public void setJgmc(String mc) {
+	public void setMc(String mc) {
 		this.mc = mc.trim();
 	}
 	public String getJgqy() {

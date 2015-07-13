@@ -12,7 +12,7 @@ public class GetUUIDnumber {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 
-		int sum = 5;
+		int sum = 8;
 		for(int i=0;i<sum;i++)
 			System.out.println("新生成UUID值为："+(CommonUtil.getUUID()).toUpperCase());
 		

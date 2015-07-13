@@ -1,5 +1,7 @@
 package dem.jcxx.controller;
 
+import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,10 +17,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import dem.jcxx.model.JgQueryCondition;
+import dem.jcxx.model.SbflwhObject;
 import dem.jcxx.model.UserQueryCondition;
 import dem.jcxx.service.JcxxService;
+import dem.jcxx.model.YjzwhObject;
 import dem.login.model.Department;
 import dem.login.model.Loginner;
+import dem.login.model.PagingAction;
 
 
 @Controller
@@ -45,17 +50,17 @@ public class JcxxController {
 	 */
 	@RequestMapping(value = "/rywh/cx.do", method = RequestMethod.POST,  produces = "application/json")
 	@ResponseBody
-	public Map<String, Object> rywh_cx(UserQueryCondition userQueryCondition, HttpServletRequest request, HttpServletResponse response){
-		Map<String, Object> map = new HashMap<String, Object>();
+	public Map<String, Object> rywh_cx(UserQueryCondition userQueryCondition, ModelMap map, HttpServletRequest request, HttpServletResponse response){
+		Map<String, Object> m = new HashMap<String, Object>();
 		try{
 			String userid = ((Loginner)(request.getSession().getAttribute("session_loginner"))).getUserid();
-			map = jcxxService.userlistQuery(userQueryCondition,userid);
+			m = jcxxService.userlistQuery(userQueryCondition,userid);
 		}catch(Exception e){
-			map.put("code", "888");
-			map.put("info", "查询失败");
-			map.put("userlist", null);
+			m.put("code", "888");
+			m.put("info", "查询失败");
+			m.put("userlist", null);
 		}
-		return map;
+		return m;
 	}
 	
 	@RequestMapping(value = "/rywh/add.do", method = RequestMethod.POST,  produces = "application/json")
@@ -211,6 +216,86 @@ public class JcxxController {
 		}catch(Exception e){
 			map.put("code", "888");
 			map.put("info", "注销失败");
+		}
+		return map;
+	}
+	
+	//预警值维护条件查询
+	@RequestMapping(value = "/yjzwh/cx.do", method = RequestMethod.POST,  produces = "application/json")
+	@ResponseBody
+	public Map<String, Object> yjzwh_cx(YjzwhObject yjzwhObject, HttpServletRequest request, HttpServletResponse response){
+		Map<String, Object> map = new HashMap<String, Object>();
+		try{
+			String userid = ((Loginner)(request.getSession().getAttribute("session_loginner"))).getUserid();
+			map = jcxxService.yjlistQuery(yjzwhObject,userid);
+		}catch(Exception e){
+			map.put("code", "888");
+			map.put("info", "查询失败");
+			map.put("yjlist", null);
+		}
+		return map;
+	}
+	//预警值维护信息更新
+	@RequestMapping(value = "/yjzwh/update.do", method = RequestMethod.POST,  produces = "application/json")
+	@ResponseBody
+	public Map<String, Object> yjzwh_update(YjzwhObject yjzwhObject, HttpServletRequest request, HttpServletResponse response){
+		Map<String, Object> map = new HashMap<String, Object>();
+		try{
+			String userid = ((Loginner)(request.getSession().getAttribute("session_loginner"))).getUserid();
+			map = jcxxService.yjUpdate(yjzwhObject,userid);
+		}catch(Exception e){
+			map.put("code", "888");
+			map.put("info", "更新失败");
+		}
+		return map;
+	}
+	
+	//设备分类维护查询
+	@RequestMapping(value = "/sbflwh/cx.do", method = RequestMethod.POST,  produces = "application/json")
+	@ResponseBody
+	public Map<String, Object> sbflwh_cx(SbflwhObject sbflwhObject, HttpServletRequest request, HttpServletResponse response){
+		Map<String, Object> map = new HashMap<String, Object>();
+		try{
+			String userid = ((Loginner)(request.getSession().getAttribute("session_loginner"))).getUserid();
+			map = jcxxService.sblblistQuery(userid);
+		}catch(Exception e){
+			map.put("code", "888");
+			map.put("info", "查询失败");
+			map.put("sblblist", null);
+		}
+		return map;
+	}
+	
+	//设备分类类别新增
+	@RequestMapping(value = "/sbflwh/add.do", method = RequestMethod.POST)
+	public String sbflwh_add(SbflwhObject sbflwhObject, HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException{
+		Map<String, Object> map = new HashMap<String, Object>();
+		try{
+			String userid = ((Loginner)(request.getSession().getAttribute("session_loginner"))).getUserid();
+			map = jcxxService.sblbInsert(sbflwhObject,userid);
+			if("200".equals(map.get("code"))){
+				return new String(("redirect:/jcxx/jcxx_sbflwh.html?msg=新增成功！").getBytes("utf-8"),"iso8859-1");
+			}else if("202".equals(map.get("code"))){
+				return new String("redirect:/jcxx/jcxx_sbflwh.html?msg=图片上传失败！".getBytes("utf-8"),"iso8859-1");
+			}
+		}catch(Exception e){
+			map.put("code", "888");
+			map.put("info", "新增失败");
+		}
+		return new String("redirect:/jcxx/jcxx_sbflwh.html?msg=系统异常，新增失败！".getBytes("utf-8"),"iso8859-1");
+	}
+	
+	//设备分类类别删除
+	@RequestMapping(value = "/sbflwh/remove.do", method = RequestMethod.POST,  produces = "application/json")
+	@ResponseBody
+	public Map<String, Object> sbflwh_remove(SbflwhObject sbflwhObject, HttpServletRequest request, HttpServletResponse response){
+		Map<String, Object> map = new HashMap<String, Object>();
+		try{
+			String userid = ((Loginner)(request.getSession().getAttribute("session_loginner"))).getUserid();
+			map = jcxxService.sblbDelete(sbflwhObject,userid);
+		}catch(Exception e){
+			map.put("code", "888");
+			map.put("info", "删除失败");
 		}
 		return map;
 	}
