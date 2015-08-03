@@ -2,9 +2,110 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+    <link rel="stylesheet" type="text/css" href="../jquery-easyui/themes/default/easyui.css">
+<link href="../bootstrap/css/bootstrap.css" type="text/css" rel="stylesheet" />
+<link href="../commstyle/commcss.css" type="text/css" rel="stylesheet" />
+<style type="text/css">
+	#add_alert{
+		position: absolute;
+		top: 20%;
+		left: 40%;
+		transform: translate(-30%, -15%);
+		display:none;
+		background-color: #E0F2F7;
+		z-index:1116;
+		border: 2px solid grey;
+		max-width: 700px;
+		max-height: 500px;
+	}
+</style>
+<title>设备入库</title>
 </head>
 <body>
-
+	<div id="czq">
+		<div id="top_title" class="well well-small" style="margin-bottom: 0px;height: 20px;"><font color="#0088CC"><i class="icon-wrench"></i><b style="font-size: 20px;">设备入库</b></font></div>
+	
+		<div id="top_condition" id="add">
+			<div style="background-color: #A7E8FA;height: 30px;padding: 5px 10px 0px 10px;"><font color="#0088CC" size="+1">填写设备入库信息</font></div>
+			<div style="padding: 10px 15px 10px 15px;">
+				<table style="width: 100%;">
+					<tr>
+						<td width="15%" align="right">设备类别(编号)：</td>
+						<td width="20%"><input type="text" placeholder="点击展开设备分类选项" class="nav-search-input" id="addsbflid" autocomplete="off" onfocus="open_append('add')" onblur="close_append()" readonly="readonly" /></td>
+						<td width="15%" align="right">设备名称：</td>
+						<td width="20%"><input type="text" placeholder="设备名称" class="nav-search-input" id="addsbmc" autocomplete="off" /></td>
+						<td width="10%"></td>
+					</tr>
+					<tr>
+						<td align="right">设备型号：</td>
+						<td><input type="text" placeholder="设备型号" class="nav-search-input" id="addsbxh" autocomplete="off" /></td>
+						<td align="right">生产厂家：</td>
+						<td><input type="text" placeholder="生产厂家" class="nav-search-input" id="addsccj" autocomplete="off" /></td>
+						<td></td>
+					</tr>
+					<tr>
+						<td align="right">出厂编号：</td>
+						<td><input type="text" placeholder="出厂编号" class="nav-search-input" id="addccbh" autocomplete="off" /></td>
+						<td align="right">设备采购人：</td>
+						<td><input type="text" placeholder="设备采购人" class="nav-search-input" id="addcgr" autocomplete="off" /></td>
+						<td></td>
+					</tr>
+					<tr>
+						<td align="right">采购日期：</td>
+						<td>
+							<input size="10" placeholder="点击展开时间编辑器" id="addcgrq" type="text" onclick="laydate({istime: true, format: 'YYYY-MM-DD'})" readonly="readonly">
+						</td>
+						<td align="right">入库日期：</td>
+						<td><input type="text" value="保存后自动生成" placeholder="保存后自动生成" class="nav-search-input" id="addrkrq" autocomplete="off" readonly="readonly" /></td>
+						<td></td>
+					</tr>
+					<tr>
+						<td align="right">采购数量：</td>
+						<td><input type="text" placeholder="采购量" class="nav-search-input" id="addcgsl" autocomplete="off" onblur="checknumber()" /></td>
+						<td align="right">备注：</td>
+						<td><input type="text" placeholder="..." class="nav-search-input" id="addnote" autocomplete="off" /></td>
+						<td></td>
+					</tr>
+					<tr>
+						<td colspan="4" style="text-align: center"><a href="#" class="btn btn-primary" onclick="addsbrkxx()">保存</a>&nbsp; &nbsp;<a href="#" class="btn btn-primary" onclick="resetform()">重置</a></td>
+						<td></td>
+					</tr>
+				</table>
+			</div>
+		</div>
+	</div>
+	<div id="greyground2"><div></div></div>
+	<div id="loading2"><font color="grey">数据选择中...</font></div>
+	<div class="floatarea_append" id="add_alert" onmouseover="focusAdd()" onmouseleave="blurAdd()">
+		<div style="background-color: #A7E8FA;height: 30px;padding: 5px 10px 0px 10px;"><font color="#0088CC" size="+1">选择设备类别</font><font color="red">(点击'灰色区域'或'选择数据后鼠标离开选择区'返回上一级)</font></div>
+		<div style="padding: 10px 15px 10px 15px;">
+			<div id="message_tip">正在加载数据，请稍等...</div>
+			<table id="data_table_add" class="easyui-treegrid" style="width:580px;height:420px;"
+		            data-options="
+		                url: '',
+		                method: 'post',
+		                animate: 'true',
+		                rownumbers: true,
+		                idField: 'sbflid',
+		                treeField: 'sblbmc'
+		            ">
+		        <thead>
+		            <tr>
+		                <th data-options="field:'sblbmc'" width="40%">设备类别名称</th>
+		                <th data-options="field:'sbcj'" width="10%" align="center">设备层级</th>
+		                <th data-options="field:'sfzl'" width="15%" align="center" formatter="sfzl">是否最底层子类</th>
+		                <th data-options="field:'sbflid'" width="10%" align="center" formatter="selectsbflid">选择</th>
+		            </tr>
+		        </thead>
+		    </table>
+		</div>
+	</div>
+		
 </body>
 </html>
+<script src="../bootstrap/jquery.js" type="text/javascript"></script>
+<script type="text/javascript" src="../jquery-easyui/jquery.easyui.min.js"></script>
+<script src="../bootstrap/js/bootstrap.js" type="text/javascript"></script>
+<script src="../laydate/laydate.js" type="text/javascript"></script>
+
+<script src="sbgl_sbrk.js" type="text/javascript"></script>

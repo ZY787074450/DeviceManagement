@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dem.sbgl.mapper.SbglMapper">
+
+<!-- 指定设备库存查询 -->
+<select id="sbkcquery" parameterType="String" resultType="int">
+	select (if(s1.rksl,s1.rksl,0) - if(s3.sysl,s3.sysl,0) - if(s4.cjsl,s4.cjsl,0)) sbkc
+	from (select sbflid,sum(rksl) rksl from sbgl_sbrk where sbflid = #{sbflid} group by sbflid) s1 
+		left join (select sbflid,count(*) sysl from sbgl_sbsy where sbflid = #{sbflid} group by sbflid) s3 on s1.sbflid=s3.sbflid
+		left join (select sbflid,count(*) cjsl from sbgl_sbcj where sbzt='8' and sbflid = #{sbflid} group by sbflid) s4 on s1.sbflid=s4.sbflid
+	where s1.sbflid = #{sbflid}
+</select>
+
+<insert id="sbrkInsert" parameterType="dem.sbgl.model.SbrkObject">
+	insert into sbgl_sbrk(rkid,sbflid,sbmc,sbxh,sccj,ccbh,cgr,cgrq,rkrq,rksl,note) 
+	values(#{rkid},#{sbflid},#{sbmc},#{sbxh},#{sccj},#{ccbh},#{cgr},#{cgrq},now(),#{rksl},#{note})
+</insert>
+<!-- 设备入库记信息查询 -->
+<select id="sbrkquery" parameterType="String" resultType="Map">
+	select rkid,s1.sbflid sbflid,s2.sblbmc sblbmc,sbmc,sbxh,sccj,ccbh,cgr 
+	from sbgl_sbrk s1 left join ss_sbfl s2 on s1.sbflid=s2.sbflid
+</select>
+<!-- 查询设备使用记录(表sbgl_sbsy中记录) -->
+<select id="sbsyquery" parameterType="dem.sbgl.model.SbsyObject" resultType="Map">
+	select xh,rkid,sbflid,sbmc,sbgl_sbsy.jgid jgid,ss_jg.mc jgmc,sbsyr,sbzt,azr,date_format(azrq,'%Y年%m月%d日') azrq,jdr,wxr,bfr,whr,sbgl_sbsy.note note 
+	from sbgl_sbsy left join ss_jg on sbgl_sbsy.jgid=ss_jg.jgid
+	where 1 = 1 
+	<if test="jgid != null and jgid != ''">
+		and sbgl_sbsy.jgid like "%"#{jgid}"%" 
+	</if>
+	<if test="jgmc != null and jgmc != ''">
+		and ss_jg.mc like "%"#{jgmc}"%" 
+	</if>
+	<if test="sbmc != null and sbmc != ''">
+		and sbmc like "%"#{sbmc}"%" 
+	</if>
+	<if test="sbzt != null and sbzt != ''">
+		and sbzt = #{sbzt} 
+	</if>
+	<if test="azrq_start != null and azrq_start != ''">
+		and azrq &gt; #{azrq_start}
+	</if>
+	<if test="azrq_end != null and azrq_end != ''">
+		and azrq &lt; #{azrq_end} 
+	</if>
+	${sql_paging_sort}
+</select>
+<!-- 查询设备使用记录计数(表sbgl_sbsy中记录) -->
+<select id="sbsycountquery" parameterType="dem.sbgl.model.SbsyObject" resultType="int">
+	select count(*)
+	from sbgl_sbsy left join ss_jg on sbgl_sbsy.jgid=ss_jg.jgid
+	where 1 = 1 
+	<if test="jgid != null and jgid != ''">
+		and sbgl_sbsy.jgid like "%"#{jgid}"%" 
+	</if>
+	<if test="jgmc != null and jgmc != ''">
+		and ss_jg.mc like "%"#{jgmc}"%" 
+	</if>
+	<if test="sbmc != null and sbmc != ''">
+		and sbmc like "%"#{sbmc}"%" 
+	</if>
+	<if test="sbzt != null and sbzt != ''">
+		and sbzt = #{sbzt} 
+	</if>
+	<if test="azrq_start != null and azrq_start != ''">
+		and azrq &gt; #{azrq_start}
+	</if>
+	<if test="azrq_end != null and azrq_end != ''">
+		and azrq &lt; #{azrq_end} 
+	</if>
+</select>
+<!-- 设备使用记录新增，即：设备安装后必备信息 -->
+<insert id="sbsyinsert" parameterType="dem.sbgl.model.SbsyObject">
+	insert into sbgl_sbsy(xh,rkid,sbflid,sbmc,jgid,sbsyr,sbzt,azr,azrq,note) 
+	values(#{xh},#{rkid},#{sbflid},#{sbmc},#{jgid},#{sbsyr},'0',#{azr},now(),#{note})
+</insert>
+<!-- 查询指定设备使用记录 -->
+<select id="sbsyqueryone" parameterType="String" resultType="dem.sbgl.model.SbsyObject">
+	select * from sbgl_sbsy where xh = #{xh}
+</select>
+<!-- 设备使用记录数据更新，即：维修、维护、检定、报废、修改   -->
+<update id="sbsyupdate" parameterType="dem.sbgl.model.SbsyObject">
+	update sbgl_sbsy
+	set 
+	<if test="jdr != null and jdr != '' and jdr != 'null'">
+		jdr = #{jdr},
+		jdrq = now(),
+	</if>
+	<if test="wxr != null and wxr != '' and wxr != 'null'">
+		wxr = #{wxr},
+		wxrq = now(),
+	</if>
+	<if test="bfr != null and bfr != '' and bfr != 'null'">
+		bfr = #{bfr},
+		bfrq = now(),
+	</if>
+	<if test="whr != null and whr != '' and whr != 'null'">
+		whr = #{whr},
+		whrq = now(),
+	</if>
+		sbzt = #{sbzt}
+	where xh = #{xh}
+</update>
+<!-- 设备使用记录删除 -->
+<delete id="sbsydelete" parameterType="String">
+	delete from sbgl_sbsy where xh = #{xh}
+</delete>
+<!-- 设备操作记录新增，即：添加1维修、4维护、3检定、2报废操作的记录 -->
+<insert id="sbczinsert" parameterType="dem.sbgl.model.SbsyHisObject">
+	insert into sbgl_sbsy_his(xh,rkid,sbflid,sbmc,jgid,sbsylx,czr,czrq,note) 
+	values(#{xh},#{rkid},#{sbflid},#{sbmc},#{jgid},#{sbsylx},#{czr},now(),#{note})
+</insert>
+
+<!-- 查询设备使用操作记录(表sbgl_sbsy_his中记录) -->
+<select id="sbsyjlquery" parameterType="dem.sbgl.model.SbsyHisObject" resultType="Map">
+	select sbmc,sbgl_sbsy_his.jgid jgid,ss_jg.mc jgmc,sbsylx,czr,date_format(czrq,'%Y年%m月%d日') czrq,sbgl_sbsy_his.note note 
+	from sbgl_sbsy_his left join ss_jg on sbgl_sbsy_his.jgid=ss_jg.jgid
+	where 1 = 1 
+	<if test="jgid != null and jgid != ''">
+		and sbgl_sbsy_his.jgid like "%"#{jgid}"%" 
+	</if>
+	<if test="jgmc != null and jgmc != ''">
+		and ss_jg.mc like "%"#{jgmc}"%" 
+	</if>
+	<if test="sbmc != null and sbmc != ''">
+		and sbmc like "%"#{sbmc}"%" 
+	</if>
+	<if test="sbsylx != null and sbsylx != ''">
+		and sbsylx = #{sbsylx} 
+	</if>
+	<if test="czrq_start != null and czrq_start != ''">
+		and czrq &gt; #{czrq_start}
+	</if>
+	<if test="czrq_end != null and czrq_end != ''">
+		and czrq &lt; #{czrq_end}
+	</if>
+</select>
+<!-- 查询设备使用操作记录计数(表sbgl_sbsy_his中记录) -->
+<select id="sbsyjlcountquery" parameterType="dem.sbgl.model.SbsyHisObject" resultType="int">
+	select count(*)
+	from sbgl_sbsy_his left join ss_jg on sbgl_sbsy_his.jgid=ss_jg.jgid
+	where 1 = 1 
+	<if test="jgid != null and jgid != ''">
+		and sbgl_sbsy_his.jgid like "%"#{jgid}"%" 
+	</if>
+	<if test="jgmc != null and jgmc != ''">
+		and ss_jg.mc like "%"#{jgmc}"%" 
+	</if>
+	<if test="sbmc != null and sbmc != ''">
+		and sbmc like "%"#{sbmc}"%" 
+	</if>
+	<if test="sbsylx != null and sbsylx != ''">
+		and sbsylx = #{sbsylx} 
+	</if>
+	<if test="czrq_start != null and czrq_start != ''">
+		and czrq &gt; #{czrq_start}
+	</if>
+	<if test="czrq_end != null and czrq_end != ''">
+		and czrq &lt; #{czrq_end}
+	</if>
+</select>
+
+<!-- 设备出借记录查询 -->
+<select id="sbcjlistquery" parameterType="dem.sbgl.model.SbcjObject" resultType="Map">
+	select xh,rkid,sbflid,sbmc,sbgl_sbcj.jgid jgid,ss_jg.mc jgmc,sbsyr,sbzt,azr,date_format(azrq,'%Y年%m月%d日') azrq,date_format(cjrq,'%Y年%m月%d日') cjrq,date_format(hrrq,'%Y年%m月%d日') hrrq,sbgl_sbcj.note note 
+	from sbgl_sbcj left join ss_jg on sbgl_sbcj.jgid=ss_jg.jgid
+	order by cjrq
+</select>
+<!-- 设备出借记录查询计数 -->
+<select id="sbcjcountquery" parameterType="dem.sbgl.model.SbcjObject" resultType="int">
+	select count(*)
+	from sbgl_sbcj 
+</select>
+<!-- 设备出借记录新增 -->
+<insert id="sbcjinsert" parameterType="dem.sbgl.model.SbcjObject">
+	insert into sbgl_sbcj(xh,rkid,sbflid,sbmc,jgid,sbsyr,sbzt,azr,azrq,cjrq,note) 
+	values(#{xh},#{rkid},#{sbflid},#{sbmc},#{jgid},#{sbsyr},'8',#{azr},#{azrq},now(),#{note})
+</insert>
+<!-- 设备还入  -->
+<update id="sbcjupdate" parameterType="dem.sbgl.model.SbcjObject">
+	update sbgl_sbcj
+	set hrrq = now(),
+		sbzt = '9'
+	where xh = #{xh}
+</update>
+
+</mapper>

@@ -8,27 +8,28 @@
 </head>
 <body>
 	<div id="czq">
-		<div class="well well-small" style="margin-bottom: 0px"><font color="#0088CC" size="+1"><i class="icon-wrench"></i><b>密码修改</b></font></div>
-		<div>
+		<div id="top_title" class="well well-small" style="margin-bottom: 0px"><font color="#0088CC" size="+1"><i class="icon-wrench"></i><b>密码修改</b></font></div>
+		<div id="top_condition">
 			<div>
 				<table class="table">
 					<tr>
-						<td width="100px">请输入原密码：</td>
-						<td width="180px"><input class="sel" type="password" placeholder="原密码..." id="old_password" /></td>
+						<td width="100px" height="30px" style="text-align: right">请输入原密码：</td>
+						<td width="180px" style="text-align: left"><input class="sel" type="password" placeholder="原密码..." id="old_password" /></td>
 						<td width="250px"></td>
 					</tr>
 					<tr>
-						<td>请输入新密码：</td>
-						<td><input class="sel" type="password" placeholder="新密码..." id="new_password" /></td>
+						<td height="30px" style="text-align: right">请输入新密码：</td>
+						<td style="text-align: left"><input class="sel" type="password" placeholder="新密码..." id="new_password" /></td>
 						<td></td>
 					</tr>
 					<tr>
-						<td>再次输入新密码：</td>
-						<td><input class="sel" type="password" placeholder="新密码确认..." id="new_password_again" /></td>
+						<td height="30px" style="text-align: right">再次输入新密码：</td>
+						<td style="text-align: left"><input class="sel" type="password" placeholder="新密码确认..." id="new_password_again" /></td>
 						<td></td>
 					</tr>
 					<tr>
-						<td colspan="2" style="text-align: center"><a href="#" class="btn btn-primary" onclick="updatePassword()">保存</a></td>
+						<td></td>
+						<td height="30px" style="text-align: left"><a href="#" class="btn btn-primary" onclick="updatePassword()">保存</a></td>
 						<td></td>
 					</tr>
 					<tr>

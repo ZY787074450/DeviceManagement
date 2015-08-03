@@ -19,8 +19,9 @@ function updatePassword(){
 			success : function(data){
 				if(data.userid){
 					alert(data.info);
+					window.parent.location.href="/DeviceManagement/index/login.html";
 				}else{
-					alert("数据处理异常，请联系系统管理员！");
+					alert("密码修改功能暂时停用，请联系系统管理员维护系统！");
 				}
 			}
 		});

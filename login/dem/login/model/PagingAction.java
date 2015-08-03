@@ -22,13 +22,12 @@ public class PagingAction {
 	private String sql_paging_sort="";
 
 	public String getSql_paging_sort() {
-		if(getSortname()!="" && getSortname()!=null){
+		if(!("".equals(getSortname())) && getSortname()!=null){
 			sql_paging_sort += (" order by "+getSortname());
 		}
 		if(ispaging && getCountline()!=0 && getCurrpage()>=0){
 			sql_paging_sort += (" limit "+getFirstpram()+","+getSecondpram());
 		}
-		
 		return sql_paging_sort;
 	}
 	public void setSql_paging_sort(String sql_paging_sort) {
@@ -123,6 +122,7 @@ public class PagingAction {
 			System.out.println("请求参数字符串非法，请求无效！");
 			return "";
 		}
+		sql_new_str = sql_new_str.replace("@", " ");
 		return sql_new_str;
 	}
 	

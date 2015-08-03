@@ -62,6 +62,22 @@ public class JcxxController {
 		}
 		return m;
 	}
+	//查询机构及站点信息，无条件
+	@RequestMapping(value = "/rywh/getdeparments.do", method = RequestMethod.POST,  produces = "application/json")
+	@ResponseBody
+	public Map<String, Object> getdeparments(JgQueryCondition jgQueryCondition, ModelMap map, HttpServletRequest request, HttpServletResponse response) {	
+		Map<String, Object> m = new HashMap<String, Object>();
+		try {
+			String userid = ((Loginner)(request.getSession().getAttribute("session_loginner"))).getUserid();
+			jgQueryCondition.setJgzt("0");
+			m = jcxxService.jglistQuery(jgQueryCondition,userid);	
+		} catch (Exception e) {
+			m.put("code", "888");
+			m.put("info", "查询失败");
+			m.put("jglist", null);
+		}
+		return m;
+	}
 	
 	@RequestMapping(value = "/rywh/add.do", method = RequestMethod.POST,  produces = "application/json")
 	@ResponseBody
@@ -146,7 +162,6 @@ public class JcxxController {
 		try {
 			String userid = ((Loginner)(request.getSession().getAttribute("session_loginner"))).getUserid();
 			m = jcxxService.setUserPassword(userid,oldpassword,newpassword);
-			System.out.println("输出显示操作代码："+m.get("code"));
 			if("200".equals(m.get("code"))){
 				System.out.println("当前角色已注销");
 				request.getSession().setAttribute("session_loginner", null);
@@ -173,6 +188,36 @@ public class JcxxController {
 			map.put("jglist", null);
 		}
 		return map;
+	}
+	//查询机构类型，无条件
+	@RequestMapping(value = "/qxzdjbmwh/getjglx.do", method = RequestMethod.POST,  produces = "application/json")
+	@ResponseBody
+	public Map<String, Object> getjglx(ModelMap map, HttpServletRequest request, HttpServletResponse response) {	
+		Map<String, Object> m = new HashMap<String, Object>();
+		try {
+			String userid = ((Loginner)(request.getSession().getAttribute("session_loginner"))).getUserid();
+			m = jcxxService.jglxlistQuery(userid);	
+		} catch (Exception e) {
+			m.put("code", "888");
+			m.put("info", "查询失败");
+			m.put("jglist", null);
+		}
+		return m;
+	}
+	//查询机构区域，无条件
+	@RequestMapping(value = "/qxzdjbmwh/getjgqy.do", method = RequestMethod.POST,  produces = "application/json")
+	@ResponseBody
+	public Map<String, Object> getjgqy(ModelMap map, HttpServletRequest request, HttpServletResponse response) {	
+		Map<String, Object> m = new HashMap<String, Object>();
+		try {
+			String userid = ((Loginner)(request.getSession().getAttribute("session_loginner"))).getUserid();
+			m = jcxxService.jgqylistQuery(userid);	
+		} catch (Exception e) {
+			m.put("code", "888");
+			m.put("info", "查询失败");
+			m.put("jglist", null);
+		}
+		return m;
 	}
 	
 	//气象站点及部门维护新增部门
@@ -265,6 +310,20 @@ public class JcxxController {
 		}
 		return map;
 	}
+	//设备分类维护更新
+	@RequestMapping(value = "/sbflwh/update.do", method = RequestMethod.POST,  produces = "application/json")
+	@ResponseBody
+	public Map<String, Object> sbflwh_update(SbflwhObject sbflwhObject, HttpServletRequest request, HttpServletResponse response){
+		Map<String, Object> map = new HashMap<String, Object>();
+		try{
+			String userid = ((Loginner)(request.getSession().getAttribute("session_loginner"))).getUserid();
+			map = jcxxService.sblbUpdate(sbflwhObject,userid);
+		}catch(Exception e){
+			map.put("code", "888");
+			map.put("info", "查询失败");
+		}
+		return map;
+	}
 	
 	//设备分类类别新增
 	@RequestMapping(value = "/sbflwh/add.do", method = RequestMethod.POST)
@@ -294,7 +353,7 @@ public class JcxxController {
 			String userid = ((Loginner)(request.getSession().getAttribute("session_loginner"))).getUserid();
 			map = jcxxService.sblbDelete(sbflwhObject,userid);
 		}catch(Exception e){
-			map.put("code", "888");
+			map.put("code", "888"); 
 			map.put("info", "删除失败");
 		}
 		return map;

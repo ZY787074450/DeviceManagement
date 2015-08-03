@@ -6,10 +6,25 @@ public class YjzwhObject extends PagingAction {
 
 	private String yjid;
 	private String jgid;
+	private String jgmc;
 	private String mc;
 	private String yjz;
 	private String note;
+	private String yjlx;
 	
+	
+	public String getYjlx() {
+		return yjlx;
+	}
+	public void setYjlx(String yjlx) {
+		this.yjlx = yjlx.trim();
+	}
+	public String getJgmc() {
+		return jgmc;
+	}
+	public void setJgmc(String jgmc) {
+		this.jgmc = jgmc.trim();
+	}
 	public String getYjid() {
 		return yjid;
 	}

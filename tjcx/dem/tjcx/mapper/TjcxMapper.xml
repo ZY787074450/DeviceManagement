@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dem.tjcx.mapper.TjcxMapper">
+
+<!-- 设备使用统计（站点）查询 -->
+<select id="sbsytj_zdquery" parameterType="dem.tjcx.model.TimeFrameObject" resultType="Map">
+	select s1.jgid jgid,s1.mc jgmc,s2.azsl sbazsl,s3.cjsl sbcjsl,s4.bfsl sbbfsl,s5.jdcs sbjdcs,s6.wxcs sbwxcs
+	from ss_jg s1 
+		left join (select jgid,count(*) azsl 
+					from sbgl_sbsy 
+					where 1=1 and azrq is not null 
+					<if test="rq_start != null and rq_start != ''">
+						and azrq &gt; #{rq_start} 
+					</if>
+					<if test="rq_end != null and rq_end != ''">
+						and azrq &lt; #{rq_end} 
+					</if>
+					group by jgid) s2 on s1.jgid=s2.jgid
+		left join (select jgid,count(*) cjsl 
+					from sbgl_sbcj 
+					where sbzt='8' and cjrq is not null 
+					<if test="rq_start != null and rq_start != ''">
+						and cjrq &gt; #{rq_start} 
+					</if>
+					<if test="rq_end != null and rq_end != ''">
+						and cjrq &lt; #{rq_end} 
+					</if>
+					group by jgid) s3 on s1.jgid=s3.jgid 
+		left join (select jgid,count(*) bfsl 
+					from sbgl_sbsy 
+					where 1=1 and bfrq is not null 
+					<if test="rq_start != null and rq_start != ''">
+						and bfrq &gt; #{rq_start} 
+					</if>
+					<if test="rq_end != null and rq_end != ''">
+						and bfrq &lt; #{rq_end} 
+					</if> 
+					group by jgid) s4 on s1.jgid=s4.jgid 
+		left join (select jgid,count(*) jdcs 
+					from sbgl_sbsy_his 
+					where sbsylx='3' and czrq is not null 
+					<if test="rq_start != null and rq_start != ''">
+						and czrq &gt; #{rq_start} 
+					</if>
+					<if test="rq_end != null and rq_end != ''">
+						and czrq &lt; #{rq_end} 
+					</if> 
+					group by jgid) s5 on s1.jgid=s5.jgid 
+		left join (select jgid,count(*) wxcs 
+					from sbgl_sbsy_his 
+					where sbsylx='1' and czrq is not null 
+					<if test="rq_start != null and rq_start != ''">
+						and czrq &gt; #{rq_start} 
+					</if>
+					<if test="rq_end != null and rq_end != ''">
+						and czrq &lt; #{rq_end} 
+					</if>
+					group by jgid) s6 on s1.jgid=s6.jgid 
+	${sql_paging_sort}
+</select>
+<!-- 设备使用统计（站点）查询计数 -->
+<select id="sbsytj_zdcountquery" parameterType="String" resultType="int">
+	select count(*) from ss_jg
+</select>
+
+<!-- 设备使用统计（设备）查询 -->
+<select id="sbsytj_sbquery" parameterType="dem.tjcx.model.TimeFrameObject" resultType="Map">
+	select s1.sbflid sbflid,s7.sblbmc sblbmc,s2.azsl sbazsl,s3.cjsl sbcjsl,s4.bfsl sbbfsl,s5.jdcs sbjdcs,s6.wxcs sbwxcs
+	from (select sbflid,sum(rksl) rksl 
+			from sbgl_sbrk 
+			where 1=1 and cgrq is not null 
+			<if test="rq_start != null and rq_start != ''">
+				and cgrq &gt; #{rq_start} 
+			</if>
+			<if test="rq_end != null and rq_end != ''">
+				and cgrq &lt; #{rq_end} 
+			</if>
+			group by sbflid) s1  
+		left join (select sbflid,count(*) azsl 
+					from sbgl_sbsy 
+					where 1=1 and azrq is not null 
+					<if test="rq_start != null and rq_start != ''">
+						and azrq &gt; #{rq_start} 
+					</if>
+					<if test="rq_end != null and rq_end != ''">
+						and azrq &lt; #{rq_end} 
+					</if>
+					group by sbflid) s2 on s1.sbflid=s2.sbflid
+		left join (select sbflid,count(*) cjsl 
+					from sbgl_sbcj 
+					where sbzt='8' and cjrq is not null 
+					<if test="rq_start != null and rq_start != ''">
+						and cjrq &gt; #{rq_start} 
+					</if>
+					<if test="rq_end != null and rq_end != ''">
+						and cjrq &lt; #{rq_end} 
+					</if>
+					group by sbflid) s3 on s1.sbflid=s3.sbflid 
+		left join (select sbflid,count(*) bfsl 
+					from sbgl_sbsy 
+					where 1=1 and bfrq is not null 
+					<if test="rq_start != null and rq_start != ''">
+						and bfrq &gt; #{rq_start} 
+					</if>
+					<if test="rq_end != null and rq_end != ''">
+						and bfrq &lt; #{rq_end} 
+					</if> 
+					group by sbflid) s4 on s1.sbflid=s4.sbflid 
+		left join (select sbflid,count(*) jdcs 
+					from sbgl_sbsy_his 
+					where sbsylx='3' and czrq is not null 
+					<if test="rq_start != null and rq_start != ''">
+						and czrq &gt; #{rq_start} 
+					</if>
+					<if test="rq_end != null and rq_end != ''">
+						and czrq &lt; #{rq_end} 
+					</if> 
+					group by sbflid) s5 on s1.sbflid=s5.sbflid 
+		left join (select sbflid,count(*) wxcs 
+					from sbgl_sbsy_his 
+					where sbsylx='1' and czrq is not null 
+					<if test="rq_start != null and rq_start != ''">
+						and czrq &gt; #{rq_start} 
+					</if>
+					<if test="rq_end != null and rq_end != ''">
+						and czrq &lt; #{rq_end} 
+					</if>
+					group by sbflid) s6 on s1.sbflid=s6.sbflid 
+		left join ss_sbfl s7 on s1.sbflid=s7.sbflid 
+	${sql_paging_sort}
+</select>
+<!-- 设备使用统计（设备）查询计数 -->
+<select id="sbsytj_sbcountquery" parameterType="dem.tjcx.model.TimeFrameObject" resultType="int">
+	select count(*) 
+	from (select sbflid,sum(rksl) rksl 
+			from sbgl_sbrk 
+			where 1=1 and cgrq is not null 
+			<if test="rq_start != null and rq_start != ''">
+				and cgrq &gt; #{rq_start} 
+			</if>
+			<if test="rq_end != null and rq_end != ''">
+				and cgrq &lt; #{rq_end} 
+			</if>
+			group by sbflid) s1
+</select>
+
+</mapper>

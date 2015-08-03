@@ -7,8 +7,17 @@ public class JgQueryCondition extends PagingAction {
 	private String jgid;//机构编号
 	private String mc;//机构名称
 	private String jgqy;//机构所属区域
+	private String jglx;//机构类型
 	private String jgzt;//机构状态
 	private String lrrq;//录入日期
+	
+	
+	public String getJglx() {
+		return jglx;
+	}
+	public void setJglx(String jglx) {
+		this.jglx = jglx.trim();
+	}
 	public String getJgid() {
 		return jgid;
 	}

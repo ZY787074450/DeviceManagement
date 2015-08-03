@@ -5,17 +5,20 @@
 
 <!-- 条件查询系统操作人员 -->
 <select id="userlistQuery" parameterType="dem.jcxx.model.UserQueryCondition" resultType="Map">
-	select userid,mc,jgid,tel,userzt,note,date_format(lrrq,'%Y-%m-%d %H:%i:%s') as lrrq 
-	from ss_user
+	select userid,ss_user.mc mc,ss_user.jgid jgid,ss_jg.mc jgmc,tel,userzt,ss_user.note note,date_format(ss_user.lrrq,'%Y年%m月%d日') as lrrq 
+	from ss_user left join ss_jg on ss_user.jgid = ss_jg.jgid
 	where 1=1 
 	<if test="userid != null and userid != ''">
 		and userid like "%"#{userid}"%" 
 	</if>
 	<if test="mc != null and mc != ''">
-		and mc like "%"#{mc}"%" 
+		and ss_user.mc like "%"#{mc}"%" 
 	</if>
 	<if test="jgid != null and jgid != ''">
-		and jgid like "%"#{jgid}"%" 
+		and ss_user.jgid like "%"#{jgid}"%" 
+	</if>
+	<if test="jgmc != null and jgmc != ''">
+		and ss_jg.mc like "%"#{jgmc}"%" 
 	</if>
 	<if test="tel != null and tel != ''">
 		and tel like "%"#{tel}"%" 
@@ -23,12 +26,13 @@
 	<if test="userzt != null and userzt != ''">
 		and userzt = #{userzt}
 	</if>
-	<!-- <if test="lrrq_start != null and lrrq_start != '' and lrrq_start like '%-%-%'">
+	<!-- <if test="lrrq_start != null and lrrq_start != ''">
 		and lrrq &gt; to_date(#{lrrq_start},"YYYY-mm-dd") 
 	</if>
-	<if test="lrrq_end != null and lrrq_end != '' and lrrq_end like '%-%-%'">
+	<if test="lrrq_end != null and lrrq_end != ''">
 		and lrrq &lt; to_date(#{lrrq_end},"YYYY-mm-dd")  
 	</if> -->
+	and userid != '000000'
 	${sql_paging_sort}
 </select>
 <select id="userCount" parameterType="dem.jcxx.model.UserQueryCondition" resultType="int">
@@ -49,6 +53,7 @@
 	<if test="userzt != null and userzt != ''">
 		and userzt = #{userzt}
 	</if>
+	and userid != '000000'
 </select>
 <select id="departmentCount" parameterType="dem.jcxx.model.JgQueryCondition" resultType="int">
 	select count(*) from ss_jg
@@ -57,20 +62,36 @@
 		and jgid like "%"#{jgid}"%" 
 	</if>
 	<if test="mc != null and mc != ''">
-		and s1.mc like "%"#{mc}"%" 
+		and mc like "%"#{mc}"%" 
+	</if>
+	<if test="jglx != null and jglx != ''">
+		and jglx = #{jgzt} 
+	</if>
+	<if test="jgqy != null and jgqy != ''">
+		and jgqy = #{jgqy} 
+	</if>
+	<if test="jgzt != null and jgzt != ''">
+		and jgzt = #{jgzt} 
 	</if>
 </select>
 <select id="yjzCount" parameterType="dem.jcxx.model.YjzwhObject" resultType="int">
-	select count(*) from ss_yjfl
+	select count(*) 
+	from ss_yjfl s1 left join ss_jg s2 on s1.jgid=s2.jgid
 	where 1=1 
 	<if test="jgid != null and jgid != ''">
-		and jgid like "%"#{jgid}"%" 
+		and s1.jgid like "%"#{jgid}"%" 
+	</if>
+	<if test="jgmc != null and jgmc != ''">
+		and s2.mc like "%"#{jgmc}"%" 
 	</if>
 	<if test="mc != null and mc != ''">
-		and mc like "%"#{mc}"%" 
+		and s1.mc like "%"#{mc}"%" 
 	</if>
-	<if test="yjid != null and yjid != ''">
-		and yjid = #{yjid} 
+	<if test='yjlx == "2"'>
+		and s1.jgid = '0000'
+	</if>
+	<if test='yjlx == "1"'>
+		and s1.jgid != '0000'
 	</if>
 </select>
 
@@ -125,18 +146,34 @@
 </update>
 
 <!-- 条件查询系统站点/部门 -->
-<select id="jglistQuery" parameterType="Map" resultType="Map">
-	select s1.jgid jgid,s1.mc mc,s1.jglx jglx,s2.mc jglxmc,s1.jgqy jgqy,s3.mc jgqymc,jgjd,jgwd,jghb,jgdz,jglxr,jglxdh,jgzt,note,date_format(lrrq,'%Y-%m-%d %H:%i:%s') as lrrq 
+<select id="jglistQuery" parameterType="dem.jcxx.model.JgQueryCondition" resultType="Map">
+	select s1.jgid jgid,s1.mc mc,s1.jglx jglx,s2.mc jglxmc,s1.jgqy jgqy,s3.mc jgqymc,jgjd,jgwd,jghb,jgdz,jglxr,jglxdh,jgzt,note,date_format(lrrq,'%Y年%m月%d日') as lrrq 
 	from ss_jg s1 left join ss_jglx s2 on s1.jglx=s2.jglx
 				  left join ss_jgqy s3 on s1.jgqy=s3.jgqy
 	where 1=1 
 	<if test="jgid != null and jgid != ''">
-		and jgid like "%"#{jgid}"%" 
+		and s1.jgid like "%"#{jgid}"%" 
 	</if>
 	<if test="mc != null and mc != ''">
 		and s1.mc like "%"#{mc}"%" 
 	</if>
+	<if test="jglx != null and jglx != ''">
+		and s1.jglx = #{jgzt} 
+	</if>
+	<if test="jgqy != null and jgqy != ''">
+		and s1.jgqy = #{jgqy} 
+	</if>
+	<if test="jgzt != null and jgzt != ''">
+		and jgzt = #{jgzt} 
+	</if>
 	${sql_paging_sort}
+</select>
+
+<select id="jglxlistQuery" parameterType="String" resultType="Map">
+	select jglx,mc from ss_jglx
+</select>
+<select id="jgqylistQuery" parameterType="String" resultType="Map">
+	select jgqy,mc from ss_jgqy
 </select>
 
 <select id="getLastJgid" parameterType="String" resultType="String">
@@ -167,17 +204,23 @@
 
 <!-- 条件查询预警信息 -->
 <select id="yjlistQuery" parameterType="dem.jcxx.model.YjzwhObject" resultType="Map">
-	select yjid,jgid,mc,yjz,note
-	from ss_yjfl
+	select yjid,s1.jgid jgid,s1.mc mc,yjz,s1.note note,s2.mc jgmc
+	from ss_yjfl s1 left join ss_jg s2 on s1.jgid=s2.jgid
 	where 1=1 
 	<if test="jgid != null and jgid != ''">
-		and jgid like "%"#{jgid}"%" 
+		and s1.jgid like "%"#{jgid}"%" 
+	</if>
+	<if test="jgmc != null and jgmc != ''">
+		and s2.mc like "%"#{jgmc}"%" 
 	</if>
 	<if test="mc != null and mc != ''">
-		and mc like "%"#{mc}"%" 
+		and s1.mc like "%"#{mc}"%" 
 	</if>
-	<if test="yjid != null and yjid != ''">
-		and yjid = #{yjid} 
+	<if test='yjlx == "2"'>
+		and s1.jgid = '0000'
+	</if>
+	<if test='yjlx == "1"'>
+		and s1.jgid != '0000'
 	</if>
 	${sql_paging_sort}
 </select>
@@ -206,10 +249,28 @@
 	set yxbz = 'N'
 	where sbflid = #{sbflid}
 </update>
+<update id="sblbUpdate" parameterType="dem.jcxx.model.SbflwhObject">
+	update ss_sbfl
+	set sblbmc = #{sblbmc}
+	where sbflid = #{sbflid}
+</update>
 <update id="updatesfzl" parameterType="dem.jcxx.model.SbflwhObject">
 	update ss_sbfl
 	set sfzl = '0'
 	where sbflid = #{fsbflid}
 </update>
+
+<select id="findchildren" parameterType="List" resultType="String">
+	select group_concat(fsbflidarr) fsbflidarray from (select fsbflid,group_concat(sbflid) fsbflidarr from ss_sbfl where yxbz='Y' group by fsbflid) s1 where fsbflid in 
+	<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+    	#{item}
+    </foreach>
+</select>
+<select id="countsbrkwithsbflid" parameterType="List" resultType="int">
+	select count(*) from sbgl_sbrk where sbflid in 
+	<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+    	#{item}
+    </foreach>
+</select>
 
 </mapper>

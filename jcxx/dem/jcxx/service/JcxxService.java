@@ -38,6 +38,12 @@ public interface JcxxService {
 	//机构条件查询
 	public Map<String, Object> jglistQuery(JgQueryCondition jgQueryCondition, String userid);
 	
+	//查询机构类型，无条件查询
+	public Map<String, Object> jglxlistQuery(String userid);
+	
+	//查询机构所属区域，无条件查询
+	public Map<String, Object> jgqylistQuery(String userid);
+	
 	//机构信息修改更新
 	public Map<String, Object> jgUpdate(Department department, String userid);
 	
@@ -55,6 +61,9 @@ public interface JcxxService {
 	
 	//设备分类(类别)维护查询
 	public Map<String, Object> sblblistQuery(String userid);
+	
+	//设备分类更新
+	public Map<String, Object> sblbUpdate(SbflwhObject sbflwhObject, String userid);
 	
 	//设备类别新增
 	public Map<String, Object> sblbInsert(SbflwhObject sbflwhObject, String userid);

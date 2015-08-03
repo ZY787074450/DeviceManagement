@@ -100,7 +100,9 @@ function drawtreemodel(sblbObj,cj){
 						+'<td style="text-align: left;">'+draw_cj+(sblbObj.sblbmc?sblbObj.sblbmc:'')+'</td>'
 						+'<td>'+(sblbObj.sbcj?sblbObj.sbcj:'')+'</td>'
 						+('<td><a href="#" title="点击查看大图" onclick="loadpicture(\''+(sblbObj.sbtpdz?sblbObj.sbtpdz:'')+'\')">点击查看大图</a></td>')
-						+('<td><a href="#" title="添加子类" onclick="addsblb(\''+(sblbObj.sbflid?sblbObj.sbflid:'')+'\',\''+(sblbObj.sbcj?sblbObj.sbcj:'')+'\')">'
+						+('<td><a href="#" title="修改类名" onclick="updatesblb(\''+(sblbObj.sbflid?sblbObj.sbflid:'')+'\',\''+(sblbObj.sblbmc?sblbObj.sblbmc:'')+'\')">'
+						+'<i class="icon-plus-sign"></i></a>&nbsp;&nbsp;')
+						+('<a href="#" title="添加子类" onclick="addsblb(\''+(sblbObj.sbflid?sblbObj.sbflid:'')+'\',\''+(sblbObj.sbcj?sblbObj.sbcj:'')+'\')">'
 						+'<i class="icon-plus-sign"></i></a>&nbsp;&nbsp;')
 						+('<a href="#" title="删除该类" onclick="removesblb(\''+(sblbObj.sbflid?sblbObj.sbflid:'')+'\',\''+(sblbObj.sblbmc?sblbObj.sblbmc:'')+'\')">'
 						+'<i class="icon-minus-sign"></i></a></td>')
@@ -118,6 +120,7 @@ function greyback(){
 	$("#greyground").hide();
 	$("#loading").hide();
 	$("#add").hide();
+	$("#update").hide();
 	$("#remove").hide();
 	$("#loadpic").hide();
 }
@@ -141,6 +144,13 @@ function addsblb(fsbflid,sbcj){
 	$("#addfsbflid").val(fsbflid);
 	$("#addsbcj").val((parseInt(sbcj)+1));
 }
+//打开更新区域div
+function updatesblb(sbflid,sblbmc){
+	greybackadd();
+	$("#update").show();
+	$("#updatesbflid").val(sbflid);
+	$("#updatesblbmc").val(sblbmc);
+}
 //打开新增区域div
 function removesblb(sbflid,sblbmc){
 	greybackadd();
@@ -149,8 +159,35 @@ function removesblb(sbflid,sblbmc){
 	$("#removesbflid").val(sbflid);
 }
 function addsbwhfl(){
+	if(trimspace($("#addsblbmc").val())==''){
+		alert("设备类别名称不能为空！");
+		return;
+	}
 	$("#addsblb").submit();
 	greyback();
+}
+function updatesbwhfl(){
+	if(trimspace($("#updatesblbmc").val())==''){
+		alert("设备类别名称不能为空！");
+		return;
+	}
+	$("#update").hide();
+	$.ajax({
+		url : "/DeviceManagement/jcxx/sbflwh/update.do",
+		type : "POST",
+		data : "&sbflid="+$("#updatesbflid").val()+"&sblbmc="+$("#updatesblbmc").val(),
+		success : function(data){
+			if(data.sblbmc){
+				alert("名称 ["+data.sblbmc+"]已更新！");
+			}else if(data.cannot){
+				alert(data.cannot);
+			}else{
+				alert("数据处理异常，请联系系统管理员！");
+			}
+			greyback();
+			queryuserlist_for_easyui();
+		}
+	});
 }
 function removesbwhfl(){
 	$("#remove").hide();
@@ -161,6 +198,8 @@ function removesbwhfl(){
 		success : function(data){
 			if(data.sblbmc){
 				alert("设备类别 ["+data.sblbmc+"]已被系统注销！");
+			}else if(data.cannot){
+				alert(data.cannot);
 			}else{
 				alert("数据处理异常，请联系系统管理员！");
 			}
@@ -260,12 +299,17 @@ function checkpic(sbtpdz){
 	return '<a href="#" title="点击查看大图" onclick="loadpicture(\''+(sbtpdz?sbtpdz:'')+'\')">点击查看大图</a>';
 }
 function cz(sbflid,rowObj){
-	return ('<a href="#" title="添加子类" onclick="addsblb(\''+(sbflid?sbflid:'')+'\',\''+(rowObj.sbcj?rowObj.sbcj:'')+'\')">'
-			+'<i class="icon-plus-sign"></i></a>&nbsp;&nbsp;')
+	return  ('<a href="#" title="修改类名" onclick="updatesblb(\''+(sbflid?sbflid:'')+'\',\''+(rowObj.sblbmc?rowObj.sblbmc:'')+'\')">'
+			+'<i class="icon-edit"></i></a>&nbsp; &nbsp;') 
+			+('<a href="#" title="添加子类" onclick="addsblb(\''+(sbflid?sbflid:'')+'\',\''+(rowObj.sbcj?rowObj.sbcj:'')+'\')">'
+			+'<i class="icon-plus-sign"></i></a>&nbsp; &nbsp;')
 			+('<a href="#" title="删除该类" onclick="removesblb(\''+(sbflid?sbflid:'')+'\',\''+(rowObj.sblbmc?rowObj.sblbmc:'')+'\')">'
 			+'<i class="icon-minus-sign"></i></a>');
 }
 function sfzl(sfzl){
 	return (sfzl=='1'?'是':'否');
 }
-
+//字符串左右去空格
+function trimspace(str){
+	return str.replace(/(^\s*)|(\s*$)/g,'');
+}

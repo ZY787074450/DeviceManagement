@@ -1,11 +1,50 @@
 /**
  * 
  */
+var bottomheight = 0;
 $(document).ready(function(){
 	setLoginname();
 	getTime();
+	setDatatablePosition();
 	fatherMenuList();
+	setPicSize();
 });
+function setPicSize(){//设置首页地图大小及位置
+	var fullheight = document.documentElement.clientHeight;//屏幕高度
+	var fullwidth = document.documentElement.clientWidth;//屏幕宽度
+	var perfectH = fullheight-$("#titlearea").outerHeight(true)-$("#fathermenuarea").outerHeight(true);
+	var perfectW = fullwidth-4;
+	$("#mapdiv").css("height",perfectH-8);
+	$("#mappic").css("max-width",perfectW);
+	$("#mappic").css("max-height",perfectH-10);
+}
+//页面总布局
+function setDatatablePosition(){
+	bottomheight = document.documentElement.clientHeight-$("#titlearea").outerHeight(true)-$("#fathermenuarea").outerHeight(true);
+	
+   var OsObject = ""; 
+   $("#navtabsarea").css("height",bottomheight-5);
+   if(navigator.userAgent.indexOf("MSIE")>0) { 
+		$("#navtabsarea").css("height",bottomheight-5);
+   } 
+   if(isFirefox=navigator.userAgent.indexOf("Firefox")>0){ 
+		$("#navtabsarea").css("height",bottomheight-5);
+   } 
+   if(isSafari=navigator.userAgent.indexOf("Safari")>0) { 
+	   if(isSafari=navigator.userAgent.indexOf("Chrome")>0) {
+			$("#navtabsarea").css("height",bottomheight-5);
+	   }else{
+			$("#navtabsarea").css("height",bottomheight-25);
+	   }
+   }  
+   if(isCamino=navigator.userAgent.indexOf("Camino")>0){ 
+		$("#navtabsarea").css("height",bottomheight-5); 
+   } 
+   if(isMozilla=navigator.userAgent.indexOf("Gecko/")>0){ 
+		$("#navtabsarea").css("height",bottomheight-5);
+   } 
+   
+}
 
 function getTime(){
 	var datestr = new Date();
@@ -46,13 +85,12 @@ function fatherMenuList(){
 					menu_html += ('<li style="width: 100px;"><a href="#bj_'+menuArray[i].menu_cj+'_'+menuArray[i].tjpx
 								+'" data-toggle="tab" onclick="menulist(\'bj_'+menuArray[i].menu_cj+'_'+menuArray[i].tjpx
 								+'\',\''+menuArray[i].menu_id+'\',\''+menuArray[i].menu_mc+'\')">'+menuArray[i].menu_mc+'</a></li>');
-					dealarea_html += ('<div id="bj_'+menuArray[i].menu_cj+'_'+menuArray[i].tjpx+'" class="tab-pane fade">'
-										 +'<div>'
-										 	+'<div class="container-fluid" style="padding: 0px 0px 0px 0px;padding-top: 5px;">'
-										 		+'<div class="row-fluid">'
-										 			+'<div class="span2"><div id="bj_'+menuArray[i].menu_cj+'_'+menuArray[i].tjpx+'_menulist" class="air" style="background-color: #E0F2F7;height: 640px;margin-left: 10px;padding-left: 10px;padding-top: 10px;padding-right: 10px;"></div></div>'
-										 			+'<div class="span10" style="margin-left: 10px;"><div id="bj_'+menuArray[i].menu_cj+'_'+menuArray[i].tjpx+'_workarea" class="air" style="background-color: #E0F2F7;height: 640px;margin-left: 0px;padding-left: 5px;padding-top: 10px;"></div></div>'
-									+'</div></div></div></div>');
+					dealarea_html += ('<div id="bj_'+menuArray[i].menu_cj+'_'+menuArray[i].tjpx+'" class="tab-pane fade" style="height:'+($("#navtabsarea").height())+'px;">'
+										 	+'<div class="container-fluid" style="padding: 0px 0px 0px 0px;padding-top: 5px;height:'+($("#navtabsarea").height()-5)+'px;">'
+										 		+'<div class="row-fluid" style="height:'+($("#navtabsarea").height()-8)+'px;">'
+										 			+'<div class="span2" style="height:'+($("#navtabsarea").height()-10)+'px;"><div id="bj_'+menuArray[i].menu_cj+'_'+menuArray[i].tjpx+'_menulist" class="air" style="background-color: #E0F2F7;height: '+($("#navtabsarea").height()-15)+'px;margin-left: 10px;padding-left: 0px;padding-top: 10px;padding-right: 0px;"></div></div>'
+										 			+'<div class="span10" style="margin-left: 10px;height:'+($("#navtabsarea").height()-10)+'px;"><div id="bj_'+menuArray[i].menu_cj+'_'+menuArray[i].tjpx+'_workarea" class="air" style="background-color: #E0F2F7;height: '+($("#navtabsarea").height()-15)+'px;margin-left: 0px;padding-left: 5px;padding-top: 10px;"></div></div>'
+									+'</div></div></div>');
 				}
 			}
 			$("#fathermenus").html(menu_html);
@@ -77,7 +115,7 @@ function menulist(dividname,menucode,fathername){
 			data : "&userid="+$("#userid").html()+"&menucode="+menucode,
 			success : function(data){
 				//此处拼装前台菜单元素代码
-				var menu_html = '<ul class="nav nav-list">'
+				var menu_html = '<ul class="nav nav-list" style="padding-left:10px;padding-right:10px;">'
 								+'<li id="menu_li_'+dividname+'" class="active leftmenu">'
 								+'<a href="#" >'
 								+'<i class="icon-list"></i>'
@@ -161,6 +199,20 @@ function updatePassword(){
 		});
 	}else{
 		alert("再次输入的新密码与新密码不匹配！请确认！");
+	}
+}
+
+function loginout(){
+	if(confirm("用户即将退出系统，请确认？")){
+		$.ajax({
+			url: "/DeviceManagement/user/backlogin.do",
+			type: "POST",
+			data: "",
+			success: function(data){
+				alert("用户已安全退出！");
+				location.reload();
+			}
+		});
 	}
 }
 

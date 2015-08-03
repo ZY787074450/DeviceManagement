@@ -14,47 +14,16 @@
 	}
 	li.SecondLevelMenu{
 		border-bottom: 1px solid grey;
+		margin: 15px 0px 0px 0px;
+		padding: 0px 0px 0px 0px;
 	}
 	li.leftmenu{
 		text-align: left;
+		margin: 15px 0px 0px 0px;
+		padding: 0px 0px 0px 0px;
 	}
 	.bechecked{
 		background-color: #A7E8FA;
-	}
-	#greyground{
-		display:none;
-		width:100%;
-		height:100%;
-		background-color: #CFCFCF;
-		filter: Alpha(Opacity=50);
-	 	-moz-opacity:0.8; 
-     	opacity:0.8; 
-
-	 	background-position:center;
-		z-index:111;
-		position:fixed;
-		top:0;
-		left:0;
-	}
-	#loading{
-		position: absolute;
-		top: 30%;
-		left: 40%;
-		transform: translate(-30%, -15%);
-		display:none;
-		background-color: #E0F2F7;
-		z-index:1111;
-	}
-	.floatarea{
-		position: absolute;
-		top: 25%;
-		left: 35%;
-		right: 35%;
-		transform: translate(-25%, -25%);
-		display:none;
-		background-color: #E0F2F7;
-		z-index:1111;
-		border: 1px solid grey;
 	}
 	div.air{
 		filter:alpha(Opacity=90);
@@ -66,19 +35,19 @@
 </head>
 <body>
 <div>
-	<div class="page-header" style="margin-top: 0px;margin-bottom: 0px;padding-top: 10px;">
+	<div id="titlearea" class="page-header" style="margin-top: 0px;margin-bottom: 0px;padding-top: 5px;">
 		<div class="container-fluid">
 			<div class="row-fluid">
 				<div class="span2" align="center">图标</div>
-				<div class="span8" align="center"><h1><font color="#34BBEA">常州气象探测设备管理系统</font></h1></div>
+				<div class="span8" align="center"><h1><font color="white">常州气象探测设备管理系统</font></h1></div>
 				<div class="span2" align="center" style="color: #B6CEF8">
 					<p>登录用户：<span id="userid">未知</span></p>
-					<p><span id="nowtime">当前时间</span>&nbsp;&nbsp;<a href="#" onclick="greybackadd()"><font color="#8EC90A"><u>密码修改</u></font></a></p>
+					<p><span id="nowtime">当前时间</span>&nbsp;&nbsp;<a href="#" onclick="loginout()"><font color="#8EC90A">安全退出</font></a></p>
 				</div>
 			</div>
 		</div>
 	</div>
-	<div class="page-header" style="margin-top: 0px;margin-bottom: 0px;padding-bottom: 0px;">
+	<div id="fathermenuarea" class="page-header" style="margin-top: 0px;margin-bottom: 0px;padding-bottom: 0px;">
 		<div class="navbar" style="margin-bottom: 0px;">
 			<div class="navbar-inner air" style="background-color: #98AAB9;">
 				<ul class="nav nav-tabs" style="float: right;" id="fathermenus">
@@ -87,55 +56,17 @@
 			</div>
 		</div>
 	</div>
-	
 	<div id="navtabsarea" class="tab-content">
 		<div id="home" class="tab-pane fade in active">
-		
 			<div>
 				<div class="container-fluid" style="padding: 0px 0px 0px 0px;padding-top: 2px;">
 					<div class="row-fluid">
-						<div class="span12 air" style="background-color: #E0F2F7;height: 630px;margin-left: 0px;"><img src="map.jpg"></div>
+						<div id="mapdiv" class="span12 air" style="background-color: white;margin-left: 0px;" align="center"><img id="mappic" src="map.jpg"></div>
 					</div>
 				</div>
 			</div>
-		</div>
-		
+		</div>	
 	</div>
-	
-	<div id="greyground"><div></div></div>
-	<div id="loading"><font color="grey">数据正在处理，请稍等...</font></div>
-	<div class="floatarea">
-		<div class="well well-small" style="margin-bottom: 0px"><font color="#0088CC" size="+1"><i class="icon-wrench"></i><b>密码修改</b></font></div>
-		<div>
-			<div>
-				<table class="table">
-					<tr>
-						<td width="100px">请输入原密码：</td>
-						<td width="180px"><input class="sel" type="password" placeholder="原密码..." id="old_password" /></td>
-						<td></td>
-					</tr>
-					<tr>
-						<td>请输入新密码：</td>
-						<td><input class="sel" type="password" placeholder="新密码..." id="new_password" /></td>
-						<td></td>
-					</tr>
-					<tr>
-						<td>再次输入新密码：</td>
-						<td><input class="sel" type="password" placeholder="新密码确认..." id="new_password_again" /></td>
-						<td></td>
-					</tr>
-					<tr>
-						<td colspan="2" style="text-align: center"><a href="#" class="btn btn-primary" onclick="updatePassword()">保存</a>&nbsp; &nbsp;<a href="#" class="btn btn-primary" onclick="greyback()">返回</a></td>
-						<td></td>
-					</tr>
-					<tr>
-						<td colspan="3">友情提醒：<br/>人员密码修改成功后，当前登录状态将会失效，需重新登录系统！<br/>系统管理员有权禁止人员修改密码，如多次尝试修改密码失败并跳转至登陆界面，请及时联系管理员解除密码修改限制！</td>
-					</tr>
-				</table>
-			</div>
-		</div>
-	</div>
-	
 </div>
 </body>
 </html>

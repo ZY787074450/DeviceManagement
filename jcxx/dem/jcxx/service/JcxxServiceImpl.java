@@ -2,6 +2,7 @@ package dem.jcxx.service;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -80,11 +81,11 @@ public class JcxxServiceImpl implements JcxxService {
 		//新增人员基本菜单权限(基本信息、修改登录密码)，系统管理员可在人员维护菜单中禁止人员修改登录密码
 		Map<String, Object> m1 = new HashMap<String, Object>();
 		m1.put("usercode", loginner.getUserid());
-		m1.put("menucode", "7FA49ED94E1C479B83E6074F0507D0CD");
+		m1.put("menucode", "B876B28AB11B4483BCB0CF9105FF3A46");
 		baseDao.insert("dem.jcxx.mapper.JcxxMapper.setUserMenus", m1);
 		Map<String, Object> m2 = new HashMap<String, Object>();
 		m2.put("usercode", loginner.getUserid());
-		m2.put("menucode", "FF8E26F01CF44091A8D750DD24C3EA3D");
+		m2.put("menucode", "B1A0ADFE67BF496C8D43DFA0B7EC3960");
 		baseDao.insert("dem.jcxx.mapper.JcxxMapper.setUserMenus", m2);
 		map.put("code", "200");
 		map.put("info", "新增成功！");
@@ -278,7 +279,9 @@ public class JcxxServiceImpl implements JcxxService {
 	//预警值维护信息更新
 	@Override
 	public Map<String, Object> yjUpdate(YjzwhObject yjzwhObject, String userid) {
+		
 		Map<String, Object> map = new HashMap<String, Object>();
+		yjzwhObject.setYjz((Integer.parseInt(yjzwhObject.getYjz()))+"");//验证是否为数字，不是数字就向上级抛出转换错误异常，是数字则去除首位0
 		baseDao.update("dem.jcxx.mapper.JcxxMapper.updateYj",yjzwhObject);
 		map.put("code", "200");
 		map.put("info", "更新成功！");
@@ -307,20 +310,21 @@ public class JcxxServiceImpl implements JcxxService {
 		
 		String url = "/DeviceManagement/";//请求地址http://localhost:8080
 		String pathDiv = "tpzy/sbtp";//图片存储路径(当前工程下的路径)"+File.separator+"
-		fileUpLoadManager.setPathDir(pathDiv);
 		String fix = "jpg";//文件类型(后缀)
 		String newUUID = (CommonUtil.getUUID()).toUpperCase();//产生UUID用于生成设备分类ID和设备图片名
 		String fileName = null;
-		fileName="sbtp_"+newUUID+"."+fix;//设备图片名称规范:sbtp_32位UUID.jpg
-		boolean judge = fileUpLoadManager.upload(sbflwhObject.getSbtpfile(), fileName);//生成服务器端图片文件
-		if(!judge){
-			map.put("code", "202");
-			map.put("info", "图片上传失败！");
-			map.put("sblbmc", sbflwhObject.getSblbmc());
-			return map;
+		if(sbflwhObject.getSbtpfile().getSize()>0){
+			fileUpLoadManager.setPathDir(pathDiv);
+			fileName="sbtp_"+newUUID+"."+fix;//设备图片名称规范:sbtp_32位UUID.jpg
+			boolean judge = fileUpLoadManager.upload(sbflwhObject.getSbtpfile(), fileName);//生成服务器端图片文件
+			if(!judge){
+				map.put("code", "202");
+				map.put("info", "图片上传失败！");
+				map.put("sblbmc", sbflwhObject.getSblbmc());
+				return map;
+			}
+			sbflwhObject.setSbtpdz(url+pathDiv+"/"+fileName);//设置数据库中存储的服务器端图片地址
 		}
-		sbflwhObject.setSbtpdz(url+pathDiv+"/"+fileName);//设置数据库中存储的服务器端图片地址
-		
 		sbflwhObject.setSbflid(newUUID);//设备分类ID
 		baseDao.update("dem.jcxx.mapper.JcxxMapper.updatesfzl",sbflwhObject);//更新父分类“是否子类”状态为父类0
 		
@@ -336,9 +340,65 @@ public class JcxxServiceImpl implements JcxxService {
 	@Override
 	public Map<String, Object> sblbDelete(SbflwhObject sbflwhObject, String userid) {
 		Map<String, Object> map = new HashMap<String, Object>();
+		
+		String fsbflidarr = sbflwhObject.getSbflid();
+		for(int i=1;i<=6;i++){
+			if(fsbflidarr==null || (fsbflidarr.trim()).equals("")){
+				break;
+			}
+			//拼装SQL条件字符串开始--->
+			String[] arr = fsbflidarr.split(",");
+			//<---拼装SQL条件字符串结束
+			int sum_sbrk = (Integer)baseDao.selectOne("dem.jcxx.mapper.JcxxMapper.countsbrkwithsbflid", Arrays.asList(arr));
+			if(sum_sbrk>0){
+				map.put("code", "202");
+				map.put("info", "注销无效！");
+				map.put("cannot", "当前分类或该分类下的子类存在设备入库记录，无法删除此类！");
+				return map;
+			}
+			fsbflidarr = (String)baseDao.selectOne("dem.jcxx.mapper.JcxxMapper.findchildren", Arrays.asList(arr));
+			
+		}
+		
 		baseDao.update("dem.jcxx.mapper.JcxxMapper.sblbDelete",sbflwhObject);
 		map.put("code", "200");
 		map.put("info", "注销成功！");
+		map.put("sblbmc", sbflwhObject.getSblbmc());
+
+		return map;
+	}
+
+	@Override
+	public Map<String, Object> jglxlistQuery(String userid) {
+		Map<String, Object> map = new HashMap<String, Object>();
+
+		List list = new ArrayList();
+		list = baseDao.selectList("dem.jcxx.mapper.JcxxMapper.jglxlistQuery", "");
+		map.put("code", "200");
+		map.put("info", "查询成功！");
+		map.put("jglist", list);
+		return map;
+	}
+
+	@Override
+	public Map<String, Object> jgqylistQuery(String userid) {
+		Map<String, Object> map = new HashMap<String, Object>();
+
+		List list = new ArrayList();
+		list = baseDao.selectList("dem.jcxx.mapper.JcxxMapper.jgqylistQuery", "");
+		map.put("code", "200");
+		map.put("info", "查询成功！");
+		map.put("jglist", list);
+		return map;
+	}
+
+	//设备类别信息更新
+	@Override
+	public Map<String, Object> sblbUpdate(SbflwhObject sbflwhObject, String userid) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		baseDao.update("dem.jcxx.mapper.JcxxMapper.sblbUpdate",sbflwhObject);
+		map.put("code", "200");
+		map.put("info", "更新成功！");
 		map.put("sblbmc", sbflwhObject.getSblbmc());
 
 		return map;
