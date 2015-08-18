@@ -12,4 +12,7 @@ public interface YjglService {
 	//设备维护预警查询
 	public Map<String, Object> sbwhyjlistQuery(PagingAction pagingAction,String userid);
 	
+	//设备检定预警查询
+	public Map<String, Object> sbjdyjlistQuery(PagingAction pagingAction,String userid);
+	
 }

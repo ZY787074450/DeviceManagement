@@ -21,6 +21,7 @@ function getUrlParam(){
 	}
 } 
 
+//获取数据(已失效、废除，最新方法queryuserlist_for_easyui())
 function queryuserlist(){
 	greybackadd();
 	$.ajax({
@@ -45,7 +46,7 @@ function queryuserlist(){
 		}
 	});
 }
-//根据设备分类级别，分装数据列表，并产生树状图html
+//根据设备分类级别，分装数据列表，并产生树状图html(此方法已失效，优先使用drawsixlevel_cz()方法数据重组)
 function drawsixlevel(sblbList){
 	var tablehtml = "";
 	var sblblist1 = new Array();
@@ -89,7 +90,7 @@ function drawsixlevel(sblbList){
 	}
 	return tablehtml;
 }
-//绘制树状前缀特效，参数sblbList当前层级数据列表，参数cj当前绘制树状层级
+//绘制树状前缀特效，参数sblbList当前层级数据列表，参数cj当前绘制树状层级(已失效)
 function drawtreemodel(sblbObj,cj){
 
 	var draw_cj = (sblbObj.sfzl==0)?('<i class="icon-chevron-down"></i>'):(' &nbsp; &nbsp; ');//当前层级所需要的前缀特效
@@ -135,7 +136,7 @@ function loadpicture(url){
 }
 //打开新增区域div
 function addsblb(fsbflid,sbcj){
-	if(sbcj==''||sbcj=='6'){
+	if(sbcj==''||sbcj=='3' || parseInt(sbcj)>3){
 		alert("当前设备层级已达上限，不可添加子类！");
 		return;
 	}

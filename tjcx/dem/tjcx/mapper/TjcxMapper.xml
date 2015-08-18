@@ -4,7 +4,7 @@
 
 <!-- 设备使用统计（站点）查询 -->
 <select id="sbsytj_zdquery" parameterType="dem.tjcx.model.TimeFrameObject" resultType="Map">
-	select s1.jgid jgid,s1.mc jgmc,s2.azsl sbazsl,s3.cjsl sbcjsl,s4.bfsl sbbfsl,s5.jdcs sbjdcs,s6.wxcs sbwxcs
+	select s1.jgid jgid,s1.mc jgmc,s2.azsl sbazsl,s3.cjsl sbcjsl,s4.bfsl sbbfsl,s5.jdcs sbjdcs,s6.wxcs sbwxcs,s7.jgwhcs jgwhcs,s8.jgwxcs jgwxcs
 	from ss_jg s1 
 		left join (select jgid,count(*) azsl 
 					from sbgl_sbsy 
@@ -56,6 +56,26 @@
 						and czrq &lt; #{rq_end} 
 					</if>
 					group by jgid) s6 on s1.jgid=s6.jgid 
+		left join (select jgid,count(*) jgwhcs 
+					from zdgl_jgwh 
+					where 1=1
+					<if test="rq_start != null and rq_start != ''">
+						and whrq &gt; #{rq_start} 
+					</if>
+					<if test="rq_end != null and rq_end != ''">
+						and whrq &lt; #{rq_end} 
+					</if>
+					group by jgid) s7 on s1.jgid=s7.jgid 
+		left join (select jgid,count(*) jgwxcs 
+					from zdgl_jgwx 
+					where 1=1 
+					<if test="rq_start != null and rq_start != ''">
+						and wxrq &gt; #{rq_start} 
+					</if>
+					<if test="rq_end != null and rq_end != ''">
+						and wxrq &lt; #{rq_end} 
+					</if>
+					group by jgid) s8 on s1.jgid=s8.jgid 
 	${sql_paging_sort}
 </select>
 <!-- 设备使用统计（站点）查询计数 -->

@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<link href="../bootstrap/css/bootstrap.css" type="text/css" rel="stylesheet" />
+<link href="../commstyle/commcss.css" type="text/css" rel="stylesheet" />
+<style type="text/css">
+	#add_alert{
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(0%, 0%);
+		display:none;
+		background-color: #E0F2F7;
+		filter: Alpha(Opacity=100);
+	 	-moz-opacity:1; 
+	    	opacity:1;
+		z-index:1115;
+		border: 1px solid black;
+		max-width: 700px;
+		max-height: 500px;
+	}
+	#add_alert2{
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(0%, 0%);
+		display:none;
+		background-color: #E0F2F7;
+		filter: Alpha(Opacity=100);
+	 	-moz-opacity:1; 
+	    	opacity:1;
+		z-index:1116;
+		border: 1px solid black;
+		max-width: 700px;
+		max-height: 500px;
+	}
+</style>
+<title>设备检定</title>
+</head>
+<body>
+	<div id="czq">
+		<div id="top_title" class="well well-small" style="margin-bottom: 0px"><font color="#0088CC" size="+1"><i class="icon-wrench"></i><b>设备检定</b></font></div>
+		<div id="top_condition" style="background-color: #E0F2F7">
+			<div id="conditionarea" class="tab-pane fade in active" style="padding-top: 10px;padding-left: 15px;padding-right: 15px;padding-bottom: 10px;background-color: #CBF0FA;border-left: 1px solid #DDDDDD;border-right: 1px solid #DDDDDD;border-bottom: 1px solid #DDDDDD;">
+				<table id="condition_table" style="width: 100%">
+					<tr style="width: 100%">
+						<td width="150px;" align="right">&nbsp;使用站点编号：</td>
+						<td width="200px" align="left"><input class="sel" type="text" placeholder="模糊匹配..." id="condition_jgid" />&nbsp;</td>
+						<td width="120px;" height="30px" align="right">&nbsp;设备名称：</td>
+						<td width="200px" align="left"><input class="sel" type="text" placeholder="模糊匹配..." id="condition_sbmc" />&nbsp;</td>
+						<!-- <td width="120px" align="right">&nbsp;设备状态：</td>
+						<td width="300px" align="left">
+							<input type="radio" name="condition_sbzt" value="" />全部&nbsp;
+							<input type="radio" name="condition_sbzt" value="0" checked="checked" />使用&nbsp;
+							<input type="radio" name="condition_sbzt" value="1" />维修&nbsp;
+							<input type="radio" name="condition_sbzt" value="2" />报废&nbsp;
+						</td> -->
+						<td width="120px" align="center" rowspan="2">
+							<a href="#" class="btn btn-primary" title="查询" onclick="queryuserlist()"><i class="icon-search icon-white"></i>查询</a>	
+						</td>
+					</tr>
+					<tr>
+						<td height="30px" align="right">&nbsp;安装日期：</td>
+						<td align="left">
+							<input style="width: 170px;margin: 0px 0px 0px 0px;" size="10" placeholder="起始时间" id="condition_azrq_start" type="text" onclick="laydate({istime: true, format: 'YYYY-MM-DD 00:00:00'})" readonly="readonly">
+						</td>
+						<td align="right">&nbsp;至&nbsp;</td>
+						<td align="left">
+							<input style="width: 170px;margin: 0px 0px 0px 0px;" size="10" placeholder="终止时间" id="condition_azrq_end" type="text" onclick="laydate({istime: true, format: 'YYYY-MM-DD 23:59:59'})" readonly="readonly">
+						</td>
+						<!-- <td></td> -->
+						<!-- <td></td> -->
+					</tr>
+				</table>
+			</div>
+			<div id="data_div" style="background-color: white">
+				<table class="table" id="data_table">
+					
+				</table>
+			</div>
+		</div>
+		
+		<div id="bottom_pagging" style="background-color: #E0F2F7;padding-top: 3px; height: 32px;">
+			<!-- <span style="float: left;"><a href="#" class="btn btn-primary" title="安装设备" onclick="addsbsy()"><i class="icon-pencil icon-white"></i>设备安装</a></span> -->
+			<span style="text-align: right;float: right;">
+				共<span id="sum"></span>条记录； 
+				每页条数<input type="text" id="countline" style="width:30px;margin-bottom: 0px;" onblur="queryuserlist('跳转指定页')"/> 
+				<button id="pagereset" class="btn btn-primary" title="首页" onclick="queryuserlist('首页')">首页</button>
+				<button id="pageup" class="btn btn-primary" title="上一页" onclick="queryuserlist('上一页')">上一页</button>
+				当前页<input type="text" id="currpage" style="width:30px;margin-bottom: 0px;" readonly="readonly"/>/共<span id="sum_page"></span>页
+				<button id="pagedown" class="btn btn-primary" title="下一页" onclick="queryuserlist('下一页')">下一页</button> 
+				<button id="pagereset" class="btn btn-primary" title="尾页" onclick="queryuserlist('尾页')">尾页</button>
+			</span>
+		</div>
+		
+	</div>
+	<div id="greyground"><div></div></div>
+	<div id="loading"><font color="grey">数据正在处理，请稍等...</font></div>
+	<div id="greyground2"><div></div></div>
+	<div id="loading2"><font color="grey">数据选择中...</font></div>
+	
+	<div class="floatarea" id="add">
+		<div style="background-color: #A7E8FA;height: 30px;padding: 5px 10px 0px 10px;"><span style="float: left;"><font color="#0088CC" size="+1">新增设备使用记录</font></span><span style="text-align: right;float: right;"><a href="#" onclick="greyback()"><img src="../commstyle/close_pic.png"></a></span></div>
+		<div style="padding: 10px 15px 10px 15px;">
+			<table>
+				<tr>
+					<td colspan="4">注意事项：<br/>
+					<font color="red">设备入库编号、设备使用站点编号、设备安装人</font>为必填项，
+					确保后期设备使用记录数据的查找的准确性！
+					</td>
+				</tr>
+				<tr>
+					<td align="right"></td>
+					<td align="left"><input style="display: none;" type="text" placeholder="点击展开设备选择列表" class="sel" id="addrkid" autocomplete="off" onfocus="open_append('add_alert')" onblur="close_append()" readonly="readonly" /></td>
+					<td align="right"></td>
+					<td align="left"><input style="display: none;" type="text" placeholder="点击展开设备选择列表" class="sel" id="addsbflid" autocomplete="off" onfocus="open_append('add_alert')" onblur="close_append()" readonly="readonly" /></td>
+				</tr>
+				<tr>
+					<td align="right">设备名称：</td>
+					<td align="left"><input type="text" placeholder="点击展开设备选择列表" class="sel" id="addsbmc" autocomplete="off" onfocus="open_append('add_alert')" onblur="close_append()" readonly="readonly" /></td>
+					<td align="right">设备使用站点：</td>
+					<td align="left">
+						<input type="text" placeholder="点击展开站点列表" class="sel" id="addjgmc" autocomplete="off" onfocus="open_append('add_alert2')" onblur="close_append()" readonly="readonly" />
+						<input style="display: none;" type="text" placeholder="点击展开站点列表" class="sel" id="addjgid" autocomplete="off" onfocus="open_append('add_alert2')" onblur="close_append()" readonly="readonly" />
+					</td>
+				</tr>
+				<tr>
+					<td align="right">设备使用人：</td>
+					<td align="left"><input type="text" placeholder="设备使用人" class="sel" id="addsbsyr" autocomplete="off" /></td>
+					<td align="right">设备状态：</td>
+					<td align="left"><input type="text" placeholder="设备状态" class="sel" value="正常使用" id="addsbzt" readonly="readonly" autocomplete="off" /></td>
+				</tr>
+				<tr>
+					<td align="right">设备安装人：</td>
+					<td align="left"><input type="text" placeholder="设备安装人" class="sel" id="addazr" autocomplete="off" /></td>
+					<td align="right">备注：</td>
+					<td align="left"><input type="text" placeholder="备注" class="sel" id="addnote" autocomplete="off" /></td>
+				</tr>
+				<tr>
+					<td colspan="4" style="text-align: center"><a href="#" class="btn btn-primary" onclick="addsbsyjl()">保存</a></td>
+				</tr>
+				
+			</table>
+		</div>
+	</div>
+	<div class="floatarea_append" id="add_alert" onmouseover="focusAdd()" onmouseleave="blurAdd()">
+		<div style="background-color: #A7E8FA;height: 30px;padding: 5px 10px 0px 10px;"><font color="#0088CC" size="+1">选择设备</font><font color="red">(点击'灰色区域'或'选择数据'返回上一级)</font></div>
+		<div style="padding: 10px 15px 10px 15px;">
+			<table class="table" id="data_table_add">
+				
+			</table>
+		</div>
+	</div>
+	<div class="floatarea_append" id="add_alert2" onmouseover="focusAdd()" onmouseleave="blurAdd()">
+		<div style="background-color: #A7E8FA;height: 30px;padding: 5px 10px 0px 10px;"><font color="#0088CC" size="+1">选择设备使用单位</font><font color="red">(点击'灰色区域'或'选择数据'返回上一级)</font></div>
+		<div style="padding: 10px 15px 10px 15px;">
+			<table class="table" id="data_table_add2">
+				
+			</table>
+		</div>
+	</div>
+	<div class="floatarea_append" id="update_alert" onmouseover="focusAdd()" onmouseleave="blurAdd()">
+		<div style="background-color: #A7E8FA;height: 30px;padding: 5px 10px 0px 10px;"><font color="#0088CC" size="+1">选择设备</font><font color="red">(点击'灰色区域'或'选择数据'返回上一级)</font></div>
+		<div style="padding: 10px 15px 10px 15px;">
+			<table class="table" id="data_table_update">
+				
+			</table>
+		</div>
+	</div>
+	<div class="floatarea" id="update">
+		<div style="background-color: #A7E8FA;height: 30px;padding: 5px 10px 0px 10px;"><span style="float: left;"><font color="#0088CC" size="+1">设备检定操作</font></span><span style="text-align: right;float: right;"><a href="#" onclick="greyback()"><img src="../commstyle/close_pic.png"></a></span></div>
+		<div style="padding: 10px 15px 10px 15px;">
+			<table>
+				<tr>
+					<td align="right">设备名称：</td>
+					<td align="left">
+						<input type="text" placeholder="设备名称" class="sel" id="updatesbmc" autocomplete="off" readonly="readonly" />
+						<input type="text" class="sel" id="updatexh" style="display: none" />
+						<input type="text" class="sel" id="updaterkid" style="display: none" />
+					</td>
+				</tr>
+				<tr>
+					<td align="right">操作种类：</td>
+					<td align="left" height="30px;">
+						<!-- <input type="radio" name="update_sbzt" value="1" checked="checked" onchange="onchangetype()" />维修&nbsp;
+						<input type="radio" name="update_sbzt" value="2" onchange="onchangetype()" />报废&nbsp; -->
+						<input type="radio" name="update_sbzt" value="3" checked="checked" onchange="onchangetype()" />检定&nbsp;
+						<!-- <input type="radio" name="update_sbzt" value="4" onchange="onchangetype()" />回库&nbsp;
+						<input type="radio" name="update_sbzt" value="5" onchange="onchangetype()" />仅修改设备状态&nbsp; -->
+					</td>
+				</tr>
+				
+				<tr id="tr_1">
+					<td align="right">维修人：</td>
+					<td align="left"><input type="text" placeholder="维修人姓名" class="nav-search-input" id="updatewxr" autocomplete="off" /></td>
+				</tr>
+				<tr id="tr_2">
+					<td align="right">报废人：</td>
+					<td align="left"><input type="text" placeholder="报废人姓名" class="nav-search-input" id="updatebfr" autocomplete="off" /></td>
+				</tr>
+				<tr id="tr_3">
+					<td align="right">检定人：</td>
+					<td align="left"><input type="text" placeholder="检定人姓名" class="nav-search-input" id="updatejdr" autocomplete="off" /></td>
+				</tr>
+				<tr id="tr_4">
+					<td align="right">操作人：</td>
+					<td align="left"><input type="text" placeholder="回库操作人姓名" class="nav-search-input" id="updatewhr" autocomplete="off" /></td>
+				</tr>
+				<tr id="tr_5">
+					<td align="right">设备状态：</td>
+					<td align="left" height="30px;">
+						<input type="radio" name="change_sbzt" value="0" checked="checked" onchange="onchangetype()" />使用中&nbsp;
+						<input type="radio" name="change_sbzt" value="1" onchange="onchangetype()" />维修中&nbsp;
+						<input type="radio" name="change_sbzt" value="2" onchange="onchangetype()" />已报废&nbsp;
+					</td>
+				</tr>
+				
+				<tr id="tr_note">
+					<td align="right">操作备注：</td>
+					<td align="left"><input type="text" placeholder="..." class="nav-search-input" id="updatenote" autocomplete="off" /></td>
+				</tr>
+				<tr>
+					<td colspan="2" style="text-align: center"><a href="#" class="btn btn-primary" onclick="updatesbsyjl()">提交</a></td>
+				</tr>
+				
+			</table>
+		</div>
+	</div>
+	<div class="floatarea" id="remove">
+		<div style="background-color: #A7E8FA;height: 30px;padding: 5px 10px 0px 10px;"><span style="float: left;"><font color="#0088CC" size="+1">删除设备使用记录</font></span><span style="text-align: right;float: right;"><a href="#" onclick="greyback()"><img src="../commstyle/close_pic.png"></a></span></div>
+		<div style="padding: 10px 15px 10px 15px;">
+			<table>
+				<tr>
+					<td align="center">设备【<span id="removesbmc"></span>】的使用记录将被系统删除，请确认？</td>
+				</tr>
+				<tr><td><input type="text" class="nav-search-input" id="removexh" style="display: none;" />&nbsp;</td></tr>
+				<tr>
+					<td style="text-align: center"><a href="#" class="btn btn-primary" onclick="removesbsyjl()">确定</a>&nbsp; &nbsp;<a href="#" class="btn btn-primary" onclick="greyback()">取消</a></td>
+				</tr>
+				<tr>
+					<td>注意事项：<br/>
+					删除对象不能存在检定、维修、维护、报废等使用记录，否则无法移除设备使用记录！
+					</td>
+				</tr>
+			</table>
+		</div>
+	</div>
+
+</body>
+</html>
+<script src="../bootstrap/jquery.js" type="text/javascript"></script>
+<script src="../bootstrap/js/bootstrap.js" type="text/javascript"></script>
+<script src="../laydate/laydate.js" type="text/javascript"></script>
+<script src="../commscript/commjs.js" type="text/javascript"></script>
+<script src="sbgl_sbjd.js" type="text/javascript"></script>

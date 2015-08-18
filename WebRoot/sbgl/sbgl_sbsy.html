@@ -7,9 +7,9 @@
 <style type="text/css">
 	#add_alert{
 		position: absolute;
-		top: 30%;
-		left: 30%;
-		transform: translate(-30%, -15%);
+		top: 50%;
+		left: 50%;
+		transform: translate(0%, 0%);
 		display:none;
 		background-color: #E0F2F7;
 		filter: Alpha(Opacity=100);
@@ -17,14 +17,15 @@
 	    	opacity:1;
 		z-index:1115;
 		border: 1px solid black;
-		max-width: 700px;
+		max-width: 800px;
 		max-height: 500px;
+		overflow: auto;
 	}
 	#add_alert2{
 		position: absolute;
-		top: 30%;
-		left: 30%;
-		transform: translate(-30%, -15%);
+		top: 50%;
+		left: 50%;
+		transform: translate(0%, 0%);
 		display:none;
 		background-color: #E0F2F7;
 		filter: Alpha(Opacity=100);
@@ -32,8 +33,9 @@
 	    	opacity:1;
 		z-index:1116;
 		border: 1px solid black;
-		max-width: 700px;
+		max-width: 800px;
 		max-height: 500px;
+		overflow: auto;
 	}
 </style>
 <title>设备使用</title>
@@ -51,8 +53,8 @@
 						<td width="200px" align="left"><input class="sel" type="text" placeholder="模糊匹配..." id="condition_sbmc" />&nbsp;</td>
 						<td width="120px" align="right">&nbsp;设备状态：</td>
 						<td width="300px" align="left">
-							<input type="radio" name="condition_sbzt" value="" checked="checked" />全部&nbsp;
-							<input type="radio" name="condition_sbzt" value="0" />使用&nbsp;
+							<input type="radio" name="condition_sbzt" value="" />全部&nbsp;
+							<input type="radio" name="condition_sbzt" value="0" checked="checked" />使用&nbsp;
 							<input type="radio" name="condition_sbzt" value="1" />维修&nbsp;
 							<input type="radio" name="condition_sbzt" value="2" />报废&nbsp;
 						</td>
@@ -61,9 +63,7 @@
 						</td>
 					</tr>
 					<tr>
-						<td height="30px" align="right">&nbsp;使用站点名称：</td>
-						<td align="left"><input class="sel" type="text" placeholder="模糊匹配..." id="condition_jgmc" />&nbsp;</td>
-						<td align="right">&nbsp;安装日期：</td>
+						<td height="30px" align="right">&nbsp;安装日期：</td>
 						<td align="left">
 							<input style="width: 170px;margin: 0px 0px 0px 0px;" size="10" placeholder="起始时间" id="condition_azrq_start" type="text" onclick="laydate({istime: true, format: 'YYYY-MM-DD 00:00:00'})" readonly="readonly">
 						</td>
@@ -71,6 +71,8 @@
 						<td align="left">
 							<input style="width: 170px;margin: 0px 0px 0px 0px;" size="10" placeholder="终止时间" id="condition_azrq_end" type="text" onclick="laydate({istime: true, format: 'YYYY-MM-DD 23:59:59'})" readonly="readonly">
 						</td>
+						<td></td>
+						<td></td>
 					</tr>
 				</table>
 			</div>
@@ -82,7 +84,7 @@
 		</div>
 		
 		<div id="bottom_pagging" style="background-color: #E0F2F7;padding-top: 3px; height: 32px;">
-			<span style="float: left;"><a href="#" class="btn btn-primary" title="安装设备" onclick="addsbsy()"><i class="icon-pencil icon-white"></i>安装设备</a></span>
+			<span style="float: left;"><a href="#" class="btn btn-primary" title="安装设备" onclick="addsbsy()"><i class="icon-pencil icon-white"></i>设备安装</a></span>
 			<span style="text-align: right;float: right;">
 				共<span id="sum"></span>条记录； 
 				每页条数<input type="text" id="countline" style="width:30px;margin-bottom: 0px;" onblur="queryuserlist('跳转指定页')"/> 
@@ -145,7 +147,7 @@
 		</div>
 	</div>
 	<div class="floatarea_append" id="add_alert" onmouseover="focusAdd()" onmouseleave="blurAdd()">
-		<div style="background-color: #A7E8FA;height: 30px;padding: 5px 10px 0px 10px;"><font color="#0088CC" size="+1">选择设备</font><font color="red">(点击'灰色区域'或'选择数据后鼠标离开选择区'返回上一级)</font></div>
+		<div style="background-color: #A7E8FA;height: 30px;padding: 5px 10px 0px 10px;"><font color="#0088CC" size="+1">选择设备</font><font color="red">(点击'灰色区域'或'选择数据'返回上一级)</font></div>
 		<div style="padding: 10px 15px 10px 15px;">
 			<table class="table" id="data_table_add">
 				
@@ -153,7 +155,7 @@
 		</div>
 	</div>
 	<div class="floatarea_append" id="add_alert2" onmouseover="focusAdd()" onmouseleave="blurAdd()">
-		<div style="background-color: #A7E8FA;height: 30px;padding: 5px 10px 0px 10px;"><font color="#0088CC" size="+1">选择设备使用单位</font><font color="red">(点击'灰色区域'或'选择数据后鼠标离开选择区'返回上一级)</font></div>
+		<div style="background-color: #A7E8FA;min-width: 450px;height: 30px;padding: 5px 10px 0px 10px;"><font color="#0088CC" size="+1">选择设备使用单位</font> 站点快速定位:<input type="text" placeholder="输入站点编号" class="sel" id="seljgid" autocomplete="off" onfocus="killhide()" onblur="savehide()" /></div>
 		<div style="padding: 10px 15px 10px 15px;">
 			<table class="table" id="data_table_add2">
 				
@@ -161,7 +163,7 @@
 		</div>
 	</div>
 	<div class="floatarea_append" id="update_alert" onmouseover="focusAdd()" onmouseleave="blurAdd()">
-		<div style="background-color: #A7E8FA;height: 30px;padding: 5px 10px 0px 10px;"><font color="#0088CC" size="+1">选择设备</font><font color="red">(点击'灰色区域'或'选择数据后鼠标离开选择区'返回上一级)</font></div>
+		<div style="background-color: #A7E8FA;height: 30px;padding: 5px 10px 0px 10px;"><font color="#0088CC" size="+1">选择设备</font><font color="red">(点击'灰色区域'或'选择数据'返回上一级)</font></div>
 		<div style="padding: 10px 15px 10px 15px;">
 			<table class="table" id="data_table_update">
 				
@@ -189,9 +191,9 @@
 					<td align="right">选择更新操作种类：</td>
 					<td align="left" height="30px;">
 						<input type="radio" name="update_sbzt" value="1" checked="checked" onchange="onchangetype()" />维修&nbsp;
-						<input type="radio" name="update_sbzt" value="2" onchange="onchangetype()" />报废&nbsp;
-						<input type="radio" name="update_sbzt" value="3" onchange="onchangetype()" />检定&nbsp;
-						<input type="radio" name="update_sbzt" value="4" onchange="onchangetype()" />维护&nbsp;
+						<!-- <input type="radio" name="update_sbzt" value="2" onchange="onchangetype()" />报废&nbsp;
+						<input type="radio" name="update_sbzt" value="3" onchange="onchangetype()" />检定&nbsp; -->
+						<input type="radio" name="update_sbzt" value="4" onchange="onchangetype()" />回库&nbsp;
 						<input type="radio" name="update_sbzt" value="5" onchange="onchangetype()" />仅修改设备状态&nbsp;
 					</td>
 				</tr>
@@ -209,8 +211,8 @@
 					<td align="left"><input type="text" placeholder="检定人姓名" class="nav-search-input" id="updatejdr" autocomplete="off" /></td>
 				</tr>
 				<tr id="tr_4">
-					<td align="right">维护人：</td>
-					<td align="left"><input type="text" placeholder="维护人姓名" class="nav-search-input" id="updatewhr" autocomplete="off" /></td>
+					<td align="right">操作人：</td>
+					<td align="left"><input type="text" placeholder="回库操作人姓名" class="nav-search-input" id="updatewhr" autocomplete="off" /></td>
 				</tr>
 				<tr id="tr_5">
 					<td align="right">设备状态：</td>

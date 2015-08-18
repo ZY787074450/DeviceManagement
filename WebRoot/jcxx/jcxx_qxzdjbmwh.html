@@ -8,37 +8,38 @@
 </head>
 <body>
 	<div id="czq">
-		<div id="top_title" class="well well-small" style="margin-bottom: 0px"><font color="#0088CC" size="+1"><i class="icon-wrench"></i><b>气象站点及部门维护</b></font></div>
+		<div id="top_title" class="well well-small" style="margin-bottom: 0px"><font color="#0088CC" size="+1"><i class="icon-wrench"></i><b>站点信息</b></font></div>
 		<div id="top_condition" style="background-color: #E0F2F7">
 			<div id="conditionarea" class="tab-pane fade in active" style="padding-top: 10px;padding-left: 15px;padding-right: 15px;padding-bottom: 10px;background-color: #CBF0FA;border-left: 1px solid #DDDDDD;border-right: 1px solid #DDDDDD;border-bottom: 1px solid #DDDDDD;">
 				<table id="condition_table" style="width: 100%">
 					<tr style="width: 100%">
-						<td width="150px" height="30px" align="right">&nbsp;机构编号：</td>
+						<td width="150px" height="30px" align="right">&nbsp;站点编号：</td>
 						<td width="200px" align="left"><input class="sel" type="text" placeholder="模糊匹配..." id="condition_jgid" /></td>
 						
-						<td width="150px" align="right">&nbsp;机构类型：</td>
+						<td width="150px" align="right">&nbsp;站点类型：</td>
 						<td width="200px" align="left">
 							<select class="sel" id="condition_jglx">
 							  <option value="">全部</option>
-							  <option value="0">市局</option>
 							  <option value="1">主站</option>
 							  <option value="2">自动站</option>
-							  <option value="3">机关部门</option>
 							</select>
 						</td>
 						
-						<td width="150px" align="right">&nbsp;机构状态：</td>
+						<td width="150px" align="right">&nbsp;站点状态：</td>
 						<td width="200px" align="left">
 							<input type="radio" name="condition_jgzt" value="" />全部&nbsp;
 							<input type="radio" name="condition_jgzt" value="0" checked="checked" />正常&nbsp;
 							<input type="radio" name="condition_jgzt" value="1" />注销
 						</td>
 						
+						<td width="100px" rowspan="2" align="center">
+							<a href="#" class="btn btn-primary" title="查询" onclick="queryuserlist()"><i class="icon-search icon-white"></i>查询</a>	
+						</td>
 					</tr>
 					<tr>
-						<td height="30px" align="right">&nbsp;机构名称：</td>
+						<td height="30px" align="right">&nbsp;站点名称：</td>
 						<td align="left"><input class="sel" type="text" placeholder="模糊匹配..." id="condition_jgmc" /></td>
-						<td align="right">&nbsp;机构所属区：</td>
+						<td align="right">&nbsp;站点所属区：</td>
 						<td align="left">
 							<select class="sel" id="condition_jgqy">
 							  <option value="">全部</option>
@@ -51,7 +52,7 @@
 							</select>
 						</td>
 						<td colspan="2" align="center">
-							<a href="#" class="btn btn-primary" title="查询" onclick="queryuserlist()"><i class="icon-search icon-white"></i>查询</a>	
+							
 						</td>
 					</tr>
 				</table>
@@ -64,7 +65,7 @@
 		</div>
 		
 		<div id="bottom_pagging" style="background-color: #E0F2F7;padding-top: 3px; height: 32px;">
-			<span style="float: left;"><a href="#" class="btn btn-primary" title="新增站点/部门" onclick="addjg()"><i class="icon-pencil icon-white"></i>新增站点/部门</a></span>
+			<!-- <span style="float: left;"><a href="#" class="btn btn-primary" title="新增站点/部门" onclick="addjg()"><i class="icon-pencil icon-white"></i>新增站点/部门</a></span> -->
 			<span style="text-align: right;float: right;">
 				共<span id="sum"></span>条记录； 
 				每页条数<input type="text" id="countline" style="width:30px;margin-bottom: 0px;" onblur="queryuserlist('跳转指定页')"/> 
@@ -89,21 +90,21 @@
 			<table>
 				<tr>
 					<td colspan="4">注意事项：<br/>
-					新增机构时请<font color="red">谨慎填写机构类型</font>，后续数据维护机构类型不可改变；<br/>
-					新增机构的机构编号由系统产生，规则（1位机构类型+5位机构序号）；<br/>
-					机构序号为当前机构类型下最大机构编号后五位+1。</td>
+					新增站点时请<font color="red">谨慎填写站点类型</font>，后续数据维护站点类型不可改变；<br/>
+					新增站点的站点编号由系统产生，规则（1位机构类型+5位机构序号）；<br/>
+					站点编号为当前机构类型下最大站点编号后五位+1。</td>
 				</tr>
 				<tr>
-					<td align="right">机构名称：</td>
+					<td align="right">站点名称：</td>
 					<td><input type="text" placeholder="机构名称" class="sel" id="addmc" autocomplete="off" /></td>
-					<td align="right">机构类型：</td>
+					<td align="right">站点类型：</td>
 					<td>
 						<input type="text" placeholder="点击展开机构类型选项" class="sel" id="addjglxmc" autocomplete="off" onfocus="open_append('add')" onblur="close_append()" readonly="readonly" />
 						<input style="display: none;" type="text" placeholder="点击展开机构类型选项" class="sel" id="addjglx" autocomplete="off" onfocus="open_append('add')" onblur="close_append()" readonly="readonly" />
 					</td>
 				</tr>
 				<tr>
-					<td align="right">机构所属区域：</td>
+					<td align="right">站点所属区域：</td>
 					<td align="left">
 						<input type="text" placeholder="点击展开机构所属区选项" class="sel" id="addjgqymc" autocomplete="off" onfocus="open_append('add2')" onblur="close_append()" readonly="readonly" />
 						<input style="display: none;" type="text" placeholder="点击展开机构所属区选项" class="sel" id="addjgqy" autocomplete="off" onfocus="open_append('add2')" onblur="close_append()" readonly="readonly" />
@@ -137,7 +138,7 @@
 		</div>
 	</div>
 	<div class="floatarea_append" id="add_alert" onmouseover="focusAdd()" onmouseleave="blurAdd()">
-		<div style="background-color: #A7E8FA;height: 30px;padding: 5px 10px 0px 10px;"><font color="#0088CC" size="+1">选择机构类型</font><font color="red">(点击'灰色区域'或'选择数据后鼠标离开选择区'返回上一级)</font></div>
+		<div style="background-color: #A7E8FA;height: 30px;padding: 5px 10px 0px 10px;"><font color="#0088CC" size="+1">选择站点类型</font><font color="red">(点击'灰色区域'或'选择数据'返回上一级)</font></div>
 		<div style="padding: 10px 15px 10px 15px;">
 			<table class="table" id="data_table_add">
 				
@@ -145,7 +146,7 @@
 		</div>
 	</div>
 	<div class="floatarea_append" id="add2_alert" onmouseover="focusAdd()" onmouseleave="blurAdd()">
-		<div style="background-color: #A7E8FA;height: 30px;padding: 5px 10px 0px 10px;"><font color="#0088CC" size="+1">选择机构所属区</font><font color="red">(点击'灰色区域'或'选择数据后鼠标离开选择区'返回上一级)</font></div>
+		<div style="background-color: #A7E8FA;height: 30px;padding: 5px 10px 0px 10px;"><font color="#0088CC" size="+1">选择站点所属区</font><font color="red">(点击'灰色区域'或'选择数据'返回上一级)</font></div>
 		<div style="padding: 10px 15px 10px 15px;">
 			<table class="table" id="data_table_add2">
 				
@@ -158,18 +159,18 @@
 		<div style="padding: 10px 15px 10px 15px;">
 			<table>
 				<tr>
-					<td align="right">机构编号：</td>
+					<td align="right">站点编号：</td>
 					<td align="left"><input type="text" placeholder="机构编号" class="sel" id="updatejgid" autocomplete="off" readonly="readonly" /></td>
-					<td align="right">机构名称：</td>
+					<td align="right">站点名称：</td>
 					<td align="left"><input type="text" placeholder="机构名称" class="sel" id="updatemc" autocomplete="off" /></td>
 				</tr>
 				<tr>
-					<td align="right">机构类型：</td>
+					<td align="right">站点类型：</td>
 					<td align="left">
 						<input type="text" placeholder="类型代码" class="sel" id="updatejglxmc" autocomplete="off" readonly="readonly" />
 						<input style="display: none;" type="text" placeholder="类型代码" class="sel" id="updatejglx" autocomplete="off" readonly="readonly" />
 					</td>
-					<td align="right">机构所属区域：</td>
+					<td align="right">站点所属区域：</td>
 					<td align="left">
 						<input type="text" placeholder="所属区代码" class="sel" id="updatejgqymc" autocomplete="off" onfocus="open_append('update2')" onblur="close_append()" readonly="readonly" />
 						<input style="display: none;" type="text" placeholder="所属区代码" class="sel" id="updatejgqy" autocomplete="off" onfocus="open_append('update2')" onblur="close_append()" readonly="readonly" />
@@ -206,7 +207,7 @@
 		</div>
 	</div>
 	<div class="floatarea_append" id="update_alert" onmouseover="focusAdd()" onmouseleave="blurAdd()">
-		<div style="background-color: #A7E8FA;height: 30px;padding: 5px 10px 0px 10px;"><font color="#0088CC" size="+1">选择机构类型</font><font color="red">(点击'灰色区域'或'选择数据后鼠标离开选择区'返回上一级)</font></div>
+		<div style="background-color: #A7E8FA;height: 30px;padding: 5px 10px 0px 10px;"><font color="#0088CC" size="+1">选择站点类型</font><font color="red">(点击'灰色区域'或'选择数据'返回上一级)</font></div>
 		<div style="padding: 10px 15px 10px 15px;">
 			<table class="table" id="data_table_update">
 				
@@ -214,7 +215,7 @@
 		</div>
 	</div>
 	<div class="floatarea_append" id="update2_alert" onmouseover="focusAdd()" onmouseleave="blurAdd()">
-		<div style="background-color: #A7E8FA;height: 30px;padding: 5px 10px 0px 10px;"><font color="#0088CC" size="+1">选择机构所属区</font><font color="red">(点击'灰色区域'或'选择数据后鼠标离开选择区'返回上一级)</font></div>
+		<div style="background-color: #A7E8FA;height: 30px;padding: 5px 10px 0px 10px;"><font color="#0088CC" size="+1">选择站点所属区</font><font color="red">(点击'灰色区域'或'选择数据'返回上一级)</font></div>
 		<div style="padding: 10px 15px 10px 15px;">
 			<table class="table" id="data_table_update2">
 				
@@ -222,11 +223,11 @@
 		</div>
 	</div>
 	<div class="floatarea" id="remove">
-		<div style="background-color: #A7E8FA;height: 30px;padding: 5px 10px 0px 10px;"><span style="float: left;"><font color="#0088CC" size="+1">注销机构</font></span><span style="text-align: right;float: right;"><a href="#" onclick="greyback()"><img src="../commstyle/close_pic.png"></a></span></div>
+		<div style="background-color: #A7E8FA;height: 30px;padding: 5px 10px 0px 10px;"><span style="float: left;"><font color="#0088CC" size="+1">注销站点</font></span><span style="text-align: right;float: right;"><a href="#" onclick="greyback()"><img src="../commstyle/close_pic.png"></a></span></div>
 		<div style="padding: 10px 15px 10px 15px;">
 			<table>
 				<tr>
-					<td>机构编号为【<span id="removejgid"></span>】的机构即将被系统注销，请确认？</td>
+					<td>站点编号为【<span id="removejgid"></span>】的站点即将被系统注销，请确认？</td>
 				</tr>
 				<tr><td> &nbsp; </td></tr>
 				<tr>

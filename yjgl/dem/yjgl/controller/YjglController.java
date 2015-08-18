@@ -66,4 +66,20 @@ public class YjglController {
 		return m;
 	}
 	
+	//设备维护预警查询
+	@RequestMapping(value = "/sbjdyj/cx.do", method = RequestMethod.POST,  produces = "application/json")
+	@ResponseBody
+	public Map<String, Object> getsbjdyjlist(PagingAction pagingAction, ModelMap map, HttpServletRequest request, HttpServletResponse response) {	
+		Map<String, Object> m = new HashMap<String, Object>();
+		try {
+			String userid = ((Loginner)(request.getSession().getAttribute("session_loginner"))).getUserid();
+			m = yjglService.sbjdyjlistQuery(pagingAction,userid);	
+		} catch (Exception e) {
+			m.put("code", "888");
+			m.put("info", "查询失败");
+			m.put("sbsylist", null);
+		}
+		return m;
+	}
+	
 }

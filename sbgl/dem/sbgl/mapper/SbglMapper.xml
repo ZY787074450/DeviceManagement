@@ -13,7 +13,7 @@
 
 <insert id="sbrkInsert" parameterType="dem.sbgl.model.SbrkObject">
 	insert into sbgl_sbrk(rkid,sbflid,sbmc,sbxh,sccj,ccbh,cgr,cgrq,rkrq,rksl,note) 
-	values(#{rkid},#{sbflid},#{sbmc},#{sbxh},#{sccj},#{ccbh},#{cgr},#{cgrq},now(),#{rksl},#{note})
+	values(#{rkid},#{sbflid},#{sbmc},#{sbxh},#{sccj},#{ccbh},#{cgr},#{cgrq},#{rkrq},#{rksl},#{note})
 </insert>
 <!-- 设备入库记信息查询 -->
 <select id="sbrkquery" parameterType="String" resultType="Map">
@@ -22,7 +22,7 @@
 </select>
 <!-- 查询设备使用记录(表sbgl_sbsy中记录) -->
 <select id="sbsyquery" parameterType="dem.sbgl.model.SbsyObject" resultType="Map">
-	select xh,rkid,sbflid,sbmc,sbgl_sbsy.jgid jgid,ss_jg.mc jgmc,sbsyr,sbzt,azr,date_format(azrq,'%Y年%m月%d日') azrq,jdr,wxr,bfr,whr,sbgl_sbsy.note note 
+	select xh,rkid,sbflid,sbmc,sbgl_sbsy.jgid jgid,ss_jg.mc jgmc,sbsyr,sbzt,sbgl_sbsy.azr azr,date_format(sbgl_sbsy.azrq,'%Y年%m月%d日') azrq,jdr,date_format(sbgl_sbsy.jdrq,'%Y年%m月%d日') jdrq,wxr,date_format(sbgl_sbsy.wxrq,'%Y年%m月%d日') wxrq,bfr,date_format(sbgl_sbsy.bfrq,'%Y年%m月%d日') bfrq,whr,date_format(sbgl_sbsy.whrq,'%Y年%m月%d日') whrq,sbgl_sbsy.note note 
 	from sbgl_sbsy left join ss_jg on sbgl_sbsy.jgid=ss_jg.jgid
 	where 1 = 1 
 	<if test="jgid != null and jgid != ''">
@@ -134,6 +134,7 @@
 	<if test="czrq_end != null and czrq_end != ''">
 		and czrq &lt; #{czrq_end}
 	</if>
+	${sql_paging_sort}
 </select>
 <!-- 查询设备使用操作记录计数(表sbgl_sbsy_his中记录) -->
 <select id="sbsyjlcountquery" parameterType="dem.sbgl.model.SbsyHisObject" resultType="int">

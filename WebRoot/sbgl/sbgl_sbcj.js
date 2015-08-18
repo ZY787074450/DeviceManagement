@@ -102,7 +102,7 @@ function getsbrkjl(){
 //加载站点和部门信息
 function getqxzdjbm(){
 	$.ajax({
-		url : "/DeviceManagement/jcxx/rywh/getdeparments.do",
+		url : "/DeviceManagement/sbgl/sbcj/getdeparments.do",
 		type : "POST",
 		data : "",
 		success : function(data){
@@ -141,6 +141,10 @@ function greyback(){
 function addsbcj(){
 	greybackadd();
 	$("#add").show();
+	
+	$("input[name='jgid_add']:checked").attr("checked",false);
+	$("input[name='rkid_add']:checked").attr("checked",false);
+	
 	$("#addrkid").val("");
 	$("#addsbflid").val("");
 	$("#addsbmc").val("");

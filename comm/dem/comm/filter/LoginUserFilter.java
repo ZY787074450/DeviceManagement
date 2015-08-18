@@ -42,8 +42,8 @@ public class LoginUserFilter extends OncePerRequestFilter {
 				}else{
 					if(uriStr.indexOf(".do") > 0 && uriStr.indexOf("/getmemus.do")<=0){
 						//配置所有菜单名称对应请求字段
-						String[] menunames = {"人员维护","气象站点及部门维护","预警值维护","设备分类维护","密码修改","设备入库","设备使用","设备出借","设备使用记录","设备库存预警","设备维护预警","设备库存统计","设备使用统计（站点）","设备使用统计（设备）"};//菜单名称数组
-						String[] menuuris = {"/jcxx/rywh","/jcxx/qxzdjbmwh","/jcxx/yjzwh","/jcxx/sbflwh","/jcxx/mmxg","/sbgl/sbrk","/sbgl/sbsy","/sbgl/sbcj","/sbgl/sbsyjl","/yjgl/sbkcyj","/yjgl/sbwhyj","/tjcx/sbkctj","/tjcx/sbsytj_zd","/tjcx/sbsytj_sb"};//菜单通用请求地址(与menunames一一对应,需加上父菜单的通用请求地址作为前缀)
+						String[] menunames = {"人员信息","站点信息","预警信息","设备信息","密码修改","设备入库","设备使用","设备检定","设备报废","设备库存预警","设备检定预警","站点维护预警","设备使用记录","设备库存统计","设备使用统计（站点）","设备使用统计（设备）","站点安装","站点维护","站点维修","站点撤销","气象数据"};//菜单名称数组
+						String[] menuuris = {"/jcxx/rywh","/jcxx/qxzdjbmwh","/jcxx/yjzwh","/jcxx/sbflwh","/jcxx/mmxg","/sbgl/sbrk","/sbgl/sbsy","/sbgl/sbsy","/sbgl/sbsy","/yjgl/sbkcyj","/yjgl/sbjdyj","/yjgl/sbwhyj","/sbgl/sbsyjl","/tjcx/sbkctj","/tjcx/sbsytj_zd","/tjcx/sbsytj_sb","/jcxx/qxzdjbmwh","/zdgl/zdwh","/zdgl/zdwx","/jcxx/qxzdjbmwh","zdgl/qxsjdr"};//菜单通用请求地址(与menunames一一对应,需加上父菜单的通用请求地址作为前缀)
 						//此处编写恶意非法请求拦截代码
 						List list = (List)request.getSession().getAttribute("session_menulist");
 						if(null == list){

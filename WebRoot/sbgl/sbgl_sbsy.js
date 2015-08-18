@@ -25,6 +25,10 @@ $(document).ready(function(){
 	getsbrkjl();
 	getqxzdjbm();
 	
+	$("#seljgid").bind("keyup", function(event) {
+		seljg();
+    });
+	
 });
 
 function queryuserlist(actionstr){
@@ -45,10 +49,13 @@ function queryuserlist(actionstr){
 								+'<th>设备使用站点</th>'
 								+'<th>设备状态</th>'
 								+'<th>设备安装人</th>'
+								+'<th>安装时间</th>'
 								+'<th>近期维修人</th>'
-								+'<th>近期维护人</th>'
+								+'<th>维修时间</th>'
 								+'<th>近期检定人</th>'
+								+'<th>检定时间</th>'
 								+'<th>报废人</th>'
+								+'<th>报废日期</th>'
 								+'<th>操作</th>'
 							+'</tr>';
 			if(data.sbsylist != null && data.sbsylist != 'null' && data.sbsylist.length>0){
@@ -60,12 +67,15 @@ function queryuserlist(actionstr){
 									+'<td>'+(sbsyList[i].jgmc?sbsyList[i].jgmc:'未命名')+'</td>'
 									+'<td>'+(sbsyList[i].sbzt=="0"?'使用':(sbsyList[i].sbzt=="1"?'维修':'报废'))+'</td>'
 									+'<td>'+(sbsyList[i].azr?sbsyList[i].azr:'暂无数据')+'</td>'
+									+'<td>'+(sbsyList[i].azrq?sbsyList[i].azrq:'')+'</td>'
 									+'<td>'+(sbsyList[i].wxr?sbsyList[i].wxr:'')+'</td>'
-									+'<td>'+(sbsyList[i].whr?sbsyList[i].whr:'')+'</td>'
+									+'<td>'+(sbsyList[i].wxrq?sbsyList[i].wxrq:'')+'</td>'
 									+'<td>'+(sbsyList[i].jdr?sbsyList[i].jdr:'')+'</td>'
+									+'<td>'+(sbsyList[i].jdrq?sbsyList[i].jdrq:'')+'</td>'
 									+'<td>'+(sbsyList[i].bfr?sbsyList[i].bfr:'')+'</td>'
+									+'<td>'+(sbsyList[i].bfrq?sbsyList[i].bfrq:'')+'</td>'
 									+((sbsyList[i].sbzt=="0"||sbsyList[i].sbzt=="1")?('<td><a href="#" title="修改" onclick="updatesbsy(\''+(sbsyList[i].xh?sbsyList[i].xh:'none')+'\',\''+(sbsyList[i].rkid?sbsyList[i].rkid:'')+'\',\''+(sbsyList[i].sbmc?sbsyList[i].sbmc:'')+'\')">'
-									+'<i class="icon-edit"></i></a> &nbsp;&nbsp;&nbsp;&nbsp; '
+									+'<i class="icon-edit"></i></a> &nbsp;&nbsp; '
 									+'<a href="#" title="删除记录" onclick="removesbsy(\''+(sbsyList[i].xh?sbsyList[i].xh:'none')+'\',\''+(sbsyList[i].sbmc?sbsyList[i].sbmc:'')+'\')">'
 									+'<i class="icon-trash"></i></a></td>'):('<td><i class="icon-edit icon-white" style="background-color: rgb(215, 214, 214);"></i> &nbsp;&nbsp;&nbsp;&nbsp; <i class="icon-trash icon-white" style="background-color: rgb(215, 214, 214);"></i></td>'))
 								+'</tr>');
@@ -125,7 +135,7 @@ function getsbrkjl(){
 //加载站点和部门信息
 function getqxzdjbm(){
 	$.ajax({
-		url : "/DeviceManagement/jcxx/rywh/getdeparments.do",
+		url : "/DeviceManagement/sbgl/sbsy/getdeparments.do",
 		type : "POST",
 		data : "",
 		success : function(data){
@@ -137,7 +147,7 @@ function getqxzdjbm(){
 			if(data.jglist != null && data.jglist != 'null' && data.jglist.length>0){
 				var jglist = data.jglist;
 				for(var i=0;i<jglist.length;i++){
-					tablehtml1 += ('<tr>'
+					tablehtml1 += ('<tr class="addJG" title="\''+jglist[i].jgid+'\'">'
 									+'<td>'+(jglist[i].jgid?jglist[i].jgid:'未知')+'</td>'
 									+'<td>'+(jglist[i].mc?jglist[i].mc:'未知')+'</td>'
 									+'<td><input type="radio" name="jgid_add" value="'+(jglist[i].jgid?jglist[i].jgid:'')+'" title="'+(jglist[i].mc?jglist[i].mc:'未知名称')+'" onchange="treegrid_radio_change_add2(\''+(jglist[i].jgid?jglist[i].jgid:'')+'\')" />'+'</td>'
@@ -148,6 +158,21 @@ function getqxzdjbm(){
 		}
 	});
 }
+//机构快速定位方法
+function seljg(){
+	$(".addJG").each(function(){
+		if(trimspace($("#seljgid").val())==''){
+			$(this).show();
+		}else{
+			if($(this).attr("title").indexOf($("#seljgid").val())>0){
+				$(this).show();
+			}else{
+				$(this).hide();
+			}
+		}
+	});
+}
+
 
 //屏幕遮罩
 function greybackadd(){
@@ -167,6 +192,10 @@ function greyback(){
 function addsbsy(){
 	greybackadd();
 	$("#add").show();
+	
+	$("input[name='rkid_add']:checked").attr("checked",false);
+	$("input[name='jgid_add']:checked").attr("checked",false);
+	
 	$("#addrkid").val("");
 	$("#addsbflid").val("");
 	$("#addsbmc").val("");
@@ -329,7 +358,7 @@ function treegrid_radio_change_update(rkid,sbflid,sbmc){
 }
 
 function isCloseDiv(){
-	if(ismouseondiv || isinputselect){
+	if(ismouseondiv || isinputselect || ishide){
 		return;
 	}
 	$("#add_alert").hide();
@@ -342,4 +371,13 @@ function powerClose(){
 	$("#update_alert").hide();
 	$("#add_alert2").hide();
 	$("#greyground2").hide();
+}
+
+var ishide = false;
+function killhide(){
+	ishide = true;
+}
+
+function savehide(){
+	ishide = false;
 }

@@ -335,7 +335,7 @@ public class JcxxController {
 			if("200".equals(map.get("code"))){
 				return new String(("redirect:/jcxx/jcxx_sbflwh.html?msg=新增成功！").getBytes("utf-8"),"iso8859-1");
 			}else if("202".equals(map.get("code"))){
-				return new String("redirect:/jcxx/jcxx_sbflwh.html?msg=图片上传失败！".getBytes("utf-8"),"iso8859-1");
+				return new String(("redirect:/jcxx/jcxx_sbflwh.html?msg="+map.get("info")).getBytes("utf-8"),"iso8859-1");
 			}
 		}catch(Exception e){
 			map.put("code", "888");

@@ -8,15 +8,19 @@
 <style type="text/css">
 	#add_alert{
 		position: absolute;
-		top: 20%;
-		left: 40%;
-		transform: translate(-30%, -15%);
+		top: 50%;
+		left: 50%;
+		transform: translate(-25%, -25%);
 		display:none;
 		background-color: #E0F2F7;
+		filter: Alpha(Opacity=100);
+	 	-moz-opacity:1; 
+	    	opacity:1;
 		z-index:1116;
-		border: 2px solid grey;
-		max-width: 700px;
+		border: 1px solid black;
+		max-width: 800px;
 		max-height: 500px;
+		overflow: auto;
 	}
 </style>
 <title>设备入库</title>
@@ -26,11 +30,11 @@
 		<div id="top_title" class="well well-small" style="margin-bottom: 0px;height: 20px;"><font color="#0088CC"><i class="icon-wrench"></i><b style="font-size: 20px;">设备入库</b></font></div>
 	
 		<div id="top_condition" id="add">
-			<div style="background-color: #A7E8FA;height: 30px;padding: 5px 10px 0px 10px;"><font color="#0088CC" size="+1">填写设备入库信息</font></div>
+			<!-- <div style="background-color: #A7E8FA;height: 30px;padding: 5px 10px 0px 10px;"><font color="#0088CC" size="+1">填写设备入库信息</font></div> -->
 			<div style="padding: 10px 15px 10px 15px;">
 				<table style="width: 100%;">
 					<tr>
-						<td width="15%" align="right">设备类别(编号)：</td>
+						<td width="15%" align="right">设备编号：</td>
 						<td width="20%"><input type="text" placeholder="点击展开设备分类选项" class="nav-search-input" id="addsbflid" autocomplete="off" onfocus="open_append('add')" onblur="close_append()" readonly="readonly" /></td>
 						<td width="15%" align="right">设备名称：</td>
 						<td width="20%"><input type="text" placeholder="设备名称" class="nav-search-input" id="addsbmc" autocomplete="off" /></td>
@@ -56,12 +60,12 @@
 							<input size="10" placeholder="点击展开时间编辑器" id="addcgrq" type="text" onclick="laydate({istime: true, format: 'YYYY-MM-DD'})" readonly="readonly">
 						</td>
 						<td align="right">入库日期：</td>
-						<td><input type="text" value="保存后自动生成" placeholder="保存后自动生成" class="nav-search-input" id="addrkrq" autocomplete="off" readonly="readonly" /></td>
+						<td><input size="10" placeholder="点击展开时间编辑器" id="addrkrq" type="text" onclick="laydate({istime: true, format: 'YYYY-MM-DD'})" readonly="readonly"></td>
 						<td></td>
 					</tr>
 					<tr>
 						<td align="right">采购数量：</td>
-						<td><input type="text" placeholder="采购量" class="nav-search-input" id="addcgsl" autocomplete="off" onblur="checknumber()" /></td>
+						<td><input type="text" placeholder="采购量" class="nav-search-input" id="addcgsl" autocomplete="off" value="1" onblur="checknumber()" /></td>
 						<td align="right">备注：</td>
 						<td><input type="text" placeholder="..." class="nav-search-input" id="addnote" autocomplete="off" /></td>
 						<td></td>
@@ -77,7 +81,7 @@
 	<div id="greyground2"><div></div></div>
 	<div id="loading2"><font color="grey">数据选择中...</font></div>
 	<div class="floatarea_append" id="add_alert" onmouseover="focusAdd()" onmouseleave="blurAdd()">
-		<div style="background-color: #A7E8FA;height: 30px;padding: 5px 10px 0px 10px;"><font color="#0088CC" size="+1">选择设备类别</font><font color="red">(点击'灰色区域'或'选择数据后鼠标离开选择区'返回上一级)</font></div>
+		<div style="background-color: #A7E8FA;height: 30px;padding: 5px 10px 0px 10px;"><font color="#0088CC" size="+1">选择设备类别</font><font color="red">(点击'灰色区域'或'选择数据'返回上一级)</font></div>
 		<div style="padding: 10px 15px 10px 15px;">
 			<div id="message_tip">正在加载数据，请稍等...</div>
 			<table id="data_table_add" class="easyui-treegrid" style="width:580px;height:420px;"

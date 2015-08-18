@@ -60,9 +60,9 @@ body{
 }
 #loading2{
 	position: absolute;
-	top: 30%;
-	left: 40%;
-	transform: translate(-30%, -15%);
+	top: 50%;
+	left: 50%;
+	transform: translate(0%, 0%);
 	display:none;
 	background-color: #E0F2F7;
 	filter: Alpha(Opacity=100);
@@ -72,9 +72,9 @@ body{
 }
 .floatarea{
 	position: absolute;
-	top: 30%;
-	left: 30%;
-	transform: translate(-30%, -15%);
+	top: 50%;
+	left: 50%;
+	transform: translate(0%, 0%);
 	display:none;
 	background-color: #E0F2F7;
 	filter: Alpha(Opacity=100);
@@ -88,9 +88,9 @@ body{
 }
 .floatarea_append{
 	position: absolute;
-	top: 30%;
-	left: 30%;
-	transform: translate(-30%, -15%);
+	top: 50%;
+	left: 50%;
+	transform: translate(0%, 0%);
 	display:none;
 	background-color: #E0F2F7;
 	filter: Alpha(Opacity=100);
@@ -101,6 +101,9 @@ body{
 	max-width: 800px;
 	max-height: 500px;
 	overflow: auto;
+}
+#grant{
+	overflow: scroll;
 }
 input.sel{
 	width: 170px;
@@ -115,9 +118,10 @@ select.sel{
 	width: 99%;
 	position: fixed;
 	top: 3px;
+	margin-right: 0px;
 }
 #top_condition{
-	width: 99%;
+	width: 100%;
 	position: fixed;
 	top: 42px;
 }

@@ -8,6 +8,7 @@
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/sbgl"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/yjgl"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/tjcx"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/zdgl"/>
         <property name="java-output-path" value="/DeviceManagement/build/classes"/>
         <property name="context-root" value="DeviceManagement"/>
     </wb-module>

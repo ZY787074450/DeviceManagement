@@ -2,7 +2,8 @@
  * 
  */
 $(document).ready(function(){
-	
+	var datestr = new Date();
+	$("#addrkrq").val(datestr.getFullYear()+"-"+(datestr.getMonth()+1)+"-"+datestr.getDate());
 });
 function addsbrkxx(){
 	if($("#addsbmc").val()=='' || $("#addsbflid").val()==''){
@@ -13,6 +14,10 @@ function addsbrkxx(){
 		alert("请填写设备采购时间，否则设备使用统计将无法统计此次采购数量！");
 		return;
 	}
+	if($("#addrkrq").val()==''){
+		alert("设备入库日期不能为空！");
+		return;
+	}
 	if(!checknumber()){
 		return;
 	}
@@ -20,7 +25,7 @@ function addsbrkxx(){
 		url: "/DeviceManagement/sbgl/sbrk/add.do",
 		type: "POST",
 		data: "&sbflid="+$("#addsbflid").val()+"&sbmc="+$("#addsbmc").val()+"&sbxh="+$("#addsbxh").val()+"&sccj="+$("#addsccj").val()
-			 +"&ccbh="+$("#addccbh").val()+"&cgr="+$("#addcgr").val()+"&cgrq="+$("#addcgrq").val()+"&rksl="+$("#addcgsl").val()+"&note="+$("#addnote").val(),
+			 +"&ccbh="+$("#addccbh").val()+"&cgr="+$("#addcgr").val()+"&cgrq="+$("#addcgrq").val()+"&rkrq="+$("#addrkrq").val()+"&rksl="+$("#addcgsl").val()+"&note="+$("#addnote").val(),
 		success: function(data){
 			if(data.sbmc){
 				alert(data.sbmc+"设备入库信息记录成功！");
@@ -40,7 +45,7 @@ function getsbflid(){
 	}
 	isloadtree = true;
 	$.ajax({
-		url : "/DeviceManagement/jcxx/sbflwh/cx.do?time="+new Date(),
+		url : "/DeviceManagement/sbgl/sbrk/sbflwh_cx.do?time="+new Date(),
 		type : "POST",
 		dataType: "json",
 		data : "",
@@ -126,7 +131,7 @@ function sfzl(sfzl){
 }
 function selectsbflid(sbflid,rowObj){
 	if(rowObj.sfzl=='1'){
-		return ('<input type="radio" name="sbflid_add" value="'+sbflid+'" onchange="treegrid_radio_change_add(\'addsbflid\',\''+sbflid+'\',\''+rowObj.sblbmc+'\')" />');
+		return ('<input type="radio" name="sbflid_add" title="'+rowObj.sblbmc+'" value="'+sbflid+'" onchange="treegrid_radio_change_add(\'addsbflid\',\''+sbflid+'\',\''+rowObj.sblbmc+'\')" />');
 	}else{
 		return "";
 	}
@@ -173,15 +178,11 @@ function resettreedata(){
 }
 function treegrid_radio_change_add(idstr,sbflid,sblbmc){
 	$("#"+idstr).val("");
+	$("#addsbmc").val("");
 	
 	$("#"+idstr).val($("input[name='sbflid_add']:checked").val());
-	if(sbflid && sblbmc && sbflid!='' && sblbmc!=''){
-		$("#addsbmc").val("");
-		if($("input[name='sbflid_add']:checked").val()==sbflid){
-			
-			$("#addsbmc").val(sblbmc);
-		}
-	}
+	$("#addsbmc").val($("input[name='sbflid_add']:checked").attr("title"));
+	
 	powerClose();
 }
 

@@ -45,7 +45,7 @@ function queryuserlist(actionstr){
 								+'<th>序号</th>'
 								+'<th>人员编号</th>'
 								+'<th>姓名</th>'
-								+'<th>所属机构</th>'
+								//+'<th>所属机构</th>'
 								+'<th>联系电话</th>'
 								+'<th>人员状态</th>'
 								+'<th>录入日期</th>'
@@ -58,7 +58,7 @@ function queryuserlist(actionstr){
 									+'<td>'+(i + 1 + (parseInt($("#currpage").val())-1) * (parseInt($("#countline").val())))+'</td>'
 									+'<td>'+(userList[i].userid?userList[i].userid:'暂无数据')+'</td>'
 									+'<td><a href="#" title="'+(userList[i].note?userList[i].note:'')+'">'+(userList[i].mc?userList[i].mc:'暂无数据')+'</a></td>'
-									+'<td>'+(userList[i].jgmc?userList[i].jgmc:'暂无数据')+'</td>'
+									//+'<td>'+(userList[i].jgmc?userList[i].jgmc:'暂无数据')+'</td>'
 									+'<td>'+(userList[i].tel?userList[i].tel:'暂无数据')+'</td>'
 									+'<td>'+(userList[i].userzt=="0"?'正常':'注销')+'</td>'
 									+'<td>'+(userList[i].lrrq?userList[i].lrrq:'时间不明')+'</td>'
@@ -134,9 +134,12 @@ function greyback(){
 function addmanager(){
 	greybackadd();
 	$("#add").show();
+	
+	//$("input[name='deparment_add']:checked").attr("checked",false);
+	
 	$("#addmc").val("");
-	$("#addjgmc").val("");
-	$("#addjgid").val("");
+	//$("#addjgmc").val("");
+	//$("#addjgid").val("");
 	$("#addtel").val("");
 	$("#addnote").val("");
 }
@@ -149,8 +152,8 @@ function updatemanager(userid,mc,jgmc,jgid,tel,note){
 		$("#update").show();
 		$("#updateuserid").val(userid);
 		$("#updatemc").val(mc);
-		$("#updatejgmc").val(jgmc);
-		$("#updatejgid").val(jgid);
+		//$("#updatejgmc").val(jgmc);
+		//$("#updatejgid").val(jgid);
 		$("#updatetel").val(tel);
 		$("#updatenote").val(note);
 	}
@@ -234,8 +237,8 @@ function setParentSelect(childrencode,parentcode){
 
 //请求新增人员
 function addmember(){
-	if(trimspace($("#addmc").val())=='' || $("#addjgid").val()==''){
-		alert("姓名和机构不能为空");
+	if(trimspace($("#addmc").val())==''){
+		alert("姓名不能为空");
 		return;
 	}
 	$("#add").hide();
@@ -256,7 +259,7 @@ function addmember(){
 }
 
 function updatemember(){
-	if(trimspace($("#updatemc").val())=='' || $("#updatejgid").val()==''){
+	if(trimspace($("#updatemc").val())==''){
 		alert("姓名和机构编号不能为空");
 		return;
 	}
@@ -312,11 +315,9 @@ function grantmember(){
 			}else{
 				alert("数据处理异常，请联系系统管理员！");
 			}
+			greyback();
 		}
 	});
-	
-	greyback();
-	
 }
 var ismouseondiv = false;
 function focusAdd(){

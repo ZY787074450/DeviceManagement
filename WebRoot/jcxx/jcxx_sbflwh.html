@@ -12,7 +12,7 @@
 </head>
 <body style="padding: 0px 5px 0px 5px;">
 	<div id="czq">
-		<div id="top_title" class="well well-small" style="margin-bottom: 0px;height: 20px;"><font color="#0088CC"><i class="icon-wrench"></i><b style="font-size: 20px;">设备分类维护</b></font></div>
+		<div id="top_title" class="well well-small" style="margin-bottom: 0px;height: 20px;"><font color="#0088CC"><i class="icon-wrench"></i><b style="font-size: 20px;">设备信息</b></font></div>
 		<div id="top_condition" style="background-color: #E0F2F7">
 		<table id="dataarea" class="easyui-treegrid" style="width:100%;height:500px;"
 	            data-options="
@@ -50,7 +50,7 @@
 				<tr>
 					<td>设备类别名称：</td>
 					<td>
-						<input type="text" placeholder="设备类别名称" class="nav-search-input" id="addsblbmc" name="sblbmc" autocomplete="off" />
+						<input type="text" placeholder="设备类别名称" class="sel" id="addsblbmc" name="sblbmc" autocomplete="off" />
 						
 					</td>
 					<td><input type="file" id="addsbtp" name="sbtpfile" /></td>
@@ -63,7 +63,9 @@
 					<td colspan="3" style="text-align: center"><a href="#" class="btn btn-primary" onclick="addsbwhfl()">保存</a></td>
 				</tr>
 				<tr>
-					<td colspan="3" style="text-align: left">注意事项:上传图片只接受jpg格式，其他格式图片将被转换，若因图片格式不符导致图片显示异常，概不负责！</td>
+					<td colspan="3" style="text-align: left">注意事项:上传图片格式为JPG！
+					单个设备类别下<font color="red">分类个数</font>设定：层级1上限99个，层级2上限99个，<br/>层级3上限999999个；<font color="red">超过上限新增无效</font>。
+					</td>
 				</tr>
 			</table>
 			</form>		
@@ -74,7 +76,7 @@
 		<div style="padding: 10px 15px 10px 15px;">
 			<table>
 				<tr>
-					<td>请输入新名称：<input type="text" id="updatesblbmc" value=""/></td>
+					<td>请输入新名称：<input type="text" class="sel" id="updatesblbmc" value=""/></td>
 				</tr>
 				<tr><td><input id="updatesbflid" type="text" value="" readonly="readonly" style="display: none;"></td></tr>
 				<tr>

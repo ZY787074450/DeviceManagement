@@ -20,8 +20,8 @@ function queryuserlist(actionstr){
 			disOrEnable();
 			var tablehtml = '<tr>'
 								+'<th>序号</th>'
-								+'<th>机构编号</th>'
-								+'<th>机构名称</th>'
+								+'<th>站点编号</th>'
+								+'<th>站点名称</th>'
 								+'<th>上次维护日期</th>'
 								+'<th>预警值(单位：天)</th>'
 								+'<th>超过预警天数</th>'
@@ -44,8 +44,8 @@ function queryuserlist(actionstr){
 
 					tablehtml += ('<tr>'
 									+'<td>'+(i + 1 + (parseInt($("#currpage").val())-1) * (parseInt($("#countline").val())))+'</td>'
-									+'<td>'+(sbsyList[i].jgid?sbsyList[i].jgid:'未知机构编号')+'</td>'
-									+'<td>'+(sbsyList[i].jgmc?sbsyList[i].jgmc:'未知机构')+'</td>'
+									+'<td>'+(sbsyList[i].jgid?sbsyList[i].jgid:'未知站点编号')+'</td>'
+									+'<td>'+(sbsyList[i].jgmc?sbsyList[i].jgmc:'未知站点')+'</td>'
 									+'<td>'+scwhrq+'</td>'
 									+'<td>'+(yjz==-1?'未设置预警值':yjz)+'</td>'
 									+'<td>'+(yjz==-1?'无法计算':(minwhrqcz==-1?'无法计算':(minwhrqcz<=yjz?'未超过':('超出'+(minwhrqcz-yjz)+'天'))))+'</td>'

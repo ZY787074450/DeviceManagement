@@ -218,10 +218,12 @@ function isCloseDiv(){
  * 通用页面数据区div布局适应屏幕代码区
  */
 var data_height = 0;//页面数据div区高度
+
 function setDatatablePosition(aheight,bheight,cheight){//三个参数分别为：标题高度、条件区高度(不包括"查询条件"的高度)、分页区高度
 	
 	var fullheight = document.documentElement.clientHeight;
 	var dataheight = fullheight;
+	
 	if(aheight){
 		dataheight = dataheight-aheight-3;
 	}
@@ -247,9 +249,10 @@ function setDatatablePosition(aheight,bheight,cheight){//三个参数分别为�
 	}else if(data_height>610){
 		$("#countline").val("15");
 		countline = 15;
-	}else{
+	}else if(0<data_height && data_height<26){
 		alert("您的浏览器显示界面过小，建议隐藏浏览器上方非必要组件！");
 	}
+	
 }
 
 /**

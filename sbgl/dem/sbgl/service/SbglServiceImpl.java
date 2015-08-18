@@ -86,7 +86,7 @@ public class SbglServiceImpl implements SbglService {
 			SbsyObject sbsyqueryobj = (SbsyObject)baseDao.selectOne("dem.sbgl.mapper.SbglMapper.sbsyqueryone", sbsyObject.getXh());
 			baseDao.update("dem.sbgl.mapper.SbglMapper.sbsyupdate", sbsyObject);
 			responsesbmc = sbsyqueryobj.getSbmc();
-		}else{//其它类型(1维修、2报废、3检定、4维护)则执行更新update
+		}else{//其它类型(1维修、2报废、3检定、4回库(原“维护”功能))则执行更新update，4执行delete
 			sbsyhisObject.setSbsylx(czlx);
 			switch(czlx){
 			case "1":
@@ -98,7 +98,7 @@ public class SbglServiceImpl implements SbglService {
 				sbsyhisObject.setCzr(sbsyObject.getBfr());
 				break;
 			case "3":
-				sbsyObject.setSbzt("1");
+				sbsyObject.setSbzt("0");
 				sbsyhisObject.setCzr(sbsyObject.getJdr());
 				break;
 			case "4":
@@ -107,7 +107,11 @@ public class SbglServiceImpl implements SbglService {
 				break;
 			}
 			SbsyObject sbsyqueryobj = (SbsyObject)baseDao.selectOne("dem.sbgl.mapper.SbglMapper.sbsyqueryone", sbsyObject.getXh());
-			baseDao.update("dem.sbgl.mapper.SbglMapper.sbsyupdate", sbsyObject);//更新sbgl_sbsy使用记录表
+			if("4".equals(czlx)){
+				baseDao.delete("dem.sbgl.mapper.SbglMapper.sbsydelete", sbsyObject.getXh());//删除sbgl_sbsy使用记录
+			}else{
+				baseDao.update("dem.sbgl.mapper.SbglMapper.sbsyupdate", sbsyObject);//更新sbgl_sbsy使用记录表
+			}
 			
 			sbsyhisObject.setXh((CommonUtil.getUUID()).toUpperCase());
 			sbsyhisObject.setRkid(sbsyqueryobj.getRkid());

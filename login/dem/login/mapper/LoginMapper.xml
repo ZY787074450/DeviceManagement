@@ -6,7 +6,7 @@
 <select id="menucodeListSelect"  parameterType="String"  resultType="Map" >
 	select ss_privilege.menu_id,ss_menu.menu_mc,ss_privilege.userid 
 	from ss_privilege left join ss_menu on ss_privilege.menu_id = ss_menu.menu_id 
-	where userid = #{userid}
+	where userid = #{userid} AND ss_menu.yxbz = 'Y'
 </select>
 
 <!-- 用户登录验证 -->
@@ -23,6 +23,7 @@
 	SELECT yxbz,menu_mc,menu_pid,tjpx, menu_id,menu_cj,menu_url
 	FROM ss_menu 
 	WHERE menu_pid = #{menucode}
+	AND yxbz = 'Y'
 	AND menu_id in (select menu_id from ss_privilege where userid = #{userid})
 	ORDER BY tjpx
 </select>

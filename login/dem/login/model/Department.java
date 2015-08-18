@@ -15,11 +15,25 @@ public class Department{
 	private String jgzt;//机构状态
 	private String note;//备注
 	private String lrrq;//录入日期
+	private String jgys;//机构要素
+	private String azr;//安装人
 	//补充字段（附加表字段）
 	private String jglxmc;//机构类型名称
 	private String jgqymc;//机构所属区域名称
 	
 	
+	public String getJgys() {
+		return jgys;
+	}
+	public void setJgys(String jgys) {
+		this.jgys = jgys;
+	}
+	public String getAzr() {
+		return azr;
+	}
+	public void setAzr(String azr) {
+		this.azr = azr;
+	}
 	public String getJgid() {
 		return jgid;
 	}

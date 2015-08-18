@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="../jquery-easyui/themes/default/easyui.css">
+<link href="../bootstrap/css/bootstrap.css" type="text/css" rel="stylesheet" />
+<link href="../commstyle/commcss.css" type="text/css" rel="stylesheet" />
+<title>站点安装</title>
+</head>
+<body>
+	<div id="czq">
+		<div id="top_title" class="well well-small" style="margin-bottom: 0px;height: 20px;"><font color="#0088CC"><i class="icon-wrench"></i><b style="font-size: 20px;">站点安装</b></font></div>
+		<div id="top_condition" id="add">
+			
+			<div style="padding: 10px 15px 10px 15px;">
+				<table style="width: 100%">
+					<tr>
+						<td align="right">注意事项：</td>
+						<td colspan="3" align="left">
+						新增站点时请<font color="red">谨慎填写站点类型</font>，后续数据维护站点类型不可改变；<br/>
+						</td>
+					</tr>
+					<tr>
+						<td align="right">站点编号：</td>
+						<td align="left"><input type="text" placeholder="手动输入站点编号" class="sel" id="addjgid" autocomplete="off" /></td>
+						<td align="right">站点名称：</td>
+						<td><input type="text" placeholder="机构名称" class="sel" id="addmc" autocomplete="off" /></td>
+					</tr>
+					<tr>
+						<td align="right">站点所属区域：</td>
+						<td align="left">
+							<input type="text" placeholder="点击展开机构所属区选项" class="sel" id="addjgqymc" autocomplete="off" onfocus="open_append('add2')" onblur="close_append()" readonly="readonly" />
+							<input style="display: none;" type="text" placeholder="点击展开机构所属区选项" class="sel" id="addjgqy" autocomplete="off" onfocus="open_append('add2')" onblur="close_append()" readonly="readonly" />
+						</td>
+						<td align="right">站点类型：</td>
+						<td>
+							<input type="text" value="自动站" placeholder="点击展开机构类型选项" class="sel" id="addjglxmc" autocomplete="off" onfocus="open_append('add')" onblur="close_append()" readonly="readonly" />
+							<input style="display: none;" type="text" value="2" placeholder="点击展开机构类型选项" class="sel" id="addjglx" autocomplete="off" onfocus="open_append('add')" onblur="close_append()" readonly="readonly" />
+						</td>	
+					</tr>
+					<tr>
+						<td align="right">站点要素：</td>
+						<td align="left"><input type="text" placeholder="站点要素" class="sel" id="addjgys" autocomplete="off" /></td>
+						<td align="right">经度：</td>
+						<td align="left"><input type="text" placeholder="经度" class="sel" id="addjgjd" autocomplete="off" /></td>
+					</tr>
+					<tr>
+						<td align="right">纬度：</td>
+						<td align="left"><input type="text" placeholder="纬度" class="sel" id="addjgwd" autocomplete="off" /></td>
+						<td align="right">海拔：</td>
+						<td align="left"><input type="text" placeholder="海拔" class="sel" id="addjghb" autocomplete="off" /></td>
+					</tr>
+					<tr>
+						<td align="right">地址：</td>
+						<td align="left"><input type="text" placeholder="地址" class="sel" id="addjgdz" autocomplete="off" /></td>
+						<td align="right">联系人：</td>
+						<td align="left"><input type="text" placeholder="联系人" class="sel" id="addjglxr" autocomplete="off" /></td>
+					</tr>
+					<tr>
+						<td align="right">联系电话：</td>
+						<td align="left"><input type="text" placeholder="联系电话" class="sel" id="addjglxdh" autocomplete="off" /></td>
+						<td align="right">备注：</td>
+						<td align="left"><input type="text" placeholder="..." class="sel" id="addnote" autocomplete="off" /></td>
+					</tr>
+					
+					<tr>
+						<td align="right">安装人：</td>
+						<td align="left"><input type="text" placeholder="..." class="sel" id="addazr" autocomplete="off" /></td>
+						<td align="right">安装日期：</td>
+						<td align="left"><input style="width: 170px;margin: 0px 0px 0px 0px;" size="10" placeholder="安装日期" id="addlrrq" type="text" onclick="laydate({istime: true, format: 'YYYY-MM-DD'})" readonly="readonly"></td>						
+					</tr>
+					<tr>
+						<td colspan="4" style="text-align: center"><a href="#" class="btn btn-primary" onclick="addjgxx()">保存</a></td>
+					</tr>
+					
+				</table>
+			</div>
+		</div>
+	</div>
+	<div id="greyground2"><div></div></div>
+	<div id="loading2"><font color="grey">数据选择中...</font></div>
+	<div class="floatarea_append" id="add_alert" onmouseover="focusAdd()" onmouseleave="blurAdd()">
+		<div style="background-color: #A7E8FA;height: 30px;padding: 5px 10px 0px 10px;"><font color="#0088CC" size="+1">选择站点类型</font><font color="red">(点击'灰色区域'或'选择数据'返回上一级)</font></div>
+		<div style="padding: 10px 15px 10px 15px;">
+			<table class="table" id="data_table_add">
+				
+			</table>
+		</div>
+	</div>
+	<div class="floatarea_append" id="add2_alert" onmouseover="focusAdd()" onmouseleave="blurAdd()">
+		<div style="background-color: #A7E8FA;height: 30px;padding: 5px 10px 0px 10px;"><font color="#0088CC" size="+1">选择站点所属区</font><font color="red">(点击'灰色区域'或'选择数据'返回上一级)</font></div>
+		<div style="padding: 10px 15px 10px 15px;">
+			<table class="table" id="data_table_add2">
+				
+			</table>
+		</div>
+	</div>
+		
+</body>
+</html>
+<script src="../bootstrap/jquery.js" type="text/javascript"></script>
+<script type="text/javascript" src="../jquery-easyui/jquery.easyui.min.js"></script>
+<script src="../bootstrap/js/bootstrap.js" type="text/javascript"></script>
+<script src="../laydate/laydate.js" type="text/javascript"></script>
+
+<script src="zdgl_zdaz.js" type="text/javascript"></script>

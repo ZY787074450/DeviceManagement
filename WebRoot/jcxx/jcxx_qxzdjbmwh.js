@@ -23,15 +23,20 @@ function queryuserlist(actionstr){
 			disOrEnable();
 			var tablehtml = '<tr>'
 								+'<th>序号</th>'
-								+'<th>机构编号</th>'
-								+'<th>机构名称</th>'
-								+'<th>机构类型</th>'
-								+'<th>机构所属区域</th>'
+								+'<th>站点编号</th>'
+								+'<th>站点名称</th>'
+								+'<th>站点类型</th>'
+								+'<th>站点所属区域</th>'
 								+'<th width="120px">地址</th>'
+								+'<th>经度</th>'
+								+'<th>纬度</th>'
+								+'<th>海拔</th>'
 								+'<th>联系人</th>'
 								+'<th>联系电话</th>'
-								+'<th>机构状态</th>'
-								+'<th>操作</th>'
+								+'<th>站点状态</th>'
+								+'<th>站点要素</th>'
+								+'<th>站点安装人</th>'
+								+'<th>安装时间</th>'
 							+'</tr>';
 			if(data.jglist != null && data.jglist != 'null' && data.jglist.length>0){
 				var jglist = data.jglist;
@@ -43,13 +48,19 @@ function queryuserlist(actionstr){
 									+'<td>'+(jglist[i].jglxmc?jglist[i].jglxmc:'暂无数据')+'</td>'
 									+'<td>'+(jglist[i].jgqymc?jglist[i].jgqymc:'暂无数据')+'</td>'
 									+'<td>'+(jglist[i].jgdz?jglist[i].jgdz:'暂无数据')+'</td>'
+									+'<td>'+(jglist[i].jgjd?jglist[i].jgjd:'')+'</td>'
+									+'<td>'+(jglist[i].jgwd?jglist[i].jgwd:'')+'</td>'
+									+'<td>'+(jglist[i].jghb?jglist[i].jghb:'')+'</td>'
 									+'<td>'+(jglist[i].jglxr?jglist[i].jglxr:'')+'</td>'
 									+'<td>'+(jglist[i].jglxdh?jglist[i].jglxdh:'')+'</td>'
 									+'<td>'+(jglist[i].jgzt=="0"?'正常':'注销')+'</td>'
-									+(jglist[i].jgzt=="0"?('<td><a href="#" title="编辑" onclick="updatejg(\''+(jglist[i].jgid?jglist[i].jgid:'none')+'\',\''+(jglist[i].mc?jglist[i].mc:'')+'\',\''+(jglist[i].jglxmc?jglist[i].jglxmc:'未知名称')+'\',\''+(jglist[i].jglx?jglist[i].jglx:'')+'\',\''+(jglist[i].jgqymc?jglist[i].jgqymc:'未知名称')+'\',\''+(jglist[i].jgqy?jglist[i].jgqy:'')+'\',\''+(jglist[i].jgjd?jglist[i].jgjd:'')+'\',\''+(jglist[i].jgwd?jglist[i].jgwd:'')+'\',\''+(jglist[i].jghb?jglist[i].jghb:'')+'\',\''+(jglist[i].jgdz?jglist[i].jgdz:'')+'\',\''+(jglist[i].jglxr?jglist[i].jglxr:'')+'\',\''+(jglist[i].jglxdh?jglist[i].jglxdh:'')+'\',\''+(jglist[i].note?jglist[i].note:'')+'\')">'
+									+'<td>'+(jglist[i].jgys?jglist[i].jgys:'')+'</td>'
+									+'<td>'+(jglist[i].azr?jglist[i].azr:'')+'</td>'
+									+'<td>'+(jglist[i].lrrq?jglist[i].lrrq:'')+'</td>'
+									/*+(jglist[i].jgzt=="0"?('<td><a href="#" title="编辑" onclick="updatejg(\''+(jglist[i].jgid?jglist[i].jgid:'none')+'\',\''+(jglist[i].mc?jglist[i].mc:'')+'\',\''+(jglist[i].jglxmc?jglist[i].jglxmc:'未知名称')+'\',\''+(jglist[i].jglx?jglist[i].jglx:'')+'\',\''+(jglist[i].jgqymc?jglist[i].jgqymc:'未知名称')+'\',\''+(jglist[i].jgqy?jglist[i].jgqy:'')+'\',\''+(jglist[i].jgjd?jglist[i].jgjd:'')+'\',\''+(jglist[i].jgwd?jglist[i].jgwd:'')+'\',\''+(jglist[i].jghb?jglist[i].jghb:'')+'\',\''+(jglist[i].jgdz?jglist[i].jgdz:'')+'\',\''+(jglist[i].jglxr?jglist[i].jglxr:'')+'\',\''+(jglist[i].jglxdh?jglist[i].jglxdh:'')+'\',\''+(jglist[i].note?jglist[i].note:'')+'\')">'
 									+'<i class="icon-edit"></i></a> &nbsp;&nbsp;&nbsp;&nbsp; '
 									+'<a href="#" title="注销" onclick="removejg(\''+(jglist[i].jgid?jglist[i].jgid:'none')+'\')">'
-									+'<i class="icon-trash"></i></a></td>'):('<td><i class="icon-edit icon-white" style="background-color: rgb(215, 214, 214);"></i> &nbsp;&nbsp;&nbsp;&nbsp; <i class="icon-trash icon-white" style="background-color: rgb(215, 214, 214);"></i></td>'))
+									+'<i class="icon-trash"></i></a></td>'):('<td><i class="icon-edit icon-white" style="background-color: rgb(215, 214, 214);"></i> &nbsp;&nbsp;&nbsp;&nbsp; <i class="icon-trash icon-white" style="background-color: rgb(215, 214, 214);"></i></td>'))*/
 								+'</tr>');
 				}
 			}
@@ -66,12 +77,12 @@ function getjglx(){
 		data : "",
 		success : function(data){
 			var tablehtml1 = '<tr>'
-								+'<th>机构类型代码</th>'
-								+'<th>(选定)机构类型</th>'
+								+'<th>站点类型代码</th>'
+								+'<th>(选定)站点类型</th>'
 							+'</tr>';
 			var tablehtml2 = '<tr>'
-								+'<th>机构类型代码</th>'
-								+'<th>(选定)机构类型</th>'
+								+'<th>站点类型代码</th>'
+								+'<th>(选定)站点类型</th>'
 							+'</tr>';
 			if(data.jglist != null && data.jglist != 'null' && data.jglist.length>0){
 				var jglist = data.jglist;
@@ -100,11 +111,11 @@ function getjgqy(){
 		data : "",
 		success : function(data){
 			var tablehtml = '<tr>'
-								+'<th>机构所属区域代码</th>'
+								+'<th>站点所属区域代码</th>'
 								+'<th>(选定)区域名称</th>'
 							+'</tr>';
 			var tablehtml2 = '<tr>'
-								+'<th>机构所属区域代码</th>'
+								+'<th>站点所属区域代码</th>'
 								+'<th>(选定)区域名称</th>'
 							+'</tr>';
 			if(data.jglist != null && data.jglist != 'null' && data.jglist.length>0){
@@ -144,6 +155,10 @@ function greyback(){
 function addjg(){
 	greybackadd();
 	$("#add").show();
+	
+	$("input[name='jglx_add']:checked").attr("checked",false);
+	$("input[name='jgqy_add']:checked").attr("checked",false);
+	
 	$("#addmc").val("");
 	$("#addjglxmc").val("");
 	$("#addjglx").val("");
@@ -160,7 +175,7 @@ function addjg(){
 
 function updatejg(jgid,mc,jglxmc,jglx,jgqymc,jgqy,jgjd,jgwd,jghb,jgdz,jglxr,jglxdh,note){//打开更新区div
 	if(jgid == 'none'){
-		alert("当前选中机构尚未获得机构编号，无法对其更新信息，请联系管理员维护数据！");
+		alert("当前选中站点尚未获得站点编号，无法对其更新信息，请联系管理员维护数据！");
 	}else{
 		greybackadd();
 		$("#update").show();
@@ -185,8 +200,8 @@ function updatejgdiv(jgid,mc,jglxmc,jglx,jgqymc,jgqy,jgjd,jgwd,jghb,jgdz,jglxr,j
 
 //请求新增机构
 function addjgxx(){
-	if(trimspace($("#addmc").val())=='' || $("#addjgjd").val()=='' || $("#addjglx").val()==''){
-		alert("机构名称、机构类型、机构所属区不能为空！");
+	if(trimspace($("#addmc").val())=='' || $("#addjgqy").val()=='' || $("#addjglx").val()==''){
+		alert("站点名称、站点类型、站点所属区不能为空！");
 		return;
 	}
 	$("#add").hide();
@@ -198,7 +213,7 @@ function addjgxx(){
 				+"&jglxdh="+$("#addjglxdh").val()+"&jgqy="+$("#addjgqy").val()+"&jgwd="+$("#addjgwd").val(),
 		success : function(data){
 			if(data.mc && data.jgid){
-				alert("新增机构 ["+data.mc+"] 的机构编号为 ["+data.jgid+"]，请牢记！");
+				alert("新增站点 ["+data.mc+"] 的站点编号为 ["+data.jgid+"]，请牢记！");
 			}else{
 				alert("数据处理异常，请联系系统管理员！");
 			}
@@ -208,8 +223,8 @@ function addjgxx(){
 	});
 }
 function updatejgxx(){//保存更新信息
-	if(trimspace($("#addmc").val())=='' || $("#addjgjd").val()=='' || $("#addjglx").val()==''){
-		alert("机构名称、机构类型、机构所属区不能为空！");
+	if(trimspace($("#updatemc").val())=='' || $("#updatejgqy").val()=='' || $("#updatejglx").val()==''){
+		alert("站点名称、站点类型、站点所属区不能为空！");
 		return;
 	}
 	$("#update").hide();
@@ -221,7 +236,7 @@ function updatejgxx(){//保存更新信息
 				+"&jglxdh="+$("#updatejglxdh").val()+"&jgqy="+$("#updatejgqy").val()+"&jgwd="+$("#updatejgwd").val(),
 		success : function(data){
 			if(data.jgid){
-				alert("机构编号为 ["+data.jgid+"]基础信息更新成功！");
+				alert("站点编号为 ["+data.jgid+"]基础信息更新成功！");
 			}else{
 				alert("数据处理异常，请联系系统管理员！");
 			}
@@ -232,7 +247,7 @@ function updatejgxx(){//保存更新信息
 }
 function removejg(jgid){//打开注销区域div
 	if(jgid == 'none'){
-		alert("当前选中机构尚未获得机构编号，无法对其注销，请联系管理员维护数据！");
+		alert("当前选中站点尚未获得站点编号，无法对其注销，请联系管理员维护数据！");
 	}else{
 		greybackadd();
 		$("#remove").show();
@@ -247,7 +262,7 @@ function removejgxx(){
 		data : "&jgid="+$("#removejgid").text(),
 		success : function(data){
 			if(data.jgid){
-				alert("机构编号为 ["+data.jgid+"]的机构已被系统注销！");
+				alert("站点编号为 ["+data.jgid+"]的站点已被系统注销！");
 			}else{
 				alert("数据处理异常，请联系系统管理员！");
 			}

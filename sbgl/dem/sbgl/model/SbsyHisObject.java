@@ -1,6 +1,8 @@
 package dem.sbgl.model;
 
-public class SbsyHisObject {
+import dem.login.model.PagingAction;
+
+public class SbsyHisObject extends PagingAction{
 	private String xh;//序号
 	private String rkid;//设备入库编号
 	private String sbflid;//设备ID

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dem.zdgl.mapper.ZdglMapper">
+
+<insert id="addzdwh" parameterType="dem.zdgl.model.ZdglWhWxObject">
+	insert into zdgl_jgwh(uuid,jgid,mc,note,whr,whrq) 
+	values(#{uuid},#{jgid},#{mc},#{note},#{whr},#{whrq})
+</insert>
+
+<insert id="addzdwx" parameterType="dem.zdgl.model.ZdglWhWxObject">
+	insert into zdgl_jgwx(uuid,jgid,mc,note,wxr,wxrq,gzyy) 
+	values(#{uuid},#{jgid},#{mc},#{note},#{wxr},#{wxrq},#{gzyy})
+</insert>
+
+<select id="qxsjlistquery" parameterType="dem.zdgl.model.ZdglQxsjdrObject" resultType="Map">
+	select s1.jgid,s2.mc jgmc,qxsjsj_2,fx,fs,yl,wd,sd,qy
+	from zdgl_qxsj s1 left join ss_jg s2 on s1.jgid=s2.jgid
+	where 1=1
+	<if test="jgid != null and jgid != ''">
+		and s1.jgid like "%"#{jgid}"%"
+	</if>
+	<if test="sjd_start != null and sjd_start != ''">
+		and qxsjsj_2 &gt; #{sjd_start}
+	</if>
+	<if test="sjd_end != null and sjd_end != ''">
+		and qxsjsj_2 &lt; #{sjd_end}
+	</if>
+	${sql_paging_sort}
+</select>
+<select id="qxsjCount" parameterType="dem.zdgl.model.ZdglQxsjdrObject" resultType="int">
+	select count(*) from zdgl_qxsj
+	where 1=1
+	<if test="jgid != null and jgid != ''">
+		and jgid like "%"#{jgid}"%"
+	</if>
+	<if test="sjd_start != null and sjd_start != ''">
+		and qxsjsj_2 &gt; #{sjd_start}
+	</if>
+	<if test="sjd_end != null and sjd_end != ''">
+		and qxsjsj_2 &lt; #{sjd_end}
+	</if>
+</select>
+
+<select id="zdqxsjCount" parameterType="dem.zdgl.model.ZdglQxsjdrObject" resultType="int">
+	select count(*) from zdgl_qxsj
+	where 1=1 and qxsjsj_1 = #{qxsjsj_1} and jgid = #{jgid}
+</select>
+
+<insert id="addqxsj" parameterType="dem.zdgl.model.ZdglQxsjdrObject">
+	insert into zdgl_qxsj(uuid,jgid,qxsjsj_1,qxsjsj_2,fx,fs,yl,wd,sd,qy) 
+	values(#{uuid},#{jgid},#{qxsjsj_1},#{qxsjsj_2},#{fx},#{fs},#{yl},#{wd},#{sd},#{qy})
+</insert>
+
+</mapper>

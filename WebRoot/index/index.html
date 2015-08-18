@@ -30,16 +30,73 @@
 		-moz-opacity:0.9;
 		opacity: 0.9;
 	}
+	.input_checkbox{
+		padding-left: 15px;
+		padding-top: 5px;
+	}
+	.input_checkbox > input{
+		margin-top: 0px;
+	}
+	#greyground{
+		display:none;
+		width:100%;
+		height:100%;
+		background-color: #CFCFCF;
+		filter: Alpha(Opacity=50);
+	 	-moz-opacity:0.8; 
+	    	opacity:0.8; 
+	
+	 	background-position:center;
+		z-index:1110;
+		position:fixed;
+		top:0px;
+		left:0px;
+	}
+	#loading{
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(0%, 0%);
+		display:none;
+		background-color: #E0F2F7;
+		filter: Alpha(Opacity=100);
+	 	-moz-opacity:1; 
+	    	opacity:1;
+		z-index:1111;
+	}
+	.floatarea{
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(0%, 0%);
+		display:none;
+		background-color: #E0F2F7;
+		filter: Alpha(Opacity=100);
+	 	-moz-opacity:1; 
+	    	opacity:1;
+		z-index:1112;
+		border: 1px solid black;
+		width: 1000px;
+		max-width: 1000px;
+		max-height: 500px;
+		overflow: auto;
+	}
+	#data_table tr>th{
+		text-align: center;
+	}
+	#data_table tr>td{
+		text-align: center;
+	}
 </style>
 <title>常州气象探测设备管理系统</title>
 </head>
 <body>
-<div>
+<div id="body_div">
 	<div id="titlearea" class="page-header" style="margin-top: 0px;margin-bottom: 0px;padding-top: 5px;">
 		<div class="container-fluid">
 			<div class="row-fluid">
-				<div class="span2" align="center">图标</div>
-				<div class="span8" align="center"><h1><font color="white">常州气象探测设备管理系统</font></h1></div>
+				<div class="span1" align="right"><img src="icon_czqx.png" style="width: 60px;height: 60px;" /></div>
+				<div class="span9" align="left"><h1 style="margin-left: -15px;"><font color="white">常州市气象探测设备管理系统</font></h1></div>
 				<div class="span2" align="center" style="color: #B6CEF8">
 					<p>登录用户：<span id="userid">未知</span></p>
 					<p><span id="nowtime">当前时间</span>&nbsp;&nbsp;<a href="#" onclick="loginout()"><font color="#8EC90A">安全退出</font></a></p>
@@ -47,26 +104,88 @@
 			</div>
 		</div>
 	</div>
+	<!-- <div class="span10" align="left" style="background-image: url('icon_czqxbj.png');background-position: left;background-repeat: no-repeat;padding-left: 80px;">
+				<h1><font color="white">常州气象探测设备管理系统</font></h1></div> -->
 	<div id="fathermenuarea" class="page-header" style="margin-top: 0px;margin-bottom: 0px;padding-bottom: 0px;">
 		<div class="navbar" style="margin-bottom: 0px;">
 			<div class="navbar-inner air" style="background-color: #98AAB9;">
-				<ul class="nav nav-tabs" style="float: right;" id="fathermenus">
+				<ul class="nav nav-tabs" style="float: left;padding-left: 80px;" id="fathermenus">
 					
 				</ul>
 			</div>
 		</div>
 	</div>
-	<div id="navtabsarea" class="tab-content">
+	<div id="navtabsarea" class="tab-content" style="background-color: white;">
 		<div id="home" class="tab-pane fade in active">
 			<div>
 				<div class="container-fluid" style="padding: 0px 0px 0px 0px;padding-top: 2px;">
 					<div class="row-fluid">
-						<div id="mapdiv" class="span12 air" style="background-color: white;margin-left: 0px;" align="center"><img id="mappic" src="map.jpg"></div>
+						<div id="mapdiv" class="span12 air" style="background-color: white;margin-left: 0px;" align="center">
+							<table>
+								<tr>
+									<td id="condition_td" width="15%" height="200px" align="left" style="padding-left: 15px;padding-top: 15px;min-width: 200px;">
+										<table>
+											<tr>
+												<td>当前时间：<br/>&nbsp;&nbsp;<span id="currtime"></span></td>
+											</tr>
+											<tr>
+												<td>数据要素：</td>
+											</tr>
+											<tr>
+												<td class="input_checkbox">&nbsp;&nbsp;<input type="checkbox" name="sjyscondition" value="0" checked="checked" onchange="allset()">所有</td>
+											</tr>
+											<tr>
+												<td class="input_checkbox">&nbsp;&nbsp;<input type="checkbox" name="sjyscondition" value="3" checked="checked" onchange="oneset()">风向</td>
+											</tr>
+											<tr>
+												<td class="input_checkbox">&nbsp;&nbsp;<input type="checkbox" name="sjyscondition" value="4" checked="checked" onchange="oneset()">风速</td>
+											</tr>
+											<tr>
+												<td class="input_checkbox">&nbsp;&nbsp;<input type="checkbox" name="sjyscondition" value="5" checked="checked" onchange="oneset()">雨量</td>
+											</tr>
+											<tr>
+												<td class="input_checkbox">&nbsp;&nbsp;<input type="checkbox" name="sjyscondition" value="6" checked="checked" onchange="oneset()">温度</td>
+											</tr>
+											<tr>
+												<td class="input_checkbox">&nbsp;&nbsp;<input type="checkbox" name="sjyscondition" value="7" checked="checked" onchange="oneset()">湿度</td>
+											</tr>
+											<tr>
+												<td class="input_checkbox">&nbsp;&nbsp;<input type="checkbox" name="sjyscondition" value="8" checked="checked" onchange="oneset()">气压</td>
+											</tr>
+										</table>
+									</td>
+									<td width="82%" rowspan="2" style="border-left: 1px solid grey;">
+										<div id="map_td" style="overflow: auto;">
+											<img id="map" src="map.jpg" alt="" hspace="10" align="left" usemap="#czmap" border="0" style="margin: 0px 0px 0px 0px;max-width: 3200px;width: 3200px;height: 3178px;">
+											<map id="areaplace" name="czmap">
+												<!-- <area shape="circle" coords="20,20,40" href="#" target="_blank" alt="这里收集十万多个网址。" title="这里收集十万多个网址。"> -->
+											</map>
+										</div>
+									</td>
+								</tr>
+								<tr>
+									<td></td>
+								</tr>
+							</table>
+							
+						</div>
 					</div>
 				</div>
 			</div>
 		</div>	
 	</div>
+	
+	<div id="greyground"><div></div></div>
+	<div id="loading"><font color="grey">正在处理，请稍等...</font></div>
+	<div class="floatarea" id="add">
+		<div style="background-color: #A7E8FA;height: 30px;padding: 5px 10px 0px 10px;"><span style="float: left;"><font color="#0088CC" size="+1">站点信息</font></span><span style="text-align: right;float: right;"><a href="#" onclick="greyback()"><img src="../commstyle/close_pic.png"></a></span></div>
+		<div style="padding: 10px 15px 10px 15px;">
+			<table class="table" id="data_table">
+				
+			</table>
+		</div>
+	</div>
+	
 </div>
 </body>
 </html>

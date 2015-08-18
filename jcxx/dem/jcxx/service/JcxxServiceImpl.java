@@ -202,37 +202,29 @@ public class JcxxServiceImpl implements JcxxService {
 		Map<String, Object> map = new HashMap<String, Object>();
 		if("".equals(department.getJglx())){
 			map.put("code", "202");
-			map.put("info", "新增失败，未检测到机构类型！");
+			map.put("info", "新增失败，未检测到站点类型！");
 			return map;
 		}
-		String newId = "";
-		try{
-			String sum = (String)baseDao.selectOne("dem.jcxx.mapper.JcxxMapper.getLastJgid", department.getJglx());
-			Integer s = Integer.parseInt(sum);
-			int num = (int)((s + 1)/100000);
-			newId = ""+(s+1);
-			if(num == 0){
-				for(int i=newId.length();i<6;i++){
-					newId = "0"+newId;
-				}
+		if("".equals(department.getJgid()) || department.getJgid()==null){
+			
+				map.put("code", "203");
+				map.put("info", "新增失败！站点编号不能为空！");
+	
+				return map;
+		}else{
+			int sum = (Integer)baseDao.selectOne("dem.jcxx.mapper.JcxxMapper.countJgid", department);
+			if(sum>0){
+				map.put("code", "203");
+				map.put("info", "新增失败！当前站点编号已存在！");
+	
+				return map;
 			}
-		}catch(Exception e){
-			newId = department.getJglx()+"00001";
-			department.setJgid(newId);
-			baseDao.insert("dem.jcxx.mapper.JcxxMapper.addJg",department);
-			map.put("code", "200");
-			map.put("info", "新增成功！当前机构为对应类型首发机构！");
-			map.put("mc", department.getMc());
-			map.put("jgid", newId);
-
-			return map;
 		}
-		department.setJgid(newId);
 		baseDao.insert("dem.jcxx.mapper.JcxxMapper.addJg",department);
 		map.put("code", "200");
 		map.put("info", "新增成功！");
 		map.put("mc", department.getMc());
-		map.put("jgid", newId);
+		map.put("jgid", department.getJgid());
 
 		return map;
 	}
@@ -308,10 +300,17 @@ public class JcxxServiceImpl implements JcxxService {
 	public Map<String, Object> sblbInsert(SbflwhObject sbflwhObject, String userid) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		
+		if(!sbflwhObject.getSbtpfile().getName().endsWith(".jpg")){
+			map.put("code", "202");
+			map.put("info", "图片格式不符合规定，上传失败！本次操作无效！");
+			map.put("sblbmc", sbflwhObject.getSblbmc());
+			return map;
+		}
+		
 		String url = "/DeviceManagement/";//请求地址http://localhost:8080
 		String pathDiv = "tpzy/sbtp";//图片存储路径(当前工程下的路径)"+File.separator+"
 		String fix = "jpg";//文件类型(后缀)
-		String newUUID = (CommonUtil.getUUID()).toUpperCase();//产生UUID用于生成设备分类ID和设备图片名
+		String newUUID = (CommonUtil.getUUID()).toUpperCase();//产生UUID用于生成设备图片名
 		String fileName = null;
 		if(sbflwhObject.getSbtpfile().getSize()>0){
 			fileUpLoadManager.setPathDir(pathDiv);
@@ -325,7 +324,48 @@ public class JcxxServiceImpl implements JcxxService {
 			}
 			sbflwhObject.setSbtpdz(url+pathDiv+"/"+fileName);//设置数据库中存储的服务器端图片地址
 		}
-		sbflwhObject.setSbflid(newUUID);//设备分类ID
+		
+		String max_num = (String)baseDao.selectOne("dem.jcxx.mapper.JcxxMapper.getLastSbflid", sbflwhObject);//当前分类下最大序列号
+		String childid = "";
+		if("1".equals(sbflwhObject.getSbcj())){
+			if("".equals(max_num) || max_num == null){
+				childid = "01";
+			}else{
+				if(Integer.parseInt(max_num) == 99){
+					return map;
+				}
+				childid = (Integer.parseInt(max_num) + 1) + "";
+				childid = produceNewXh(2,childid);
+			}
+		}else if("2".equals(sbflwhObject.getSbcj())){
+			if("".equals(max_num) || max_num == null){
+				childid = sbflwhObject.getFsbflid()+"01";
+			}else{
+				if(Integer.parseInt(max_num.substring(2, 4)) == 99){
+					return map;
+				}
+				childid = (Integer.parseInt(max_num) + 1) + "";
+				childid = produceNewXh(4,childid);
+			}
+		}else if("3".equals(sbflwhObject.getSbcj())){
+			if("".equals(max_num) || max_num == null){
+				childid = sbflwhObject.getFsbflid()+"000001";
+			}else{
+				if(Integer.parseInt(max_num.substring(4, 10)) == 999999){
+					return map;
+				}
+				childid = (Integer.parseInt(max_num) + 1) + "";
+				childid = produceNewXh(10,childid);
+			}
+		}else{
+			map.put("code", "203");
+			map.put("info", "新增失败！");
+			map.put("sblbmc", "**设备分类层级过高**");
+
+			return map;
+		}
+		
+		sbflwhObject.setSbflid(childid);//设备分类ID
 		baseDao.update("dem.jcxx.mapper.JcxxMapper.updatesfzl",sbflwhObject);//更新父分类“是否子类”状态为父类0
 		
 		baseDao.insert("dem.jcxx.mapper.JcxxMapper.sblbInsert",sbflwhObject);
@@ -334,6 +374,13 @@ public class JcxxServiceImpl implements JcxxService {
 		map.put("sblbmc", sbflwhObject.getSblbmc());
 
 		return map;
+	}
+	
+	public String produceNewXh(int sum, String str){//产生位数足够的规则序号，参数分别为：所需最小位数、当前序号字符串；当位数足够则返回原值
+		for(int a=str.length();a<sum;a++){
+			str = "0"+str;
+		}
+		return str;
 	}
 
 	//设备类别删除

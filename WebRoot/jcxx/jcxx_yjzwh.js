@@ -9,21 +9,21 @@ $(document).ready(function(){
 
 function queryuserlist(actionstr){
 	greybackadd();
-	var urlparm = commask(actionstr,"jgid");
+	//var urlparm = commask(actionstr,"jgid");
 	$.ajax({
-		url : "/DeviceManagement/jcxx/yjzwh/cx.do?time="+new Date()+urlparm,
+		url : "/DeviceManagement/jcxx/yjzwh/cx.do?time="+new Date(),//+urlparm
 		type : "POST",
-		data : "&jgid="+$("#condition_jgid").val()+"&jgmc="+$("#condition_jgmc").val()+"&mc="+$("#condition_yjmc").val()+"&yjlx="+$("input[name='condition_yjlx']:checked").val(),
+		data : "",//"&jgid="+$("#condition_jgid").val()+"&jgmc="+$("#condition_jgmc").val()+"&mc="+$("#condition_yjmc").val()+"&yjlx="+$("input[name='condition_yjlx']:checked").val(),
 		success : function(data){
 			greyback();
-			$("#sum").text(data.sum?data.sum:'0');
-			disOrEnable();
+			//$("#sum").text(data.sum?data.sum:'0');
+			//disOrEnable();
 			var tablehtml = '<tr>'
 								+'<th>序号</th>'
 								+'<th>预警类型</th>'
 								+'<th>名称</th>'
-								+'<th>所属机构编号</th>'
-								+'<th>所属机构</th>'
+								+'<th>所属站点编号</th>'
+								+'<th>所属站点</th>'
 								+'<th>预警值</th>'
 								+'<th>操作</th>'
 							+'</tr>';
@@ -31,11 +31,11 @@ function queryuserlist(actionstr){
 				var yjList = data.yjlist;
 				for(var i=0;i<yjList.length;i++){
 					tablehtml += ('<tr>'
-									+'<td>'+(i + 1 + (parseInt($("#currpage").val())-1) * (parseInt($("#countline").val())))+'</td>'
-									+'<td>'+(yjList[i].jgid?(yjList[i].jgid=="0000"?'设备库存预警':'站点维护预警'):'')+'</td>'
+									+'<td>'+(i + 1)+'</td>'
+									+'<td>'+yjList[i].yjid+'</td>'
 									+'<td><a href="#" title="'+(yjList[i].note?yjList[i].note:'')+'">'+(yjList[i].mc?yjList[i].mc:'')+'</a></td>'
 									+'<td>'+(yjList[i].jgid?(yjList[i].jgid=="0000"?'通用编号0000':yjList[i].jgid):'')+'</td>'
-									+'<td>'+(yjList[i].jgid?(yjList[i].jgid=="0000"?'机构通用':yjList[i].jgmc):'暂无数据')+'</td>'
+									+'<td>'+(yjList[i].jgid?(yjList[i].jgid=="0000"?'站点通用':yjList[i].jgmc):'暂无数据')+'</td>'
 									+'<td>'+(yjList[i].yjz?yjList[i].yjz:'')+'</td>'
 									+('<td><a href="#" title="修改" onclick="updateyj(\''+(yjList[i].yjid?yjList[i].yjid:'')+'\',\''+(yjList[i].mc?yjList[i].mc:'')+'\',\''+(yjList[i].jgid?(yjList[i].jgid=="0000"?'机构通用':yjList[i].jgmc):'未知机构')+'\',\''+(yjList[i].jgid?yjList[i].jgid:'')+'\',\''+(yjList[i].yjz?yjList[i].yjz:'')+'\',\''+(yjList[i].note?yjList[i].note:'')+'\',\''+(yjList[i].jgid?(yjList[i].jgid=="0000"?'设备库存预警':'站点维护预警'):'')+'\')">'
 									+'<i class="icon-edit"></i></a></td>')

@@ -40,7 +40,7 @@ function queryuserlist(actionstr){
 			var tablehtml = '<tr>'
 								+'<th>序号</th>'
 								+'<th>设备名称</th>'
-								+'<th>设备使用站点/机构</th>'
+								+'<th>设备使用站点</th>'
 								+'<th>设备使用类型</th>'
 								+'<th>设备操作人</th>'
 								+'<th>操作日期</th>'

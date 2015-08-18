@@ -22,7 +22,7 @@ function queryuserlist(actionstr){
 								+'<th>设备类别名称</th>'
 								+'<th>设备采购数量</th>'
 								+'<th>设备安装数量</th>'
-								+'<th>设备出借数量</th>'
+								/*+'<th>设备出借数量</th>'*/
 								+'<th>设备报废数量</th>'
 								+'<th>设备检定次数</th>'
 								+'<th>设备维修次数</th>'
@@ -32,10 +32,10 @@ function queryuserlist(actionstr){
 				for(var i=0;i<sbsyList.length;i++){
 					tablehtml += ('<tr>'
 									+'<td>'+(i + 1 + (parseInt($("#currpage").val())-1) * (parseInt($("#countline").val())))+'</td>'
-									+'<td>'+(sbsyList[i].sblbmc?sbsyList[i].sblbmc:'未知机构编号')+'</td>'
+									+'<td>'+(sbsyList[i].sblbmc?sbsyList[i].sblbmc:'未知类别名称')+'</td>'
 									+'<td>'+(sbsyList[i].sbcgsl?sbsyList[i].sbcgsl:0)+'</td>'
 									+'<td>'+(sbsyList[i].sbazsl?sbsyList[i].sbazsl:0)+'</td>'
-									+'<td>'+(sbsyList[i].sbcjsl?sbsyList[i].sbcjsl:0)+'</td>'
+									/*+'<td>'+(sbsyList[i].sbcjsl?sbsyList[i].sbcjsl:0)+'</td>'*/
 									+'<td>'+(sbsyList[i].sbbfsl?sbsyList[i].sbbfsl:0)+'</td>'
 									+'<td>'+(sbsyList[i].sbjdcs?sbsyList[i].sbjdcs:0)+'</td>'
 									+'<td>'+(sbsyList[i].sbwxcs?sbsyList[i].sbwxcs:0)+'</td>'

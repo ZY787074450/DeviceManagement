@@ -28,7 +28,7 @@ private BaseDao baseDao;
 
 	//设备库存预警查询
 	@Override
-	public Map<String, Object> sbkcyjlistQuery(PagingAction pagingAction,String userid) {
+	public Map<String, Object> sbkcyjlistQuery(PagingAction pagingAction, String userid) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		
 		List list = (List)baseDao.selectList("dem.yjgl.mapper.YjglMapper.sbkcyjquery",pagingAction);
@@ -42,11 +42,24 @@ private BaseDao baseDao;
 
 	//设备维护预警查询
 	@Override
-	public Map<String, Object> sbwhyjlistQuery(PagingAction pagingAction,String userid) {
+	public Map<String, Object> sbwhyjlistQuery(PagingAction pagingAction, String userid) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		
 		List list = (List)baseDao.selectList("dem.yjgl.mapper.YjglMapper.sbwhyjquery",pagingAction);
 		int sum = (Integer)baseDao.selectOne("dem.yjgl.mapper.YjglMapper.sbwhyjcountquery", "");
+		map.put("code", "200");
+		map.put("info", "查询成功！");
+		map.put("sbsylist", list);
+		map.put("sum", sum);
+		return map;
+	}
+
+	@Override
+	public Map<String, Object> sbjdyjlistQuery(PagingAction pagingAction, String userid) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		
+		List list = (List)baseDao.selectList("dem.yjgl.mapper.YjglMapper.sbjdyjquery",pagingAction);
+		int sum = (Integer)baseDao.selectOne("dem.yjgl.mapper.YjglMapper.sbjdyjcountquery", "");
 		map.put("code", "200");
 		map.put("info", "查询成功！");
 		map.put("sbsylist", list);

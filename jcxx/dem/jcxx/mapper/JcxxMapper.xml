@@ -65,7 +65,7 @@
 		and mc like "%"#{mc}"%" 
 	</if>
 	<if test="jglx != null and jglx != ''">
-		and jglx = #{jgzt} 
+		and jglx = #{jglx} 
 	</if>
 	<if test="jgqy != null and jgqy != ''">
 		and jgqy = #{jgqy} 
@@ -73,6 +73,11 @@
 	<if test="jgzt != null and jgzt != ''">
 		and jgzt = #{jgzt} 
 	</if>
+	and jglx != '0' and jglx != '3'
+</select>
+<select id="countJgid" parameterType="dem.login.model.Department" resultType="int">
+	select count(*) from ss_jg
+	where 1=1 and jgid = #{jgid} 
 </select>
 <select id="yjzCount" parameterType="dem.jcxx.model.YjzwhObject" resultType="int">
 	select count(*) 
@@ -119,7 +124,7 @@
 </update>
 
 <select id="getMenusList" parameterType="dem.login.model.Loginner" resultType="Map">
-	select menu_id,menu_mc,menu_pid,tjpx from ss_menu ORDER BY tjpx
+	select menu_id,menu_mc,menu_pid,tjpx from ss_menu where yxbz = 'Y' ORDER BY tjpx
 </select>
 
 <select id="getUserMenusList" parameterType="dem.login.model.Loginner" resultType="Map">
@@ -147,7 +152,7 @@
 
 <!-- 条件查询系统站点/部门 -->
 <select id="jglistQuery" parameterType="dem.jcxx.model.JgQueryCondition" resultType="Map">
-	select s1.jgid jgid,s1.mc mc,s1.jglx jglx,s2.mc jglxmc,s1.jgqy jgqy,s3.mc jgqymc,jgjd,jgwd,jghb,jgdz,jglxr,jglxdh,jgzt,note,date_format(lrrq,'%Y年%m月%d日') as lrrq 
+	select s1.jgid jgid,s1.mc mc,s1.jglx jglx,s2.mc jglxmc,s1.jgqy jgqy,s3.mc jgqymc,jgjd,jgwd,jghb,jgdz,jglxr,jglxdh,jgzt,note,jgys,azr,date_format(lrrq,'%Y年%m月%d日') as lrrq 
 	from ss_jg s1 left join ss_jglx s2 on s1.jglx=s2.jglx
 				  left join ss_jgqy s3 on s1.jgqy=s3.jgqy
 	where 1=1 
@@ -158,7 +163,7 @@
 		and s1.mc like "%"#{mc}"%" 
 	</if>
 	<if test="jglx != null and jglx != ''">
-		and s1.jglx = #{jgzt} 
+		and s1.jglx = #{jglx} 
 	</if>
 	<if test="jgqy != null and jgqy != ''">
 		and s1.jgqy = #{jgqy} 
@@ -166,11 +171,12 @@
 	<if test="jgzt != null and jgzt != ''">
 		and jgzt = #{jgzt} 
 	</if>
+	and s1.jglx != '0' and s1.jglx != '3'
 	${sql_paging_sort}
 </select>
 
 <select id="jglxlistQuery" parameterType="String" resultType="Map">
-	select jglx,mc from ss_jglx
+	select jglx,mc from ss_jglx where jglx != '0' and jglx != '3'
 </select>
 <select id="jgqylistQuery" parameterType="String" resultType="Map">
 	select jgqy,mc from ss_jgqy
@@ -240,6 +246,14 @@
 	from ss_sbfl
 	where yxbz='Y' 
 	order by sbcj
+</select>
+<!-- 获取当前分类下最大子类序号 -->
+<select id="getLastSbflid" parameterType="dem.jcxx.model.SbflwhObject" resultType="String">
+	select sbflid
+	from ss_sbfl
+	where fsbflid = #{fsbflid} and sbcj = #{sbcj}
+	order by sbflid desc 
+	limit 1
 </select>
 <insert id="sblbInsert" parameterType="dem.jcxx.model.SbflwhObject" keyColumn="sbid">
 	insert into ss_sbfl(sbflid,sbcj,fsbflid,sfzl,sblbmc,sbtpdz,yxbz) values(#{sbflid},#{sbcj},#{fsbflid},'1',#{sblbmc},#{sbtpdz},'Y')

@@ -19,26 +19,28 @@ function queryuserlist(actionstr){
 			disOrEnable();
 			var tablehtml = '<tr>'
 								+'<th>序号</th>'
-								+'<th>机构编号</th>'
-								+'<th>机构名称</th>'
+								+'<th>站点编号</th>'
+								+'<th>站点名称</th>'
 								+'<th>设备安装数量</th>'
-								+'<th>设备出借数量</th>'
 								+'<th>设备报废数量</th>'
 								+'<th>设备检定次数</th>'
 								+'<th>设备维修次数</th>'
+								+'<th>站点维护次数</th>'
+								+'<th>站点维修次数</th>'
 							+'</tr>';
 			if(data.sbsylist != null && data.sbsylist != 'null' && data.sbsylist.length>0){
 				var sbsyList = data.sbsylist;
 				for(var i=0;i<sbsyList.length;i++){
 					tablehtml += ('<tr>'
 									+'<td>'+(i + 1 + (parseInt($("#currpage").val())-1) * (parseInt($("#countline").val())))+'</td>'
-									+'<td>'+(sbsyList[i].jgid?sbsyList[i].jgid:'未知机构编号')+'</td>'
+									+'<td>'+(sbsyList[i].jgid?sbsyList[i].jgid:'未知站点编号')+'</td>'
 									+'<td>'+(sbsyList[i].jgmc?sbsyList[i].jgmc:'未知机构')+'</td>'
 									+'<td>'+(sbsyList[i].sbazsl?sbsyList[i].sbazsl:0)+'</td>'
-									+'<td>'+(sbsyList[i].sbcjsl?sbsyList[i].sbcjsl:0)+'</td>'
 									+'<td>'+(sbsyList[i].sbbfsl?sbsyList[i].sbbfsl:0)+'</td>'
 									+'<td>'+(sbsyList[i].sbjdcs?sbsyList[i].sbjdcs:0)+'</td>'
 									+'<td>'+(sbsyList[i].sbwxcs?sbsyList[i].sbwxcs:0)+'</td>'
+									+'<td>'+(sbsyList[i].jgwhcs?sbsyList[i].jgwhcs:0)+'</td>'
+									+'<td>'+(sbsyList[i].jgwxcs?sbsyList[i].jgwxcs:0)+'</td>'
 								+'</tr>');
 				}
 			}

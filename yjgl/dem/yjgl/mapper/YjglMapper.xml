@@ -3,7 +3,7 @@
 <mapper namespace="dem.yjgl.mapper.YjglMapper">
 <!-- 设备库存预警查询 -->
 <select id="sbkcyjquery" parameterType="dem.login.model.PagingAction" resultType="Map">
-	select s1.sbflid sbflid,s2.sblbmc sblbmc,s1.rksl sbrksl,s3.sysl sbsysl,s4.cjsl sbcjsl,(select yjz from ss_yjfl where jgid='0000' limit 0,1) sbyjz
+	select s1.sbflid sbflid,s2.sblbmc sblbmc,s1.rksl sbrksl,s3.sysl sbsysl,s4.cjsl sbcjsl,(select yjz from ss_yjfl where jgid='0000' and yjid='1' limit 0,1) sbyjz
 	from (select sbflid,sum(rksl) rksl from sbgl_sbrk group by sbflid) s1 
 		left join ss_sbfl s2 on s1.sbflid=s2.sbflid
 		left join (select sbflid,count(*) sysl from sbgl_sbsy group by sbflid) s3 on s1.sbflid=s3.sbflid
@@ -16,17 +16,28 @@
 </select>
 <!-- 设备维护预警查询 -->
 <select id="sbwhyjquery" parameterType="dem.login.model.PagingAction" resultType="Map">
-	select s1.jgid jgid,s1.mc jgmc,s4.yjz yjz,date_format(s2.lastwxrq,'%Y-%m-%d') scwxrq,date_format(s3.lastwhrq,'%Y-%m-%d') scwhrq,TIMESTAMPDIFF(DAY,s2.lastwxrq,now()) wxrqcz,TIMESTAMPDIFF(DAY,s3.lastwhrq,now()) whrqcz
+	select s1.jgid jgid,s1.mc jgmc,(select yjz from ss_yjfl where jgid='0000' and yjid='2' limit 0,1),date_format(s2.lastwxrq,'%Y-%m-%d') scwxrq,date_format(s3.lastwhrq,'%Y-%m-%d') scwhrq,TIMESTAMPDIFF(DAY,s2.lastwxrq,now()) wxrqcz,TIMESTAMPDIFF(DAY,s3.lastwhrq,now()) whrqcz
 	from ss_jg s1
 		left join (select jgid,max(wxrq) lastwxrq from sbgl_sbsy where wxrq is not null group by jgid) s2 on s1.jgid=s2.jgid
 		left join (select jgid,max(whrq) lastwhrq from sbgl_sbsy where whrq is not null group by jgid) s3 on s1.jgid=s3.jgid
-		left join ss_yjfl s4 on s1.jgid=s4.jgid
-	where jgzt = '0'
+	where jgzt = '0' 
 	${sql_paging_sort}
 </select>
 <!-- 设备维护预警查询计数 -->
 <select id="sbwhyjcountquery" parameterType="String" resultType="int">
 	select count(*) from ss_jg where jgzt = '0'
+</select>
+
+<!-- 设备检定预警查询 -->
+<select id="sbjdyjquery" parameterType="dem.login.model.PagingAction" resultType="Map">
+	select xh,rkid,sbflid,sbmc,sbgl_sbsy.jgid jgid,ss_jg.mc jgmc,sbsyr,sbzt,date_format(jdrq,'%Y年%m月%d日') jdrq,jdr,(select yjz from ss_yjfl where jgid='0000' and yjid='3' limit 0,1) yjz,TIMESTAMPDIFF(DAY,jdrq,now()) jdrqcz
+	from sbgl_sbsy left join ss_jg on sbgl_sbsy.jgid=ss_jg.jgid
+	where sbzt = '0'
+	${sql_paging_sort}
+</select>
+<!-- 设备检定预警查询计数 -->
+<select id="sbjdyjcountquery" parameterType="String" resultType="int">
+	select count(*) from sbgl_sbsy where sbzt = '0'
 </select>
 
 </mapper>
