@@ -184,8 +184,8 @@ public class HSSFGenerator {
 	    	for (int i = 0; i < asgArray.length; i++) {  															                         //遍历数组
 		        for(PropertyDescriptor prop: proDescriptors){ 												                     //遍历属性
 	        		if(prop.getName().equals(asgArray[i])){														                     //如果字段相同
-	        			 Method methodGetx = prop.getReadMethod(); 								                             //得到get方法
-	        		     if(object!=null && methodGetx.invoke(object)!=null){
+	        			 Method methodGetx = prop.getReadMethod(); //得到get方法
+	        		     if(object != null &&  methodGetx.invoke(object) != null){
 	        		    	 HSSFCell   hssfCell  =hssfRow.createCell(x+i+1);	
 	        		    	    if (methodGetx.invoke(object) instanceof java.lang.Integer) {                                 //enable字段  0有效  1无效  否者认为是其它字段
 		        						if(prop.getName().equals("enable")){

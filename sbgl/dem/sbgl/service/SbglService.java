@@ -4,6 +4,7 @@ import java.util.Map;
 
 import dem.sbgl.model.SbcjObject;
 import dem.sbgl.model.SbrkObject;
+import dem.sbgl.model.SbrkQueryCondition;
 import dem.sbgl.model.SbsyHisObject;
 import dem.sbgl.model.SbsyObject;
 
@@ -13,7 +14,9 @@ public interface SbglService {
 	public Map<String, Object> addsbrk(SbrkObject sbrkObject, String userid);
 	
 	//设备入库记录查询
-	public Map<String, Object> sbrkcx(String userid);
+	public Map<String, Object> sbrkcx(SbrkQueryCondition sbrkQueryCondition, String userid);
+	//设备入库记录查询
+	public Map<String, Object> sbrkcx2(SbrkQueryCondition sbrkQueryCondition, String userid);
 	
 	//设备使用记录查询
 	public Map<String, Object> sbsycx(SbsyObject sbsyObject, String userid);

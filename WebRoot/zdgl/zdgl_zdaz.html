@@ -5,6 +5,24 @@
     <link rel="stylesheet" type="text/css" href="../jquery-easyui/themes/default/easyui.css">
 <link href="../bootstrap/css/bootstrap.css" type="text/css" rel="stylesheet" />
 <link href="../commstyle/commcss.css" type="text/css" rel="stylesheet" />
+<style type="text/css">
+	.floatarea_append{
+		position: absolute;
+		top: 30%;
+		left: 30%;
+		transform: translate(0px, 0px);
+		display:none;
+		background-color: #E0F2F7;
+		filter: Alpha(Opacity=100);
+	 	-moz-opacity:1; 
+	    	opacity:1;
+		z-index:1116;
+		border: 1px solid black;
+		max-width: 40%;
+		max-height: 500px;
+		overflow: auto;
+	}
+</style>
 <title>站点安装</title>
 </head>
 <body>
@@ -15,27 +33,21 @@
 			<div style="padding: 10px 15px 10px 15px;">
 				<table style="width: 100%">
 					<tr>
-						<td align="right">注意事项：</td>
-						<td colspan="3" align="left">
-						新增站点时请<font color="red">谨慎填写站点类型</font>，后续数据维护站点类型不可改变；<br/>
-						</td>
-					</tr>
-					<tr>
 						<td align="right">站点编号：</td>
 						<td align="left"><input type="text" placeholder="手动输入站点编号" class="sel" id="addjgid" autocomplete="off" /></td>
 						<td align="right">站点名称：</td>
-						<td><input type="text" placeholder="机构名称" class="sel" id="addmc" autocomplete="off" /></td>
+						<td><input type="text" placeholder="站点名称" class="sel" id="addmc" autocomplete="off" /></td>
 					</tr>
 					<tr>
 						<td align="right">站点所属区域：</td>
 						<td align="left">
-							<input type="text" placeholder="点击展开机构所属区选项" class="sel" id="addjgqymc" autocomplete="off" onfocus="open_append('add2')" onblur="close_append()" readonly="readonly" />
-							<input style="display: none;" type="text" placeholder="点击展开机构所属区选项" class="sel" id="addjgqy" autocomplete="off" onfocus="open_append('add2')" onblur="close_append()" readonly="readonly" />
+							<input type="text" placeholder="点击展开站点所属区选项" class="sel handsel" id="addjgqymc" autocomplete="off" onfocus="open_append('add2')" onblur="close_append()" readonly="readonly" />
+							<input style="display: none;" type="text" placeholder="点击展开站点所属区选项" class="sel" id="addjgqy" autocomplete="off" onfocus="open_append('add2')" onblur="close_append()" readonly="readonly" />
 						</td>
 						<td align="right">站点类型：</td>
 						<td>
-							<input type="text" value="自动站" placeholder="点击展开机构类型选项" class="sel" id="addjglxmc" autocomplete="off" onfocus="open_append('add')" onblur="close_append()" readonly="readonly" />
-							<input style="display: none;" type="text" value="2" placeholder="点击展开机构类型选项" class="sel" id="addjglx" autocomplete="off" onfocus="open_append('add')" onblur="close_append()" readonly="readonly" />
+							<input type="text" value="自动站" placeholder="点击展开站点类型选项" class="sel handsel" id="addjglxmc" autocomplete="off" onfocus="open_append('add')" onblur="close_append()" readonly="readonly" />
+							<input style="display: none;" type="text" value="2" placeholder="点击展开站点类型选项" class="sel" id="addjglx" autocomplete="off" onfocus="open_append('add')" onblur="close_append()" readonly="readonly" />
 						</td>	
 					</tr>
 					<tr>
@@ -47,27 +59,35 @@
 					<tr>
 						<td align="right">纬度：</td>
 						<td align="left"><input type="text" placeholder="纬度" class="sel" id="addjgwd" autocomplete="off" /></td>
-						<td align="right">海拔：</td>
-						<td align="left"><input type="text" placeholder="海拔" class="sel" id="addjghb" autocomplete="off" /></td>
+						<td align="right">测站海拔：</td>
+						<td align="left"><input type="text" placeholder="测站海拔" class="sel" id="addjghb" autocomplete="off" /></td>
 					</tr>
 					<tr>
-						<td align="right">地址：</td>
-						<td align="left"><input type="text" placeholder="地址" class="sel" id="addjgdz" autocomplete="off" /></td>
+						<td align="right">气压传感器海拔：</td>
+						<td align="left"><input type="text" placeholder="气压传感器海拔" class="sel" id="addqycgqhb" autocomplete="off" /></td>
+						<td align="right">安装人：</td>
+						<td align="left"><input type="text" placeholder="安装人" class="sel" id="addazr" autocomplete="off" /></td>		
+					</tr>
+					<tr>
+						<td align="right">启用日期：</td>
+						<td align="left"><input class="handsel" style="width: 170px;margin: 0px 0px 0px 0px;" size="10" placeholder="启用日期" id="addqyrq" type="text" onclick="laydate({istime: true, format: 'YYYY-MM-DD'})" readonly="readonly"></td>
+						<td align="right">安装日期：</td>
+						<td align="left"><input class="handsel" style="width: 170px;margin: 0px 0px 0px 0px;" size="10" placeholder="安装日期" id="addlrrq" type="text" onclick="laydate({istime: true, format: 'YYYY-MM-DD'})" readonly="readonly"></td>						
+					</tr>
+					<tr>
 						<td align="right">联系人：</td>
 						<td align="left"><input type="text" placeholder="联系人" class="sel" id="addjglxr" autocomplete="off" /></td>
-					</tr>
-					<tr>
 						<td align="right">联系电话：</td>
-						<td align="left"><input type="text" placeholder="联系电话" class="sel" id="addjglxdh" autocomplete="off" /></td>
-						<td align="right">备注：</td>
-						<td align="left"><input type="text" placeholder="..." class="sel" id="addnote" autocomplete="off" /></td>
+						<td align="left"><input type="text" placeholder="联系电话" class="sel" id="addjglxdh" autocomplete="off" /></td>	
 					</tr>
 					
 					<tr>
-						<td align="right">安装人：</td>
-						<td align="left"><input type="text" placeholder="..." class="sel" id="addazr" autocomplete="off" /></td>
-						<td align="right">安装日期：</td>
-						<td align="left"><input style="width: 170px;margin: 0px 0px 0px 0px;" size="10" placeholder="安装日期" id="addlrrq" type="text" onclick="laydate({istime: true, format: 'YYYY-MM-DD'})" readonly="readonly"></td>						
+						<td align="right">地址：</td>
+						<td align="left" colspan="3"><input type="text" placeholder="地址" class="sel" id="addjgdz" autocomplete="off" style="width:400px;" /></td>
+					</tr>
+					<tr>
+						<td align="right">备注：</td>
+						<td align="left" colspan="3"><input type="text" placeholder="..." class="sel" id="addnote" autocomplete="off" style="width:400px;" /></td>
 					</tr>
 					<tr>
 						<td colspan="4" style="text-align: center"><a href="#" class="btn btn-primary" onclick="addjgxx()">保存</a></td>

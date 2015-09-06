@@ -3,7 +3,7 @@
  */
 
 $(document).ready(function(){
-	setDatatablePosition($("#top_title").outerHeight(true),$("#conditionarea").outerHeight(true),$("#bottom_pagging").outerHeight(true));
+	setDatatablePosition(41,85,35);
 	queryuserlist();
 	getjglx();
 	getjgqy();
@@ -27,16 +27,9 @@ function queryuserlist(actionstr){
 								+'<th>站点名称</th>'
 								+'<th>站点类型</th>'
 								+'<th>站点所属区域</th>'
-								+'<th width="120px">地址</th>'
-								+'<th>经度</th>'
-								+'<th>纬度</th>'
-								+'<th>海拔</th>'
-								+'<th>联系人</th>'
-								+'<th>联系电话</th>'
+								+'<th width="200px">地址</th>'
 								+'<th>站点状态</th>'
-								+'<th>站点要素</th>'
-								+'<th>站点安装人</th>'
-								+'<th>安装时间</th>'
+								+'<th>操作</th>'
 							+'</tr>';
 			if(data.jglist != null && data.jglist != 'null' && data.jglist.length>0){
 				var jglist = data.jglist;
@@ -44,19 +37,13 @@ function queryuserlist(actionstr){
 					tablehtml += ('<tr>'
 									+'<td>'+(i + 1 + (parseInt($("#currpage").val())-1) * (parseInt($("#countline").val())))+'</td>'
 									+'<td>'+(jglist[i].jgid?jglist[i].jgid:'暂无数据')+'</td>'
-									+'<td><a href="#" title="'+(jglist[i].note?jglist[i].note:'')+'">'+(jglist[i].mc?jglist[i].mc:'暂无数据')+'</a></td>'
+									+'<td>'+(jglist[i].mc?jglist[i].mc:'暂无数据')+'</td>'
 									+'<td>'+(jglist[i].jglxmc?jglist[i].jglxmc:'暂无数据')+'</td>'
 									+'<td>'+(jglist[i].jgqymc?jglist[i].jgqymc:'暂无数据')+'</td>'
 									+'<td>'+(jglist[i].jgdz?jglist[i].jgdz:'暂无数据')+'</td>'
-									+'<td>'+(jglist[i].jgjd?jglist[i].jgjd:'')+'</td>'
-									+'<td>'+(jglist[i].jgwd?jglist[i].jgwd:'')+'</td>'
-									+'<td>'+(jglist[i].jghb?jglist[i].jghb:'')+'</td>'
-									+'<td>'+(jglist[i].jglxr?jglist[i].jglxr:'')+'</td>'
-									+'<td>'+(jglist[i].jglxdh?jglist[i].jglxdh:'')+'</td>'
 									+'<td>'+(jglist[i].jgzt=="0"?'正常':'注销')+'</td>'
-									+'<td>'+(jglist[i].jgys?jglist[i].jgys:'')+'</td>'
-									+'<td>'+(jglist[i].azr?jglist[i].azr:'')+'</td>'
-									+'<td>'+(jglist[i].lrrq?jglist[i].lrrq:'')+'</td>'
+									+'<td><a href="#" title="更多信息" onclick="updatejg(\''+(jglist[i].jgid?jglist[i].jgid:'none')+'\',\''+(jglist[i].mc?jglist[i].mc:'')+'\',\''+(jglist[i].jglxmc?jglist[i].jglxmc:'未知名称')+'\',\''+(jglist[i].jglx?jglist[i].jglx:'')+'\',\''+(jglist[i].jgqymc?jglist[i].jgqymc:'未知名称')+'\',\''+(jglist[i].jgqy?jglist[i].jgqy:'')+'\',\''+(jglist[i].jgjd?jglist[i].jgjd:'')+'\',\''+(jglist[i].jgwd?jglist[i].jgwd:'')+'\',\''+(jglist[i].jghb?jglist[i].jghb:'')+'\',\''+(jglist[i].jgdz?jglist[i].jgdz:'')+'\',\''+(jglist[i].jglxr?jglist[i].jglxr:'')+'\',\''+(jglist[i].jglxdh?jglist[i].jglxdh:'')+'\',\''+(jglist[i].note?jglist[i].note:'')+'\',\''+(jglist[i].qycgqhb?jglist[i].qycgqhb:'')+'\',\''+(jglist[i].jgys?jglist[i].jgys:'')+'\',\''+(jglist[i].azr?jglist[i].azr:'')+'\',\''+(jglist[i].lrrq?jglist[i].lrrq:'')+'\',\''+(jglist[i].qyrq?jglist[i].qyrq:'')+'\')">'
+									+'详细信息</a></td>'
 									/*+(jglist[i].jgzt=="0"?('<td><a href="#" title="编辑" onclick="updatejg(\''+(jglist[i].jgid?jglist[i].jgid:'none')+'\',\''+(jglist[i].mc?jglist[i].mc:'')+'\',\''+(jglist[i].jglxmc?jglist[i].jglxmc:'未知名称')+'\',\''+(jglist[i].jglx?jglist[i].jglx:'')+'\',\''+(jglist[i].jgqymc?jglist[i].jgqymc:'未知名称')+'\',\''+(jglist[i].jgqy?jglist[i].jgqy:'')+'\',\''+(jglist[i].jgjd?jglist[i].jgjd:'')+'\',\''+(jglist[i].jgwd?jglist[i].jgwd:'')+'\',\''+(jglist[i].jghb?jglist[i].jghb:'')+'\',\''+(jglist[i].jgdz?jglist[i].jgdz:'')+'\',\''+(jglist[i].jglxr?jglist[i].jglxr:'')+'\',\''+(jglist[i].jglxdh?jglist[i].jglxdh:'')+'\',\''+(jglist[i].note?jglist[i].note:'')+'\')">'
 									+'<i class="icon-edit"></i></a> &nbsp;&nbsp;&nbsp;&nbsp; '
 									+'<a href="#" title="注销" onclick="removejg(\''+(jglist[i].jgid?jglist[i].jgid:'none')+'\')">'
@@ -69,7 +56,7 @@ function queryuserlist(actionstr){
 		}
 	});
 }
-//加载机构类型列表
+//加载站点类型列表
 function getjglx(){
 	$.ajax({
 		url : "/DeviceManagement/jcxx/qxzdjbmwh/getjglx.do",
@@ -173,16 +160,16 @@ function addjg(){
 	$("#addnote").val("");
 }
 
-function updatejg(jgid,mc,jglxmc,jglx,jgqymc,jgqy,jgjd,jgwd,jghb,jgdz,jglxr,jglxdh,note){//打开更新区div
+function updatejg(jgid,mc,jglxmc,jglx,jgqymc,jgqy,jgjd,jgwd,jghb,jgdz,jglxr,jglxdh,note,qycgqhb,jgys,azr,lrrq,qyrq){//打开更新区div
 	if(jgid == 'none'){
 		alert("当前选中站点尚未获得站点编号，无法对其更新信息，请联系管理员维护数据！");
 	}else{
 		greybackadd();
 		$("#update").show();
-		updatejgdiv(jgid,mc,jglxmc,jglx,jgqymc,jgqy,jgjd,jgwd,jghb,jgdz,jglxr,jglxdh,note);
+		updatejgdiv(jgid,mc,jglxmc,jglx,jgqymc,jgqy,jgjd,jgwd,jghb,jgdz,jglxr,jglxdh,note,qycgqhb,jgys,azr,lrrq,qyrq);
 	}
 }
-function updatejgdiv(jgid,mc,jglxmc,jglx,jgqymc,jgqy,jgjd,jgwd,jghb,jgdz,jglxr,jglxdh,note){//区域id给予默认值
+function updatejgdiv(jgid,mc,jglxmc,jglx,jgqymc,jgqy,jgjd,jgwd,jghb,jgdz,jglxr,jglxdh,note,qycgqhb,jgys,azr,lrrq,qyrq){//区域id给予默认值
 	$("#updatejgid").val(jgid);
 	$("#updatemc").val(mc);
 	$("#updatejglxmc").val(jglxmc);
@@ -196,9 +183,14 @@ function updatejgdiv(jgid,mc,jglxmc,jglx,jgqymc,jgqy,jgjd,jgwd,jghb,jgdz,jglxr,j
 	$("#updatejglxr").val(jglxr);
 	$("#updatejglxdh").val(jglxdh);
 	$("#updatenote").val(note);
+	$("#updateqycgqhb").val(qycgqhb);
+	$("#updatejgys").val(jgys);
+	$("#updateazr").val(azr);
+	$("#updatelrrq").val(lrrq);
+	$("#updateqyrq").val(qyrq);
 }
 
-//请求新增机构
+//请求新增站点
 function addjgxx(){
 	if(trimspace($("#addmc").val())=='' || $("#addjgqy").val()=='' || $("#addjglx").val()==''){
 		alert("站点名称、站点类型、站点所属区不能为空！");

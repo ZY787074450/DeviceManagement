@@ -16,9 +16,54 @@
 	values(#{rkid},#{sbflid},#{sbmc},#{sbxh},#{sccj},#{ccbh},#{cgr},#{cgrq},#{rkrq},#{rksl},#{note})
 </insert>
 <!-- 设备入库记信息查询 -->
-<select id="sbrkquery" parameterType="String" resultType="Map">
-	select rkid,s1.sbflid sbflid,s2.sblbmc sblbmc,sbmc,sbxh,sccj,ccbh,cgr 
+<select id="sbrkquery" parameterType="dem.sbgl.model.SbrkQueryCondition" resultType="Map">
+	select rkid,s1.sbflid sbflid,s2.sblbmc sblbmc,s2.fsblbmc fsblbmc,sbmc,sbxh,sccj,ccbh,cgr,rksl,date_format(cgrq,'%Y年%m月%d日') cgrq,date_format(rkrq,'%Y年%m月%d日') rkrq,note
+	from sbgl_sbrk s1 left join 
+	(select s5.sbflid sbflid,s5.sblbmc sblbmc,s6.sblbmc fsblbmc,s6.sbflid fsbflid from ss_sbfl s5 left join (select sblbmc,sbflid from ss_sbfl) s6 on s5.fsbflid=s6.sbflid) s2 on s1.sbflid=s2.sbflid
+	where 1=1
+	<if test="sbflid != null and sbflid != ''">
+		and s1.sbflid like "%"#{sbflid}"%" 
+	</if>
+	<if test="sblbmc != null and sblbmc != ''">
+		and s2.sblbmc like "%"#{sblbmc}"%" 
+	</if>
+	<if test="rkrq_start != null and rkrq_start != ''">
+		and rkrq &gt; #{rkrq_start}
+	</if>
+	<if test="rkrq_end != null and rkrq_end != ''">
+		and rkrq &lt; #{rkrq_end} 
+	</if>
+	${sql_paging_sort}
+</select>
+<!-- 设备入库记信息查询 -->
+<select id="sbrk2query" parameterType="dem.sbgl.model.SbrkQueryCondition" resultType="Map">
+	select s8.sbflid sbflid,s8.sbmc sbmc,sbxh,sccj,ccbh,s8.rksl rksl,s9.sblbmc sblbmc,s7.sbkc sbkc,s11.fsblbmc fsblbmc
+	from (select sbflid,sbmc,sbxh,sccj,ccbh,sum(rksl) rksl from sbgl_sbrk group by sbflid) s8
+		left join (select s5.sbflid sbflid,s5.sblbmc sblbmc,s6.sblbmc fsblbmc,s6.sbflid fsbflid from ss_sbfl s5 left join (select sblbmc,sbflid from ss_sbfl) s6 on s5.fsbflid=s6.sbflid) s11 on s8.sbflid=s11.sbflid
+		left join ss_sbfl s9 on s8.sbflid=s9.sbflid
+		left join (select s1.sbflid sbflid, (if(s1.rksl,s1.rksl,0) - if(s3.sysl,s3.sysl,0) - if(s4.cjsl,s4.cjsl,0)) sbkc
+					from (select sbflid,sum(rksl) rksl from sbgl_sbrk group by sbflid) s1 
+						left join (select sbflid,count(*) sysl from sbgl_sbsy group by sbflid) s3 on s1.sbflid=s3.sbflid
+						left join (select sbflid,count(*) cjsl from sbgl_sbcj where sbzt='8' group by sbflid) s4 on s1.sbflid=s4.sbflid) s7
+					on s7.sbflid = s8.sbflid	
+</select>
+<!-- 设备入库记信息统计计数 -->
+<select id="sbrkcountquery" parameterType="dem.sbgl.model.SbrkQueryCondition" resultType="int">
+	select count(*)
 	from sbgl_sbrk s1 left join ss_sbfl s2 on s1.sbflid=s2.sbflid
+	where 1=1
+	<if test="sbflid != null and sbflid != ''">
+		and s1.sbflid like "%"#{sbflid}"%" 
+	</if>
+	<if test="sblbmc != null and sblbmc != ''">
+		and s2.sblbmc like "%"#{sblbmc}"%" 
+	</if>
+	<if test="rkrq_start != null and rkrq_start != ''">
+		and rkrq &gt; #{rkrq_start}
+	</if>
+	<if test="rkrq_end != null and rkrq_end != ''">
+		and rkrq &lt; #{rkrq_end} 
+	</if>
 </select>
 <!-- 查询设备使用记录(表sbgl_sbsy中记录) -->
 <select id="sbsyquery" parameterType="dem.sbgl.model.SbsyObject" resultType="Map">
@@ -136,6 +181,7 @@
 	</if>
 	${sql_paging_sort}
 </select>
+
 <!-- 查询设备使用操作记录计数(表sbgl_sbsy_his中记录) -->
 <select id="sbsyjlcountquery" parameterType="dem.sbgl.model.SbsyHisObject" resultType="int">
 	select count(*)
@@ -160,7 +206,31 @@
 		and czrq &lt; #{czrq_end}
 	</if>
 </select>
-
+<!-- 查询设备使用操作记录(表sbgl_sbsy_his中记录)数据导出 -->
+<select id="sbsyjldataquery" parameterType="dem.sbgl.model.SbsyHisObject" resultType="dem.tjcx.model.FileCreateObject">
+	select sbflid,sbmc,sbgl_sbsy_his.jgid jgid,ss_jg.mc jgmc,sbsylx,czr,date_format(czrq,'%Y年%m月%d日') czrq,sbgl_sbsy_his.note note 
+	from sbgl_sbsy_his left join ss_jg on sbgl_sbsy_his.jgid=ss_jg.jgid
+	where 1 = 1 
+	<if test="jgid != null and jgid != ''">
+		and sbgl_sbsy_his.jgid like "%"#{jgid}"%" 
+	</if>
+	<if test="jgmc != null and jgmc != ''">
+		and ss_jg.mc like "%"#{jgmc}"%" 
+	</if>
+	<if test="sbmc != null and sbmc != ''">
+		and sbmc like "%"#{sbmc}"%" 
+	</if>
+	<if test="sbsylx != null and sbsylx != ''">
+		and sbsylx = #{sbsylx} 
+	</if>
+	<if test="czrq_start != null and czrq_start != ''">
+		and czrq &gt; #{czrq_start}
+	</if>
+	<if test="czrq_end != null and czrq_end != ''">
+		and czrq &lt; #{czrq_end}
+	</if>
+	${sql_paging_sort}
+</select>
 <!-- 设备出借记录查询 -->
 <select id="sbcjlistquery" parameterType="dem.sbgl.model.SbcjObject" resultType="Map">
 	select xh,rkid,sbflid,sbmc,sbgl_sbcj.jgid jgid,ss_jg.mc jgmc,sbsyr,sbzt,azr,date_format(azrq,'%Y年%m月%d日') azrq,date_format(cjrq,'%Y年%m月%d日') cjrq,date_format(hrrq,'%Y年%m月%d日') hrrq,sbgl_sbcj.note note 
@@ -184,5 +254,43 @@
 		sbzt = '9'
 	where xh = #{xh}
 </update>
+
+<!-- 设备入库旧数据查询 -->
+<select id="addsbrksbidquery" parameterType="dem.sbgl.model.SbrkObject" resultType="String">
+	select distinct sbflid 
+	from sbgl_sbrk
+	where 1=1
+	<if test="sbmc != null and sbmc != ''">
+		and sbmc = #{sbmc} 
+	</if>
+	<if test="sbxh != null and sbxh != ''">
+		and sbxh = #{sbxh}
+	</if>
+	<if test="sccj != null and sccj != ''">
+		and sccj = #{sccj} 
+	</if>
+	<if test="ccbh != null and ccbh != ''">
+		and ccbh = #{ccbh} 
+	</if>
+	limit 0,1
+</select>
+<!-- 设备入库旧数据统计判定 -->
+<select id="addsbrkcountquery" parameterType="dem.sbgl.model.SbrkObject" resultType="int">
+	select count(*) 
+	from sbgl_sbrk
+	where 1=1
+	<if test="sbmc != null and sbmc != ''">
+		and sbmc = #{sbmc} 
+	</if>
+	<if test="sbxh != null and sbxh != ''">
+		and sbxh = #{sbxh}
+	</if>
+	<if test="sccj != null and sccj != ''">
+		and sccj = #{sccj} 
+	</if>
+	<if test="ccbh != null and ccbh != ''">
+		and ccbh = #{ccbh} 
+	</if>
+</select>
 
 </mapper>

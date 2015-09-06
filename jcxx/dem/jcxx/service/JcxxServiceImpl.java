@@ -300,19 +300,20 @@ public class JcxxServiceImpl implements JcxxService {
 	public Map<String, Object> sblbInsert(SbflwhObject sbflwhObject, String userid) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		
-		if(!sbflwhObject.getSbtpfile().getName().endsWith(".jpg")){
-			map.put("code", "202");
-			map.put("info", "图片格式不符合规定，上传失败！本次操作无效！");
-			map.put("sblbmc", sbflwhObject.getSblbmc());
-			return map;
-		}
 		
 		String url = "/DeviceManagement/";//请求地址http://localhost:8080
 		String pathDiv = "tpzy/sbtp";//图片存储路径(当前工程下的路径)"+File.separator+"
 		String fix = "jpg";//文件类型(后缀)
 		String newUUID = (CommonUtil.getUUID()).toUpperCase();//产生UUID用于生成设备图片名
 		String fileName = null;
-		if(sbflwhObject.getSbtpfile().getSize()>0){
+		if(sbflwhObject.getSbtpfile()!=null && sbflwhObject.getSbtpfile().getSize()>0){
+
+			if(!sbflwhObject.getSbtpfile().getName().endsWith(".jpg")){
+				map.put("code", "202");
+				map.put("info", "图片格式不符合规定，上传失败！本次操作无效！");
+				map.put("sblbmc", sbflwhObject.getSblbmc());
+				return map;
+			}
 			fileUpLoadManager.setPathDir(pathDiv);
 			fileName="sbtp_"+newUUID+"."+fix;//设备图片名称规范:sbtp_32位UUID.jpg
 			boolean judge = fileUpLoadManager.upload(sbflwhObject.getSbtpfile(), fileName);//生成服务器端图片文件
@@ -372,6 +373,7 @@ public class JcxxServiceImpl implements JcxxService {
 		map.put("code", "200");
 		map.put("info", "新增成功！");
 		map.put("sblbmc", sbflwhObject.getSblbmc());
+		map.put("childid", childid);
 
 		return map;
 	}

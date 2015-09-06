@@ -4,6 +4,8 @@ import dem.login.model.PagingAction;
 
 public class TimeFrameObject extends PagingAction {
 
+	private String sbcj;//设备层级
+	
 	private String rq_start;//起始时间
 	private String rq_end;//终止时间
 	
@@ -18,6 +20,12 @@ public class TimeFrameObject extends PagingAction {
 	}
 	public void setRq_end(String rq_end) {
 		this.rq_end = rq_end;
+	}
+	public String getSbcj() {
+		return sbcj;
+	}
+	public void setSbcj(String sbcj) {
+		this.sbcj = sbcj;
 	}
 	
 }

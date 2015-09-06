@@ -3,6 +3,8 @@
  */
 $(document).ready(function(){
 	setDatatablePosition($("#top_title").outerHeight(true),$("#conditionarea").outerHeight(true),$("#bottom_pagging").outerHeight(true));
+	$("#rq_start").val(timeArr[0]);
+	$("#rq_end").val(timeArr[1]);
 	queryuserlist();
 });
 
@@ -59,4 +61,19 @@ function greybackadd(){
 function greyback(){
 	$("#greyground").hide();
 	$("#loading").hide();
+}
+
+//数据导出
+function getfile(){
+	$.ajax({
+		url : "/DeviceManagement/tjcx/getfile/createfile.do",
+		type : "POST",
+		data : "&filetypecode=1"+"&rq_start="+$("#rq_start").val()
+				+"&rq_end="+$("#rq_end").val(),
+		success : function(data){
+			if(data.excelurl){
+				window.open("/DeviceManagement"+data.excelurl);
+			}
+		}
+	});
 }

@@ -1,5 +1,6 @@
 package dem.login.service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -56,6 +57,34 @@ public class LoginServiceImpl implements LoginService {
 		List list = null;
 		list = (List)baseDao.selectList("dem.login.mapper.LoginMapper.menucodeListSelect", loginner.getUserid());
 		return list;
+	}
+
+	@Override
+	public Map<String, Object> getNewTimeList(String lasttime,String lasttimenotes, String userid) {
+		Map<String, Object> map = new HashMap<String, Object>();
+
+		List list = new ArrayList();
+		int sum = (Integer)baseDao.selectOne("dem.login.mapper.LoginMapper.newTimeCount", lasttime);
+		int sum_note = (Integer)baseDao.selectOne("dem.login.mapper.LoginMapper.newTimeNoteCount", lasttime);
+		if(sum>0){
+			list = baseDao.selectList("dem.login.mapper.LoginMapper.newTimelistQuery", lasttime);
+			map.put("code", "200");
+			map.put("info", "数据库已存在最新时间点！");
+			map.put("newtimelist", list);
+			return map;
+		}else if(!lasttimenotes.equals((sum_note+""))){
+			list = baseDao.selectList("dem.login.mapper.LoginMapper.newTimelistQuery", lasttime);
+			map.put("code", "202");
+			map.put("info", "数据库最新时间点数据有更新！");
+			map.put("newtimelist", list);
+			return map;
+		}else{
+			map.put("code", "201");
+			map.put("info", "无新时间点！");
+			map.put("newtimelist", null);
+			return map;
+		}
+		
 	}
 
 }

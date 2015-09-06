@@ -49,6 +49,7 @@ function queryuserlist(actionstr){
 								+'<th>联系电话</th>'
 								+'<th>人员状态</th>'
 								+'<th>录入日期</th>'
+								+'<th>备注</th>'
 								+'<th>维护操作</th>'
 							+'</tr>';
 			if(data.userlist != null && data.userlist != 'null' && data.userlist.length>0){
@@ -57,11 +58,12 @@ function queryuserlist(actionstr){
 					tablehtml += ('<tr>'
 									+'<td>'+(i + 1 + (parseInt($("#currpage").val())-1) * (parseInt($("#countline").val())))+'</td>'
 									+'<td>'+(userList[i].userid?userList[i].userid:'暂无数据')+'</td>'
-									+'<td><a href="#" title="'+(userList[i].note?userList[i].note:'')+'">'+(userList[i].mc?userList[i].mc:'暂无数据')+'</a></td>'
+									+'<td>'+(userList[i].mc?userList[i].mc:'暂无数据')+'</td>'
 									//+'<td>'+(userList[i].jgmc?userList[i].jgmc:'暂无数据')+'</td>'
 									+'<td>'+(userList[i].tel?userList[i].tel:'暂无数据')+'</td>'
 									+'<td>'+(userList[i].userzt=="0"?'正常':'注销')+'</td>'
 									+'<td>'+(userList[i].lrrq?userList[i].lrrq:'时间不明')+'</td>'
+									+'<td>'+(userList[i].note?userList[i].note:'')+'</td>'
 									+(userList[i].userzt=="0"?('<td><a href="#" title="编辑" onclick="updatemanager(\''+(userList[i].userid?userList[i].userid:'none')+'\',\''+(userList[i].mc?userList[i].mc:'')+'\',\''+(userList[i].jgmc?userList[i].jgmc:'未知名称')+'\',\''+(userList[i].jgid?userList[i].jgid:'')+'\',\''+(userList[i].tel?userList[i].tel:'')+'\',\''+(userList[i].note?userList[i].note:'')+'\')">'
 									+'<i class="icon-edit"></i></a> &nbsp;&nbsp;&nbsp;&nbsp; '
 									+'<a href="#" title="注销" onclick="removemanager(\''+(userList[i].userid?userList[i].userid:'none')+'\')">'

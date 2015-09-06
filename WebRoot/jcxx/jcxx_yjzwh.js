@@ -21,10 +21,10 @@ function queryuserlist(actionstr){
 			var tablehtml = '<tr>'
 								+'<th>序号</th>'
 								+'<th>预警类型</th>'
-								+'<th>名称</th>'
+								+'<th>预警名称</th>'
 								+'<th>所属站点编号</th>'
-								+'<th>所属站点</th>'
-								+'<th>预警值</th>'
+								+'<th>所属站点名称</th>'
+								+'<th>预警值(单位)</th>'
 								+'<th>操作</th>'
 							+'</tr>';
 			if(data.yjlist != null && data.yjlist != 'null' && data.yjlist.length>0){
@@ -32,12 +32,12 @@ function queryuserlist(actionstr){
 				for(var i=0;i<yjList.length;i++){
 					tablehtml += ('<tr>'
 									+'<td>'+(i + 1)+'</td>'
-									+'<td>'+yjList[i].yjid+'</td>'
-									+'<td><a href="#" title="'+(yjList[i].note?yjList[i].note:'')+'">'+(yjList[i].mc?yjList[i].mc:'')+'</a></td>'
-									+'<td>'+(yjList[i].jgid?(yjList[i].jgid=="0000"?'通用编号0000':yjList[i].jgid):'')+'</td>'
-									+'<td>'+(yjList[i].jgid?(yjList[i].jgid=="0000"?'站点通用':yjList[i].jgmc):'暂无数据')+'</td>'
-									+'<td>'+(yjList[i].yjz?yjList[i].yjz:'')+'</td>'
-									+('<td><a href="#" title="修改" onclick="updateyj(\''+(yjList[i].yjid?yjList[i].yjid:'')+'\',\''+(yjList[i].mc?yjList[i].mc:'')+'\',\''+(yjList[i].jgid?(yjList[i].jgid=="0000"?'机构通用':yjList[i].jgmc):'未知机构')+'\',\''+(yjList[i].jgid?yjList[i].jgid:'')+'\',\''+(yjList[i].yjz?yjList[i].yjz:'')+'\',\''+(yjList[i].note?yjList[i].note:'')+'\',\''+(yjList[i].jgid?(yjList[i].jgid=="0000"?'设备库存预警':'站点维护预警'):'')+'\')">'
+									+'<td>'+(yjList[i].jgid?(yjList[i].jgid=="0000"?'通用类型':'个体类型'):'')+'</td>'
+									+'<td>'+(yjList[i].mc?yjList[i].mc:'')+'</td>'
+									+'<td>'+(yjList[i].jgid?(yjList[i].jgid=="0000"?'':yjList[i].jgid):'')+'</td>'
+									+'<td>'+(yjList[i].jgid?(yjList[i].jgid=="0000"?'':yjList[i].jgmc):'暂无数据')+'</td>'
+									+'<td>'+(yjList[i].yjz?(yjList[i].yjz+'('+(yjList[i].dw?yjList[i].dw:'-')+')'):'')+'</td>'
+									+('<td><a href="#" title="修改" onclick="updateyj(\''+(yjList[i].yjid?yjList[i].yjid:'')+'\',\''+(yjList[i].mc?yjList[i].mc:'')+'\',\''+(yjList[i].jgid?(yjList[i].jgid=="0000"?'通用':yjList[i].jgmc):'未知')+'\',\''+(yjList[i].jgid?yjList[i].jgid:'')+'\',\''+(yjList[i].yjz?yjList[i].yjz:'')+'\',\''+(yjList[i].note?yjList[i].note:'')+'\',\''+(yjList[i].jgid?(yjList[i].jgid=="0000"?'设备库存预警':'站点维护预警'):'')+'\')">'
 									+'<i class="icon-edit"></i></a></td>')
 								+'</tr>');
 				}
@@ -63,7 +63,6 @@ function greyback(){
 function updateyj(yjid,mc,jgmc,jgid,yjz,note,yjlx){
 	greybackadd();
 	$("#update").show();
-	$("#updateyjlx").val(yjlx);
 	$("#updateyjid").val(yjid);
 	$("#updatemc").val(mc);
 	$("#updatejgmc").val(jgmc);

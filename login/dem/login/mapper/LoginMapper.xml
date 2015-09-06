@@ -28,4 +28,25 @@
 	ORDER BY tjpx
 </select>
 
+<!-- 获取气象数据是否存在最新时间 -->
+<select id="newTimeCount"  parameterType="String"  resultType="int" >
+	SELECT count(*)
+	FROM zdgl_qxsj 
+	WHERE qxsjsj_2 &gt; #{lasttime}
+</select>
+<!-- 获取气象数据最新时间点数据是否有新数据 -->
+<select id="newTimeNoteCount"  parameterType="String"  resultType="int" >
+	SELECT count(*)
+	FROM zdgl_qxsj 
+	WHERE qxsjsj_2 = #{lasttime}
+</select>
+<!-- 获取气象数据最新数据的时间 -->
+<select id="newTimelistQuery"  resultType="Map" >
+	select qxsjsj_2 as timepoint,count(*) as timenotes
+	from zdgl_qxsj
+	group by qxsjsj_2 
+	order by qxsjsj_2 desc
+	limit 0,12
+</select>
+
 </mapper>

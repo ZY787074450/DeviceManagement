@@ -52,9 +52,9 @@
 						<td width="120px" align="right">&nbsp;设备状态：</td>
 						<td width="300px" align="left">
 							<input type="radio" name="condition_sbzt" value="" />全部&nbsp;
-							<input type="radio" name="condition_sbzt" value="0" checked="checked" />使用&nbsp;
+							<input type="radio" name="condition_sbzt" value="0" />使用&nbsp;
 							<input type="radio" name="condition_sbzt" value="1" />维修&nbsp;
-							<input type="radio" name="condition_sbzt" value="2" />报废&nbsp;
+							<input type="radio" name="condition_sbzt" value="2" checked="checked" />报废&nbsp;
 						</td>
 						<td align="center" rowspan="2">
 							<a href="#" class="btn btn-primary" title="查询" onclick="queryuserlist()"><i class="icon-search icon-white"></i>查询</a>	
@@ -63,11 +63,11 @@
 					<tr>
 						<td height="30px" align="right">&nbsp;安装日期：</td>
 						<td align="left">
-							<input style="width: 170px;margin: 0px 0px 0px 0px;" size="10" placeholder="起始时间" id="condition_azrq_start" type="text" onclick="laydate({istime: true, format: 'YYYY-MM-DD 00:00:00'})" readonly="readonly">
+							<input class="handsel" style="width: 170px;margin: 0px 0px 0px 0px;" size="10" placeholder="起始时间" id="condition_azrq_start" type="text" onclick="laydate({istime: true, format: 'YYYY-MM-DD 00:00:00'})" readonly="readonly">
 						</td>
 						<td align="right">&nbsp;至&nbsp;</td>
 						<td align="left">
-							<input style="width: 170px;margin: 0px 0px 0px 0px;" size="10" placeholder="终止时间" id="condition_azrq_end" type="text" onclick="laydate({istime: true, format: 'YYYY-MM-DD 23:59:59'})" readonly="readonly">
+							<input class="handsel" style="width: 170px;margin: 0px 0px 0px 0px;" size="10" placeholder="终止时间" id="condition_azrq_end" type="text" onclick="laydate({istime: true, format: 'YYYY-MM-DD 23:59:59'})" readonly="readonly">
 						</td>
 						<td></td>
 						<td></td>

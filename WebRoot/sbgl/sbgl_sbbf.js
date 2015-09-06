@@ -21,6 +21,8 @@ function initCondition(){
 
 $(document).ready(function(){
 	setDatatablePosition($("#top_title").outerHeight(true),$("#conditionarea").outerHeight(true),$("#bottom_pagging").outerHeight(true));
+	$("#condition_azrq_start").val(timeArr[0]);
+	$("#condition_azrq_end").val(timeArr[1]);
 	queryuserlist();
 	getsbrkjl();
 	getqxzdjbm();
@@ -42,7 +44,8 @@ function queryuserlist(actionstr){
 			var tablehtml = '<tr>'
 								+'<th>序号</th>'
 								+'<th>设备名称</th>'
-								+'<th>设备使用站点</th>'
+								+'<th>使用站点编号</th>'
+								+'<th>使用站点名称</th>'
 								+'<th>设备状态</th>'
 								+'<th>设备安装人</th>'
 								+'<th>近期维修人</th>'
@@ -56,7 +59,8 @@ function queryuserlist(actionstr){
 				for(var i=0;i<sbsyList.length;i++){
 					tablehtml += ('<tr>'
 									+'<td>'+(i + 1 + (parseInt($("#currpage").val())-1) * (parseInt($("#countline").val())))+'</td>'
-									+'<td><a href="#" title="'+(sbsyList[i].note?sbsyList[i].note:'')+'">'+(sbsyList[i].sbmc?sbsyList[i].sbmc:'暂无数据')+'</a></td>'
+									+'<td>'+(sbsyList[i].sbmc?sbsyList[i].sbmc:'暂无数据')+'</td>'
+									+'<td>'+(sbsyList[i].jgid?sbsyList[i].jgid:'未知ID')+'</td>'
 									+'<td>'+(sbsyList[i].jgmc?sbsyList[i].jgmc:'未命名')+'</td>'
 									+'<td>'+(sbsyList[i].sbzt=="0"?'使用':(sbsyList[i].sbzt=="1"?'维修':'报废'))+'</td>'
 									+'<td>'+(sbsyList[i].azr?sbsyList[i].azr:'暂无数据')+'</td>'
@@ -132,8 +136,8 @@ function getqxzdjbm(){
 		data : "",
 		success : function(data){
 			var tablehtml1 = '<tr>'
-								+'<th>机构/站点编号</th>'
-								+'<th>机构/站点名称</th>'
+								+'<th>站点编号</th>'
+								+'<th>站点名称</th>'
 								+'<th>选定</th>'
 							+'</tr>';
 			if(data.jglist != null && data.jglist != 'null' && data.jglist.length>0){

@@ -155,54 +155,68 @@
 	</div>
 	
 	<div class="floatarea" id="update">
-		<div style="background-color: #A7E8FA;height: 30px;padding: 5px 10px 0px 10px;"><span style="float: left;"><font color="#0088CC" size="+1">更新机构信息</font></span><span style="text-align: right;float: right;"><a href="#" onclick="greyback()"><img src="../commstyle/close_pic.png"></a></span></div>
+		<div style="background-color: #A7E8FA;height: 30px;padding: 5px 10px 0px 10px;"><span style="float: left;"><font color="#0088CC" size="+1">站点详细信息</font></span><span style="text-align: right;float: right;"><a href="#" onclick="greyback()"><img src="../commstyle/close_pic.png"></a></span></div>
 		<div style="padding: 10px 15px 10px 15px;">
 			<table>
 				<tr>
 					<td align="right">站点编号：</td>
-					<td align="left"><input type="text" placeholder="机构编号" class="sel" id="updatejgid" autocomplete="off" readonly="readonly" /></td>
+					<td align="left"><input type="text" placeholder="" class="sel" id="updatejgid" autocomplete="off" readonly="readonly" /></td>
 					<td align="right">站点名称：</td>
-					<td align="left"><input type="text" placeholder="机构名称" class="sel" id="updatemc" autocomplete="off" /></td>
+					<td align="left"><input type="text" placeholder="" class="sel" id="updatemc" autocomplete="off" readonly="readonly" /></td>
 				</tr>
 				<tr>
 					<td align="right">站点类型：</td>
 					<td align="left">
-						<input type="text" placeholder="类型代码" class="sel" id="updatejglxmc" autocomplete="off" readonly="readonly" />
-						<input style="display: none;" type="text" placeholder="类型代码" class="sel" id="updatejglx" autocomplete="off" readonly="readonly" />
+						<input type="text" placeholder="" class="sel" id="updatejglxmc" autocomplete="off" readonly="readonly" />
+						<input style="display: none;" type="text" placeholder="" class="sel" id="updatejglx" autocomplete="off" readonly="readonly" />
 					</td>
 					<td align="right">站点所属区域：</td>
 					<td align="left">
-						<input type="text" placeholder="所属区代码" class="sel" id="updatejgqymc" autocomplete="off" onfocus="open_append('update2')" onblur="close_append()" readonly="readonly" />
-						<input style="display: none;" type="text" placeholder="所属区代码" class="sel" id="updatejgqy" autocomplete="off" onfocus="open_append('update2')" onblur="close_append()" readonly="readonly" />
+						<input type="text" placeholder="" class="sel" id="updatejgqymc" autocomplete="off" onfocus="open_append('update2')" onblur="close_append()" readonly="readonly" />
+						<input style="display: none;" type="text" placeholder="" class="sel" id="updatejgqy" autocomplete="off" onfocus="open_append('update2')" onblur="close_append()" readonly="readonly" />
 					</td>
 				</tr>
 				<tr>
 					<td align="right">经度：</td>
-					<td align="left"><input type="text" placeholder="经度" class="sel" id="updatejgjd" autocomplete="off" /></td>
+					<td align="left"><input type="text" placeholder="" class="sel" id="updatejgjd" autocomplete="off" readonly="readonly"/></td>
 					<td align="right">纬度：</td>
-					<td align="left"><input type="text" placeholder="纬度" class="sel" id="updatejgwd" autocomplete="off" /></td>
+					<td align="left"><input type="text" placeholder="" class="sel" id="updatejgwd" autocomplete="off" readonly="readonly" /></td>
 				</tr>
 				<tr>
-					<td align="right">海拔：</td>
-					<td align="left"><input type="text" placeholder="海拔" class="sel" id="updatejghb" autocomplete="off" /></td>
-					<td align="right">地址：</td>
-					<td align="left"><input type="text" placeholder="地址" class="sel" id="updatejgdz" autocomplete="off" /></td>
+					<td align="right">测站海拔：</td>
+					<td align="left"><input type="text" placeholder="" class="sel" id="updatejghb" autocomplete="off" readonly="readonly" /></td>
+					<td align="right">气压传感器海拔：</td>
+					<td align="left"><input type="text" placeholder="" class="sel" id="updateqycgqhb" autocomplete="off" readonly="readonly" /></td>
+				</tr>
+				<tr>
+					<td align="right">站点要素：</td>
+					<td align="left"><input type="text" placeholder="" class="sel" id="updatejgys" autocomplete="off" readonly="readonly" /></td>
+					<td align="right">安装人：</td>
+					<td align="left"><input type="text" placeholder="" class="sel" id="updateazr" autocomplete="off" readonly="readonly" /></td>
+				</tr>
+				<tr>
+					<td align="right">启用时间：</td>
+					<td align="left"><input type="text" placeholder="" class="sel" id="updateqyrq" autocomplete="off" readonly="readonly" /></td>
+					<td align="right">安装时间：</td>
+					<td align="left"><input type="text" placeholder="" class="sel" id="updatelrrq" autocomplete="off" readonly="readonly" /></td>
 				</tr>
 				<tr>
 					<td align="right">联系人：</td>
-					<td align="left"><input type="text" placeholder="联系人" class="sel" id="updatejglxr" autocomplete="off" /></td>
+					<td align="left"><input type="text" placeholder="" class="sel" id="updatejglxr" autocomplete="off" readonly="readonly" /></td>
 					<td align="right">联系电话：</td>
-					<td align="left"><input type="text" placeholder="联系电话" class="sel" id="updatejglxdh" autocomplete="off" /></td>
+					<td align="left"><input type="text" placeholder="" class="sel" id="updatejglxdh" autocomplete="off" readonly="readonly" /></td>
+				</tr>
+				<tr>
+					<td align="right">地址：</td>
+					<td align="left" colspan="3"><input type="text" placeholder="" class="sel" id="updatejgdz" autocomplete="off" readonly="readonly" style="width:470px;" /></td>
 				</tr>
 				<tr>
 					<td align="right">备注：</td>
-					<td align="left"><input type="text" placeholder="..." class="sel" id="updatenote" autocomplete="off" /></td>
-					<td></td>
-					<td></td>
+					<td align="left" colspan="3"><input type="text" placeholder="" class="sel" id="updatenote" autocomplete="off" readonly="readonly" style="width:470px;" /></td>
 				</tr>
-				<tr>
+				<!-- <tr>
 					<td colspan="4" style="text-align: center"><a href="#" class="btn btn-primary" onclick="updatejgxx()">保存</a></td>
-				</tr>
+				</tr> -->
 			</table>
 		</div>
 	</div>

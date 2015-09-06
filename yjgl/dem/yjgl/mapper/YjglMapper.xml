@@ -14,9 +14,18 @@
 <select id="sbkcyjcountquery" parameterType="String" resultType="int">
 	select count(*) from (select sbflid,sum(rksl) kcsl from sbgl_sbrk group by sbflid) s1
 </select>
+<!-- 设备库存查询数据导出 -->
+<select id="sbkcquery" parameterType="dem.login.model.PagingAction" resultType="dem.tjcx.model.FileCreateObject">
+	select s1.sbflid sbflid,s2.sblbmc sblbmc,s1.rksl sbrksl,s3.sysl sbsysl,s4.cjsl sbcjsl,(select yjz from ss_yjfl where jgid='0000' and yjid='1' limit 0,1) sbyjz
+	from (select sbflid,sum(rksl) rksl from sbgl_sbrk group by sbflid) s1 
+		left join ss_sbfl s2 on s1.sbflid=s2.sbflid
+		left join (select sbflid,count(*) sysl from sbgl_sbsy group by sbflid) s3 on s1.sbflid=s3.sbflid
+		left join (select sbflid,count(*) cjsl from sbgl_sbcj where sbzt='8' group by sbflid) s4 on s1.sbflid=s4.sbflid 
+	${sql_paging_sort}
+</select>
 <!-- 设备维护预警查询 -->
 <select id="sbwhyjquery" parameterType="dem.login.model.PagingAction" resultType="Map">
-	select s1.jgid jgid,s1.mc jgmc,(select yjz from ss_yjfl where jgid='0000' and yjid='2' limit 0,1),date_format(s2.lastwxrq,'%Y-%m-%d') scwxrq,date_format(s3.lastwhrq,'%Y-%m-%d') scwhrq,TIMESTAMPDIFF(DAY,s2.lastwxrq,now()) wxrqcz,TIMESTAMPDIFF(DAY,s3.lastwhrq,now()) whrqcz
+	select s1.jgid jgid,s1.mc jgmc,(select yjz from ss_yjfl where jgid='0000' and yjid='2' limit 0,1) yjz,date_format(s2.lastwxrq,'%Y-%m-%d') scwxrq,date_format(s3.lastwhrq,'%Y-%m-%d') scwhrq,TIMESTAMPDIFF(DAY,s2.lastwxrq,now()) wxrqcz,TIMESTAMPDIFF(DAY,s3.lastwhrq,now()) whrqcz
 	from ss_jg s1
 		left join (select jgid,max(wxrq) lastwxrq from sbgl_sbsy where wxrq is not null group by jgid) s2 on s1.jgid=s2.jgid
 		left join (select jgid,max(whrq) lastwhrq from sbgl_sbsy where whrq is not null group by jgid) s3 on s1.jgid=s3.jgid

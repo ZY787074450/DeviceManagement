@@ -16,11 +16,13 @@ function initCondition(){
 	FormOp.sbsylx = $("input[name='condition_sbsylx']:checked").val();
 	FormOp.czrq_start = $("#condition_czrq_start").val();
 	FormOp.czrq_end = $("#condition_czrq_end").val();
-	FormOp.jgmc = $("#condition_jgmc").val()
+	FormOp.jgmc = $("#condition_jgmc").val();
 }
 
 $(document).ready(function(){
 	setDatatablePosition($("#top_title").outerHeight(true),$("#conditionarea").outerHeight(true),$("#bottom_pagging").outerHeight(true));
+	$("#condition_czrq_start").val(timeArr[0]);
+	$("#condition_czrq_end").val(timeArr[1]);
 	queryuserlist();
 	
 });
@@ -74,3 +76,23 @@ function greyback(){
 	$("#greyground").hide();
 	$("#loading").hide();
 }
+
+//数据导出
+function getfile(){
+	$.ajax({
+		url : "/DeviceManagement/tjcx/getfile/createfile.do?filetypecode=4",
+		type : "POST",
+		data : FormOp,
+		success : function(data){
+			if(data.excelurl){
+				window.open("/DeviceManagement"+data.excelurl);
+			}else{
+				if(data.code=='201'){
+					alert(data.info);
+				}else{
+					alert("系统异常，请联系管理员！");
+				}
+			}
+		}
+	});
+} 

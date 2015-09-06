@@ -21,6 +21,8 @@ function initCondition(){
 
 $(document).ready(function(){
 	setDatatablePosition($("#top_title").outerHeight(true),$("#conditionarea").outerHeight(true),$("#bottom_pagging").outerHeight(true));
+	$("#condition_azrq_start").val(timeArr[0]);
+	$("#condition_azrq_end").val(timeArr[1]);
 	queryuserlist();
 	getsbrkjl();
 	getqxzdjbm();
@@ -46,7 +48,8 @@ function queryuserlist(actionstr){
 			var tablehtml = '<tr>'
 								+'<th>序号</th>'
 								+'<th>设备名称</th>'
-								+'<th>设备使用站点</th>'
+								+'<th>使用站点编号</th>'
+								+'<th>使用站点名称</th>'
 								+'<th>设备状态</th>'
 								+'<th>设备安装人</th>'
 								+'<th>安装时间</th>'
@@ -63,7 +66,8 @@ function queryuserlist(actionstr){
 				for(var i=0;i<sbsyList.length;i++){
 					tablehtml += ('<tr>'
 									+'<td>'+(i + 1 + (parseInt($("#currpage").val())-1) * (parseInt($("#countline").val())))+'</td>'
-									+'<td><a href="#" title="'+(sbsyList[i].note?sbsyList[i].note:'')+'">'+(sbsyList[i].sbmc?sbsyList[i].sbmc:'暂无数据')+'</a></td>'
+									+'<td>'+(sbsyList[i].sbmc?sbsyList[i].sbmc:'暂无数据')+'</td>'
+									+'<td>'+(sbsyList[i].jgid?sbsyList[i].jgid:'未知ID')+'</td>'
 									+'<td>'+(sbsyList[i].jgmc?sbsyList[i].jgmc:'未命名')+'</td>'
 									+'<td>'+(sbsyList[i].sbzt=="0"?'使用':(sbsyList[i].sbzt=="1"?'维修':'报废'))+'</td>'
 									+'<td>'+(sbsyList[i].azr?sbsyList[i].azr:'暂无数据')+'</td>'
@@ -89,40 +93,45 @@ function queryuserlist(actionstr){
 //加载设备入库信息
 function getsbrkjl(){
 	$.ajax({
-		url : "/DeviceManagement/sbgl/sbrk/cx.do",
+		url : "/DeviceManagement/sbgl/sbrk/cx2.do?time="+new Date(),
 		type : "POST",
 		data : "",
 		success : function(data){
 			var tablehtml1 = '<tr>'
-								+'<th>设备分类类别</th>'
+								+'<th>设备分类</th>'
 								+'<th>设备名称</th>'
 								+'<th>设备型号</th>'
 								+'<th>出厂编号</th>'
+								+'<th>剩余库存</th>'
 								+'<th>选定</th>'
 							+'</tr>';
 			var tablehtml2 = '<tr>'
-								+'<th>设备分类类别</th>'
+								+'<th>设备分类</th>'
 								+'<th>设备名称</th>'
 								+'<th>设备型号</th>'
 								+'<th>出厂编号</th>'
+								+'<th>剩余库存</th>'
 								+'<th>选定</th>'
 							+'</tr>';
 			if(data.jglist != null && data.jglist != 'null' && data.jglist.length>0){
 				var jglist = data.jglist;
 				for(var i=0;i<jglist.length;i++){
+					var sbkcsl = (jglist[i].sbkc?jglist[i].sbkc:'0');
 					tablehtml1 += ('<tr>'
-									+'<td>'+(jglist[i].sblbmc?jglist[i].sblbmc:'未知')+'</td>'
+									+'<td>'+(jglist[i].fsblbmc?jglist[i].fsblbmc:'未知')+'</td>'
 									+'<td>'+(jglist[i].sbmc?jglist[i].sbmc:'未知')+'</td>'
 									+'<td>'+(jglist[i].sbxh?jglist[i].sbxh:'未知')+'</td>'
 									+'<td>'+(jglist[i].ccbh?jglist[i].ccbh:'未知')+'</td>'
-									+'<td><input type="radio" name="rkid_add" value="'+(jglist[i].rkid?jglist[i].rkid:'')+'" onchange="treegrid_radio_change_add(\''+(jglist[i].rkid?jglist[i].rkid:'')+'\',\''+(jglist[i].sbflid?jglist[i].sbflid:'')+'\',\''+(jglist[i].sbmc?jglist[i].sbmc:'')+'\')" />'+'</td>'
+									+'<td>'+(jglist[i].sbkc?jglist[i].sbkc:'0')+'</td>'
+									+'<td>'+(sbkcsl=='0'?'':'<input type="radio" name="rkid_add" value="'+(jglist[i].rkid?jglist[i].rkid:'')+'" onchange="treegrid_radio_change_add(\''+(jglist[i].rkid?jglist[i].rkid:'')+'\',\''+(jglist[i].sbflid?jglist[i].sbflid:'')+'\',\''+(jglist[i].sbmc?jglist[i].sbmc:'')+'\')" />')+'</td>'
 								+'</tr>');
 					tablehtml2 += ('<tr>'
-									+'<td>'+(jglist[i].sblbmc?jglist[i].sblbmc:'未知')+'</td>'
+									+'<td>'+(jglist[i].fsblbmc?jglist[i].fsblbmc:'未知')+'</td>'
 									+'<td>'+(jglist[i].sbmc?jglist[i].sbmc:'未知')+'</td>'
 									+'<td>'+(jglist[i].sbxh?jglist[i].sbxh:'未知')+'</td>'
 									+'<td>'+(jglist[i].ccbh?jglist[i].ccbh:'未知')+'</td>'
-									+'<td><input type="radio" name="rkid_update" value="'+(jglist[i].rkid?jglist[i].rkid:'')+'" onchange="treegrid_radio_change_update(\''+(jglist[i].rkid?jglist[i].rkid:'')+'\',\''+(jglist[i].sbflid?jglist[i].sbflid:'')+'\',\''+(jglist[i].sbmc?jglist[i].sbmc:'')+'\')" />'+'</td>'
+									+'<td>'+(jglist[i].sbkc?jglist[i].sbkc:'0')+'</td>'
+									+'<td>'+(sbkcsl=='0'?'':'<input type="radio" name="rkid_update" value="'+(jglist[i].rkid?jglist[i].rkid:'')+'" onchange="treegrid_radio_change_update(\''+(jglist[i].rkid?jglist[i].rkid:'')+'\',\''+(jglist[i].sbflid?jglist[i].sbflid:'')+'\',\''+(jglist[i].sbmc?jglist[i].sbmc:'')+'\')" />')+'</td>'
 								+'</tr>');
 				}
 			}
@@ -140,8 +149,8 @@ function getqxzdjbm(){
 		data : "",
 		success : function(data){
 			var tablehtml1 = '<tr>'
-								+'<th>机构/站点编号</th>'
-								+'<th>机构/站点名称</th>'
+								+'<th>站点编号</th>'
+								+'<th>站点名称</th>'
 								+'<th>选定</th>'
 							+'</tr>';
 			if(data.jglist != null && data.jglist != 'null' && data.jglist.length>0){
@@ -158,7 +167,7 @@ function getqxzdjbm(){
 		}
 	});
 }
-//机构快速定位方法
+//站点快速定位方法
 function seljg(){
 	$(".addJG").each(function(){
 		if(trimspace($("#seljgid").val())==''){
@@ -246,10 +255,10 @@ function onchangetype(str){
 }
 //添加记录请求
 function addsbsyjl(){
-	if($("#addrkid").val()==''){
+	/*if($("#addrkid").val()==''){
 		alert("请选择设备！");
 		return;
-	}
+	}*/
 	if($("#addjgid").val()==''){
 		alert("请选择设备使用站点！");
 		return;
@@ -273,6 +282,7 @@ function addsbsyjl(){
 			}
 			greyback();
 			queryuserlist();
+			getsbrkjl();
 		}
 	});
 }

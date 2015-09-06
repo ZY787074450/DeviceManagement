@@ -20,7 +20,7 @@ public class LoginUserFilter extends OncePerRequestFilter {
 			HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
 		//放行的请求地址
-		String[] notFilter = {"login.html","login.do","/user/getusername.do","testEasyUi.html"};
+		String[] notFilter = {"login.html","login.do","/user/getusername.do","testEasyUi.html","/user/getmemus.do","/jcxx/qxzdjbmwh/cx.do","/sbgl/sbsy/cx.do","/zdgl/qxsjdr/cx.do","/getfile/createfile.do","/user/qxsjzxsj/cx.do"};
 		//uri地址字符串
 		String uriStr = request.getRequestURI();
 		//是否执行过滤

@@ -40,9 +40,9 @@ function queryuserlist(actionstr){
 									+'<td><a href="#" title="'+(sbsyList[i].note?sbsyList[i].note:'')+'">'+(sbsyList[i].sbmc?sbsyList[i].sbmc:'暂无数据')+'</a></td>'
 									+'<td>'+(sbsyList[i].jgmc?sbsyList[i].jgmc:'未命名')+'</td>'
 									+'<td>'+(sbsyList[i].sbzt=="0"?'使用':(sbsyList[i].sbzt=="1"?'维修':'报废'))+'</td>'
-									+'<td>'+(sbsyList[i].jdrq?sbsyList[i].jdrq:'尚未检定记录')+'</td>'
+									+'<td>'+(sbsyList[i].jdrq?sbsyList[i].jdrq:'')+'</td>'
 									+'<td>'+(yjz==-1?'未设置预警值':yjz)+'</td>'
-									+'<td>'+(yjz==-1?'无法计算':(jdrqcz==-1?'无法计算':(jdrqcz<=yjz?'未超过':('超出'+(jdrqcz-yjz)+'天'))))+'</td>'
+									+'<td>'+(yjz==-1?'<font color="red">未设置预警值</font>':(jdrqcz==-1?'<font color="red">尚未检定记录</font>':(jdrqcz<=yjz?'正常':('<font color="red">超出'+(jdrqcz-yjz)+'天</font>'))))+'</td>'
 								+'</tr>');
 				}
 			}

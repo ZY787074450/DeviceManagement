@@ -1,6 +1,7 @@
 /**
  * 通用分页排序查询查询javascript代码区
  */
+var timeArr = ["2015-1-1 00:00:00","2015-1-31 23:59:59","2015-1-1","2015-1-31"];//当月月初与当月月末
 $(document).ready(function(){	
 	$("#currpage").val("1");
 	$("#countline").val("10");
@@ -14,6 +15,11 @@ $(document).ready(function(){
         	$("#countline").blur();
         }
     });
+	var datestr = new Date();
+	timeArr[0] = datestr.getFullYear()+"-"+((datestr.getMonth()+1)<10?("0"+(datestr.getMonth()+1)):(datestr.getMonth()+1))+"-01"+" 00:00:00";
+	timeArr[1] = datestr.getFullYear()+"-"+((datestr.getMonth()+1)<10?("0"+(datestr.getMonth()+1)):(datestr.getMonth()+1))+"-"+(new Date(datestr.getFullYear(),datestr.getMonth()+1,0).getDate())+" 23:59:59";
+	timeArr[2] = datestr.getFullYear()+"-"+((datestr.getMonth()+1)<10?("0"+(datestr.getMonth()+1)):(datestr.getMonth()+1))+"-01";
+	timeArr[3] = datestr.getFullYear()+"-"+((datestr.getMonth()+1)<10?("0"+(datestr.getMonth()+1)):(datestr.getMonth()+1))+"-"+(new Date(datestr.getFullYear(),datestr.getMonth()+1,0).getDate());
 });
 var mouseclickX = 0;//鼠标点击位置X
 var mouseclickY = 0;//鼠标点击位置Y
@@ -220,10 +226,12 @@ function isCloseDiv(){
 var data_height = 0;//页面数据div区高度
 
 function setDatatablePosition(aheight,bheight,cheight){//三个参数分别为：标题高度、条件区高度(不包括"查询条件"的高度)、分页区高度
-	
-	var fullheight = document.documentElement.clientHeight;
+	var fullheight = (document.documentElement.clientHeight==0?parseInt((parseInt(window.parent.document.getElementById("fullpageheight").value)-150)*0.99):document.documentElement.clientHeight);
+	if(document.documentElement.clientHeight==0){
+		location.reload();
+		return;
+	}
 	var dataheight = fullheight;
-	
 	if(aheight){
 		dataheight = dataheight-aheight-3;
 	}

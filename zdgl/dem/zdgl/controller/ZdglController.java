@@ -110,4 +110,35 @@ public class ZdglController {
 		return map;
 	}
 	
+	//站点维护数据查询
+	@RequestMapping(value = "/zdwh/cx.do", method = RequestMethod.POST,  produces = "application/json")
+	@ResponseBody
+	public Map<String, Object> zdwh_cx(JgQueryCondition jgQueryCondition, HttpServletRequest request, HttpServletResponse response){
+		Map<String, Object> map = new HashMap<String, Object>();
+		try{
+			String userid = ((Loginner)(request.getSession().getAttribute("session_loginner"))).getUserid();
+			map = zdglService.selectzdwhlist(jgQueryCondition,userid);
+		}catch(Exception e){
+			map.put("code", "888");
+			map.put("info", "查询失败");
+			map.put("jglist", null);
+		}
+		return map;
+	}
+	//站点维修数据查询
+	@RequestMapping(value = "/zdwx/cx.do", method = RequestMethod.POST,  produces = "application/json")
+	@ResponseBody
+	public Map<String, Object> zdwx_cx(JgQueryCondition jgQueryCondition, HttpServletRequest request, HttpServletResponse response){
+		Map<String, Object> map = new HashMap<String, Object>();
+		try{
+			String userid = ((Loginner)(request.getSession().getAttribute("session_loginner"))).getUserid();
+			map = zdglService.selectzdwxlist(jgQueryCondition,userid);
+		}catch(Exception e){
+			map.put("code", "888");
+			map.put("info", "查询失败");
+			map.put("jglist", null);
+		}
+		return map;
+	}
+	
 }

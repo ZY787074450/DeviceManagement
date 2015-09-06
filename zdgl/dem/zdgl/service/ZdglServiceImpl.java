@@ -1,6 +1,10 @@
 package dem.zdgl.service;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import dem.comm.dao.BaseDao;
 import dem.comm.util.CommonUtil;
+import dem.jcxx.model.JgQueryCondition;
 import dem.zdgl.model.ZdglQxsjdrObject;
 import dem.zdgl.model.ZdglWhWxObject;
 
@@ -103,7 +108,7 @@ public class ZdglServiceImpl implements ZdglService {
 	}
 
 	@Override
-	public Map<String, Object> addqxsj(ZdglQxsjdrObject zdglQxsjdrObject, String userid) {
+	public Map<String, Object> addqxsj(ZdglQxsjdrObject zdglQxsjdrObject, String userid){
 		Map<String, Object> map = new HashMap<String, Object>();
 		int sum = (Integer)baseDao.selectOne("dem.zdgl.mapper.ZdglMapper.zdqxsjCount", zdglQxsjdrObject);
 		if(sum>0){
@@ -118,15 +123,13 @@ public class ZdglServiceImpl implements ZdglService {
 
 			return map;
 		}else{
-			String str = "";
-			String str1 = zdglQxsjdrObject.getQxsjsj_1().substring(0,8);
-			int str2 = Integer.parseInt(zdglQxsjdrObject.getQxsjsj_1().substring(8,10)) + 8;
-			String str3 = zdglQxsjdrObject.getQxsjsj_1().substring(10,14);
-			if(str2<10){
-				str = str1 + "0" + str2 + str3;
-			}else{
-				str = str1 + str2 + str3;
-			}
+			try{
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+			Date dt = sdf.parse(zdglQxsjdrObject.getQxsjsj_1());
+			Calendar c = Calendar.getInstance();
+			c.setTime(dt);
+			c.add(Calendar.HOUR, 8); 
+			String str = sdf.format(c.getTime());
 			if(str.trim().length()!=14){
 				map.put("code", "203");
 				map.put("info", "新增失败！恶意时间数据，无法完成添加！");
@@ -136,12 +139,46 @@ public class ZdglServiceImpl implements ZdglService {
 			zdglQxsjdrObject.setQxsjsj_2(str);
 			String newUUID = (CommonUtil.getUUID()).toUpperCase();//产生UUID用于序号
 			zdglQxsjdrObject.setUuid(newUUID);
+			}catch(Exception e){
+				map.put("code", "203");
+				map.put("info", "新增失败！恶意时间数据，无法完成添加！");
+
+				return map;
+			}
 		}
 		baseDao.insert("dem.zdgl.mapper.ZdglMapper.addqxsj",zdglQxsjdrObject);
 		map.put("code", "200");
 		map.put("info", "新增成功！");
 		map.put("jgid", zdglQxsjdrObject.getJgid());
 
+		return map;
+	}
+
+	@Override
+	public Map<String, Object> selectzdwhlist(JgQueryCondition jgQueryCondition, String userid) {
+		Map<String, Object> map = new HashMap<String, Object>();
+
+		List list = new ArrayList();
+		list = baseDao.selectList("dem.zdgl.mapper.ZdglMapper.zdwhlist", jgQueryCondition);
+		int sum = (Integer)baseDao.selectOne("dem.zdgl.mapper.ZdglMapper.zdwhlistcount", jgQueryCondition);
+		map.put("code", "200");
+		map.put("info", "查询成功！");
+		map.put("jglist", list);
+		map.put("sum", sum);
+		return map;
+	}
+
+	@Override
+	public Map<String, Object> selectzdwxlist(JgQueryCondition jgQueryCondition, String userid) {
+		Map<String, Object> map = new HashMap<String, Object>();
+
+		List list = new ArrayList();
+		list = baseDao.selectList("dem.zdgl.mapper.ZdglMapper.zdwxlist", jgQueryCondition);
+		int sum = (Integer)baseDao.selectOne("dem.zdgl.mapper.ZdglMapper.zdwxlistcount", jgQueryCondition);
+		map.put("code", "200");
+		map.put("info", "查询成功！");
+		map.put("jglist", list);
+		map.put("sum", sum);
 		return map;
 	}
 

@@ -38,7 +38,7 @@ function queryuserlist(actionstr){
 					
 					var scwhlx = (wxrqcz==(-1)?(whrqcz==(-1)?'none':'wh'):(whrqcz==-1?'wx':(wxrqcz<whrqcz?'wx':'wh')));//上一次是维修还是维护
 					
-					var scwhrq = (scwhlx=='none'?'尚未维护记录':(scwhlx=='wh'?sbsyList[i].scwhrq:sbsyList[i].scwxrq));//上次维护日期
+					var scwhrq = (scwhlx=='none'?'':(scwhlx=='wh'?sbsyList[i].scwhrq:sbsyList[i].scwxrq));//上次维护日期
 					
 					var minwhrqcz = (wxrqcz==-1?(whrqcz==-1?-1:whrqcz):(whrqcz==-1?wxrqcz:(wxrqcz<whrqcz?wxrqcz:whrqcz)));//距离上一次维护时间差
 
@@ -48,7 +48,7 @@ function queryuserlist(actionstr){
 									+'<td>'+(sbsyList[i].jgmc?sbsyList[i].jgmc:'未知站点')+'</td>'
 									+'<td>'+scwhrq+'</td>'
 									+'<td>'+(yjz==-1?'未设置预警值':yjz)+'</td>'
-									+'<td>'+(yjz==-1?'无法计算':(minwhrqcz==-1?'无法计算':(minwhrqcz<=yjz?'未超过':('超出'+(minwhrqcz-yjz)+'天'))))+'</td>'
+									+'<td>'+(yjz==-1?'<font color="red">未设置预警值</font>':(minwhrqcz==-1?'<font color="red">尚未维护记录</font>':(minwhrqcz<=yjz?'未超过':('<font color="red">超出'+(minwhrqcz-yjz)+'天</font>'))))+'</td>'
 								+'</tr>');
 				}
 			}

@@ -3,7 +3,7 @@
 <mapper namespace="dem.tjcx.mapper.TjcxMapper">
 
 <!-- 设备使用统计（站点）查询 -->
-<select id="sbsytj_zdquery" parameterType="dem.tjcx.model.TimeFrameObject" resultType="Map">
+<select id="sbsytj_zdquery" parameterType="dem.tjcx.model.TimeFrameObject" resultType="dem.tjcx.model.FileCreateObject">
 	select s1.jgid jgid,s1.mc jgmc,s2.azsl sbazsl,s3.cjsl sbcjsl,s4.bfsl sbbfsl,s5.jdcs sbjdcs,s6.wxcs sbwxcs,s7.jgwhcs jgwhcs,s8.jgwxcs jgwxcs
 	from ss_jg s1 
 		left join (select jgid,count(*) azsl 
@@ -84,9 +84,12 @@
 </select>
 
 <!-- 设备使用统计（设备）查询 -->
-<select id="sbsytj_sbquery" parameterType="dem.tjcx.model.TimeFrameObject" resultType="Map">
-	select s1.sbflid sbflid,s7.sblbmc sblbmc,s2.azsl sbazsl,s3.cjsl sbcjsl,s4.bfsl sbbfsl,s5.jdcs sbjdcs,s6.wxcs sbwxcs
-	from (select sbflid,sum(rksl) rksl 
+<select id="sbsytj_sbquery" parameterType="dem.tjcx.model.TimeFrameObject" resultType="dem.tjcx.model.FileCreateObject">
+	<if test='sbcj != "3"'>
+		select ss1.fid sbflid,ss2.sblbmc sblbmc,sum(rksl) rksl,sum(sbazsl) sbazsl,sum(sbcjsl) cjsl,sum(sbbfsl) sbbfsl,sum(sbjdcs) sbjdcs,sum(sbwxcs) sbwxcs from (
+	</if>
+	select s1.sbflid sbflid,substr(s1.sbflid,1,4) fid,s7.sblbmc sblbmc,s1.rksl rksl,ifnull(s2.azsl,0) sbazsl,ifnull(s3.cjsl,0) sbcjsl,ifnull(s4.bfsl,0) sbbfsl,ifnull(s5.jdcs,0) sbjdcs,ifnull(s6.wxcs,0) sbwxcs
+	from (select sbflid,sum(rksl) rksl
 			from sbgl_sbrk 
 			where 1=1 and cgrq is not null 
 			<if test="rq_start != null and rq_start != ''">
@@ -96,7 +99,7 @@
 				and cgrq &lt; #{rq_end} 
 			</if>
 			group by sbflid) s1  
-		left join (select sbflid,count(*) azsl 
+		left join (select sbflid,count(*) azsl
 					from sbgl_sbsy 
 					where 1=1 and azrq is not null 
 					<if test="rq_start != null and rq_start != ''">
@@ -106,7 +109,7 @@
 						and azrq &lt; #{rq_end} 
 					</if>
 					group by sbflid) s2 on s1.sbflid=s2.sbflid
-		left join (select sbflid,count(*) cjsl 
+		left join (select sbflid,count(*) cjsl
 					from sbgl_sbcj 
 					where sbzt='8' and cjrq is not null 
 					<if test="rq_start != null and rq_start != ''">
@@ -147,12 +150,20 @@
 					</if>
 					group by sbflid) s6 on s1.sbflid=s6.sbflid 
 		left join ss_sbfl s7 on s1.sbflid=s7.sbflid 
+	<if test='sbcj != "3"'>
+		)ss1 left join ss_sbfl ss2 on ss2.sbflid = ss1.fid
+		 group by fid 
+	</if>
 	${sql_paging_sort}
 </select>
 <!-- 设备使用统计（设备）查询计数 -->
 <select id="sbsytj_sbcountquery" parameterType="dem.tjcx.model.TimeFrameObject" resultType="int">
 	select count(*) 
-	from (select sbflid,sum(rksl) rksl 
+	from (
+		<if test='sbcj != "3"'>
+			select fid,sum(rksl) rksl from (
+		</if>
+		select sbflid,sum(rksl) rksl,substr(sbflid,1,4) fid 
 			from sbgl_sbrk 
 			where 1=1 and cgrq is not null 
 			<if test="rq_start != null and rq_start != ''">
@@ -161,7 +172,11 @@
 			<if test="rq_end != null and rq_end != ''">
 				and cgrq &lt; #{rq_end} 
 			</if>
-			group by sbflid) s1
+			group by sbflid
+		<if test='sbcj != "3"'>
+			) a1 group by fid
+		</if>
+		) s1
 </select>
 
 </mapper>

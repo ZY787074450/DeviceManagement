@@ -1,4 +1,9 @@
 $(document).ready(function(){
+	setDatatablePosition($("#top_title").outerHeight(true),$("#conditionarea").outerHeight(true),$("#bottom_pagging").outerHeight(true));
+	$("#rq_start").val(timeArr[0]);
+	$("#rq_end").val(timeArr[1]);
+	queryuserlist();
+	
 	var datestr = new Date();
 	$("#addlrrq").val(datestr.getFullYear()+"-"+(datestr.getMonth()+1)+"-"+datestr.getDate());
 	getdeparments();
@@ -7,16 +12,99 @@ $(document).ready(function(){
 		seljg();
     });
 });
-//字符串左右去空格
-function trimspace(str){
-	return str.replace(/(^\s*)|(\s*$)/g,'');
+
+
+function queryuserlist(actionstr){
+	greybackadd();
+	var urlparm = commask(actionstr,"jgid");
+	$.ajax({
+		url : "/DeviceManagement/zdgl/zdwh/cx.do?time="+new Date()+urlparm,
+		type : "POST",
+		data : "&jgid="+$("#condition_jgid").val()+"&jgzt=0"+"&rq_start="+$("#rq_start").val()+"&rq_end="+$("#rq_end").val(),
+		success : function(data){
+			greyback();
+			$("#sum").text(data.sum?data.sum:'0');
+			disOrEnable();
+			var tablehtml = '<tr>'
+								+'<th>序号</th>'
+								+'<th>站点编号</th>'
+								+'<th>站点名称</th>'
+								+'<th>维护人</th>'
+								+'<th>维护时间</th>'
+								+'<th>备注</th>'
+								+'<th>操作</th>'
+							+'</tr>';
+			if(data.jglist != null && data.jglist != 'null' && data.jglist.length>0){
+				var jglist = data.jglist;
+				for(var i=0;i<jglist.length;i++){
+					tablehtml += ('<tr>'
+									+'<td>'+(i + 1 + (parseInt($("#currpage").val())-1) * (parseInt($("#countline").val())))+'</td>'
+									+'<td>'+(jglist[i].jgid?jglist[i].jgid:'暂无数据')+'</td>'
+									+'<td>'+(jglist[i].mc?jglist[i].mc:'暂无数据')+'</td>'
+									+'<td>'+(jglist[i].whr?jglist[i].whr:'')+'</td>'
+									+'<td>'+(jglist[i].whrq?jglist[i].whrq:'')+'</td>'
+									+'<td>'+(jglist[i].note?jglist[i].note:'')+'</td>'
+									+(jglist[i].jgzt=="0"?('<td>'
+									+'<a href="#" title="维护" onclick="updatejg(\''+(jglist[i].jgid?jglist[i].jgid:'none')+'\',\''+(jglist[i].mc?jglist[i].mc:'')+'\')">'
+									+'<i class="icon-edit"></i></a></td>'):('<td><i class="icon-edit icon-white" style="background-color: rgb(215, 214, 214);"></i></td>'))
+								+'</tr>');
+				}
+			}
+			$("#data_table").html(tablehtml);
+			
+		}
+	});
 }
-//请求新增机构
+
+//屏幕遮罩
+function greybackadd(){
+	$("#greyground").show();
+	$("#loading").show();
+}
+//屏幕遮罩移除，并移除非原始状态div
+function greyback(){
+	$("#greyground").hide();
+	$("#loading").hide();
+	$("#add").hide();
+	$("#update").hide();
+	$("#remove").hide();
+}
+//打开新增区域div
+function addjg(){
+	greybackadd();
+	$("#add").show();
+	$("#addjgid").val("");
+	$("#addjgmc").val("");
+	$("#addwhr").val("");
+	$("#addwhrq").val("");
+	$("#addnote").val("");
+}
+function updatejg(jgid,jgmc){//打开更新区div
+	if(jgid == 'none'){
+		alert("当前选中站点尚未获得站点编号，无法对其更新信息，请联系管理员维护数据！");
+	}else{
+		greybackadd();
+		$("#update").show();
+		$("#updatejgid").val("");
+		$("#updatejgmc").val("");
+		$("#updatewhr").val("");
+		$("#updatewhrq").val("");
+		$("#updatenote").val("");
+		updatejgdiv(jgid,jgmc);
+	}
+}
+function updatejgdiv(jgid,jgmc){//区域id给予默认值
+	$("#updatejgid").val(jgid);
+	$("#updatejgmc").val(jgmc);
+}
+
+//请求新增站点
 function addjgxx(){
 	if(trimspace($("#addjgid").val())=='' || $("#addwhrq").val()==''){
 		alert("站点编号、维护日期不能为空！");
 		return;
 	}
+	$("#add").hide();
 	$.ajax({
 		url : "/DeviceManagement/zdgl/zdwh/add.do",
 		type : "POST",
@@ -29,6 +117,31 @@ function addjgxx(){
 			}else{
 				alert("数据处理异常，请联系系统管理员！");
 			}
+			greyback();
+			queryuserlist();
+		}
+	});
+}
+function updatejgxx(){
+	if(trimspace($("#updatejgid").val())=='' || $("#updatewhrq").val()==''){
+		alert("站点编号、维护日期不能为空！");
+		return;
+	}
+	$("#add").hide();
+	$.ajax({
+		url : "/DeviceManagement/zdgl/zdwh/add.do",
+		type : "POST",
+		data : "&jgid="+trimspace($("#updatejgid").val())+"&mc="+trimspace($("#updatejgmc").val())+"&note="+trimspace($("#updatenote").val())
+				+"&whr="+trimspace($("#updatewhr").val())+"&whrq="+$("#updatewhrq").val(),
+		success : function(data){
+			if(data.mc){
+				alert("维护信息已记录！");
+				cleanTable();
+			}else{
+				alert("数据处理异常，请联系系统管理员！");
+			}
+			greyback();
+			queryuserlist();
 		}
 	});
 }
@@ -47,14 +160,14 @@ function getdeparments(){
 		data : "",
 		success : function(data){
 			var tablehtml1 = '<tr>'
-								+'<th>机构编号</th>'
-								+'<th>(选定)机构名称</th>'
-								+'<th>机构类型</th>'
+								+'<th>站点编号</th>'
+								+'<th>(选定)站点名称</th>'
+								+'<th>站点类型</th>'
 							+'</tr>';
 			var tablehtml2 = '<tr>'
-								+'<th>机构编号</th>'
-								+'<th>(选定)机构名称</th>'
-								+'<th>机构类型</th>'
+								+'<th>站点编号</th>'
+								+'<th>(选定)站点名称</th>'
+								+'<th>站点类型</th>'
 							+'</tr>';
 			if(data.jglist != null && data.jglist != 'null' && data.jglist.length>0){
 				var jglist = data.jglist;
@@ -77,7 +190,7 @@ function getdeparments(){
 		}
 	});
 }
-//机构快速定位方法
+//站点快速定位方法
 function seljg(){
 	$(".addJG").each(function(){
 		if(trimspace($("#seljgid").val())==''){

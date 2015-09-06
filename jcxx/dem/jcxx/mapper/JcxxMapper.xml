@@ -152,9 +152,29 @@
 
 <!-- 条件查询系统站点/部门 -->
 <select id="jglistQuery" parameterType="dem.jcxx.model.JgQueryCondition" resultType="Map">
-	select s1.jgid jgid,s1.mc mc,s1.jglx jglx,s2.mc jglxmc,s1.jgqy jgqy,s3.mc jgqymc,jgjd,jgwd,jghb,jgdz,jglxr,jglxdh,jgzt,note,jgys,azr,date_format(lrrq,'%Y年%m月%d日') as lrrq 
+	select s1.jgid jgid,s1.mc mc,s1.jglx jglx,s2.mc jglxmc,s1.jgqy jgqy,s3.mc jgqymc,jgjd,jgwd,jghb,jgdz,jglxr,jglxdh,jgzt,note,jgys,azr,date_format(lrrq,'%Y年%m月%d日') as lrrq,qycgqhb,date_format(qyrq,'%Y年%m月%d日') as qyrq,s7.jgwhcs jgwhcs,s8.jgwxcs jgwxcs 
 	from ss_jg s1 left join ss_jglx s2 on s1.jglx=s2.jglx
 				  left join ss_jgqy s3 on s1.jgqy=s3.jgqy
+				  left join (select jgid,count(*) jgwhcs 
+							from zdgl_jgwh 
+							where 1=1
+							<if test="rq_start != null and rq_start != ''">
+								and whrq &gt; #{rq_start} 
+							</if>
+							<if test="rq_end != null and rq_end != ''">
+								and whrq &lt; #{rq_end} 
+							</if>
+							group by jgid) s7 on s1.jgid=s7.jgid 
+				  left join (select jgid,count(*) jgwxcs 
+							from zdgl_jgwx 
+							where 1=1 
+							<if test="rq_start != null and rq_start != ''">
+								and wxrq &gt; #{rq_start} 
+							</if>
+							<if test="rq_end != null and rq_end != ''">
+								and wxrq &lt; #{rq_end} 
+							</if>
+							group by jgid) s8 on s1.jgid=s8.jgid 
 	where 1=1 
 	<if test="jgid != null and jgid != ''">
 		and s1.jgid like "%"#{jgid}"%" 
@@ -187,7 +207,8 @@
 </select>
 
 <insert id="addJg" parameterType="dem.login.model.Department" keyColumn="jgid">
-	insert into ss_jg(jgid,mc,jglx,jgqy,jgjd,jgwd,jghb,jgdz,jglxr,jglxdh,jgzt,note,lrrq) values(#{jgid},#{mc},#{jglx},#{jgqy},#{jgjd},#{jgwd},#{jghb},#{jgdz},#{jglxr},#{jglxdh},'0',#{note},now())
+	insert into ss_jg(jgid,mc,jglx,jgqy,jgjd,jgwd,jghb,jgdz,jglxr,jglxdh,jgzt,note,lrrq,jgys,azr,qycgqhb,qyrq) 
+				values(#{jgid},#{mc},#{jglx},#{jgqy},#{jgjd},#{jgwd},#{jghb},#{jgdz},#{jglxr},#{jglxdh},'0',#{note},#{lrrq},#{jgys},#{azr},#{qycgqhb},#{qyrq})
 </insert>
 <update id="updateJg" parameterType="dem.login.model.Department">
 	update ss_jg
@@ -210,7 +231,7 @@
 
 <!-- 条件查询预警信息 -->
 <select id="yjlistQuery" parameterType="dem.jcxx.model.YjzwhObject" resultType="Map">
-	select yjid,s1.jgid jgid,s1.mc mc,yjz,s1.note note,s2.mc jgmc
+	select yjid,s1.jgid jgid,s1.mc mc,yjz,s1.note note,s2.mc jgmc,dw
 	from ss_yjfl s1 left join ss_jg s2 on s1.jgid=s2.jgid
 	where 1=1 
 	<if test="jgid != null and jgid != ''">
@@ -242,8 +263,8 @@
 
 <!-- 查询设备分类类别 -->
 <select id="sblblistQuery" parameterType="String" resultType="Map">
-	select sbflid,sbcj,fsbflid,sfzl,sblbmc,sbtpdz
-	from ss_sbfl
+	select s1.sbflid sbflid,sbcj,fsbflid,sfzl,sblbmc,sbtpdz,sbxh,sbmc,ccbh,sccj
+	from ss_sbfl s1 left join (select sbflid,sbxh,sbmc,ccbh,sccj from sbgl_sbrk group by sbflid) s2 on s1.sbflid=s2.sbflid
 	where yxbz='Y' 
 	order by sbcj
 </select>

@@ -18,6 +18,8 @@ public class ZdglQxsjdrObject extends PagingAction {
 	private String sjd_start;//查询时间段起
 	private String sjd_end;//查询时间段止
 	
+	private String qxsj;//所需数据的时间
+	
 	
 	public String getSjd_start() {
 		return sjd_start;
@@ -90,6 +92,12 @@ public class ZdglQxsjdrObject extends PagingAction {
 	}
 	public void setQy(String qy) {
 		this.qy = qy;
+	}
+	public String getQxsj() {
+		return qxsj;
+	}
+	public void setQxsj(String qxsj) {
+		this.qxsj = qxsj;
 	}
 	
 	

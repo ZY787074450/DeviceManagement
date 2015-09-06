@@ -8,7 +8,7 @@ public class Department{
 	private String jgqy;//机构所属区域(代码)
 	private String jgjd;//经度
 	private String jgwd;//纬度
-	private String jghb;//海拔
+	private String jghb;//(测站)海拔
 	private String jgdz;//地址
 	private String jglxr;//联系人
 	private String jglxdh;//联系电话
@@ -17,6 +17,8 @@ public class Department{
 	private String lrrq;//录入日期
 	private String jgys;//机构要素
 	private String azr;//安装人
+	private String qycgqhb;//气压传感器海拔
+	private String qyrq;//启用日期
 	//补充字段（附加表字段）
 	private String jglxmc;//机构类型名称
 	private String jgqymc;//机构所属区域名称
@@ -123,6 +125,18 @@ public class Department{
 	}
 	public void setJgqymc(String jgqymc) {
 		this.jgqymc = jgqymc;
+	}
+	public String getQycgqhb() {
+		return qycgqhb;
+	}
+	public void setQycgqhb(String qycgqhb) {
+		this.qycgqhb = qycgqhb;
+	}
+	public String getQyrq() {
+		return qyrq;
+	}
+	public void setQyrq(String qyrq) {
+		this.qyrq = qyrq;
 	}
 	
 }

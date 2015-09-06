@@ -21,6 +21,8 @@ function initCondition(){
 
 $(document).ready(function(){
 	setDatatablePosition($("#top_title").outerHeight(true),$("#conditionarea").outerHeight(true),$("#bottom_pagging").outerHeight(true));
+	$("#condition_azrq_start").val(timeArr[0]);
+	$("#condition_azrq_end").val(timeArr[1]);
 	queryuserlist();
 	getsbrkjl();
 	getqxzdjbm();
@@ -42,10 +44,13 @@ function queryuserlist(actionstr){
 			var tablehtml = '<tr>'
 								+'<th>序号</th>'
 								+'<th>设备名称</th>'
-								+'<th>设备使用站点</th>'
+								+'<th>使用站点编号</th>'
+								+'<th>使用站点名称</th>'
 								+'<th>设备状态</th>'
 								+'<th>设备安装人</th>'
+								+'<th>安装日期</th>'
 								+'<th>近期检定人</th>'
+								+'<th>检定日期</th>'
 								+'<th>操作</th>'
 							+'</tr>';
 			if(data.sbsylist != null && data.sbsylist != 'null' && data.sbsylist.length>0){
@@ -53,11 +58,14 @@ function queryuserlist(actionstr){
 				for(var i=0;i<sbsyList.length;i++){
 					tablehtml += ('<tr>'
 									+'<td>'+(i + 1 + (parseInt($("#currpage").val())-1) * (parseInt($("#countline").val())))+'</td>'
-									+'<td><a href="#" title="'+(sbsyList[i].note?sbsyList[i].note:'')+'">'+(sbsyList[i].sbmc?sbsyList[i].sbmc:'暂无数据')+'</a></td>'
+									+'<td>'+(sbsyList[i].sbmc?sbsyList[i].sbmc:'暂无数据')+'</td>'
+									+'<td>'+(sbsyList[i].jgid?sbsyList[i].jgid:'未知ID')+'</td>'
 									+'<td>'+(sbsyList[i].jgmc?sbsyList[i].jgmc:'未命名')+'</td>'
 									+'<td>'+(sbsyList[i].sbzt=="0"?'使用':(sbsyList[i].sbzt=="1"?'维修':'报废'))+'</td>'
 									+'<td>'+(sbsyList[i].azr?sbsyList[i].azr:'暂无数据')+'</td>'
+									+'<td>'+(sbsyList[i].azrq?sbsyList[i].azrq:'暂无数据')+'</td>'
 									+'<td>'+(sbsyList[i].jdr?sbsyList[i].jdr:'')+'</td>'
+									+'<td>'+(sbsyList[i].jdrq?sbsyList[i].jdrq:'')+'</td>'
 									+((sbsyList[i].sbzt=="0"||sbsyList[i].sbzt=="1")?('<td><a href="#" title="修改" onclick="updatesbsy(\''+(sbsyList[i].xh?sbsyList[i].xh:'none')+'\',\''+(sbsyList[i].rkid?sbsyList[i].rkid:'')+'\',\''+(sbsyList[i].sbmc?sbsyList[i].sbmc:'')+'\')">'
 									+'<i class="icon-edit"></i></a> '
 									/*+'&nbsp;&nbsp;&nbsp;&nbsp; '
@@ -126,8 +134,8 @@ function getqxzdjbm(){
 		data : "",
 		success : function(data){
 			var tablehtml1 = '<tr>'
-								+'<th>机构/站点编号</th>'
-								+'<th>机构/站点名称</th>'
+								+'<th>站点编号</th>'
+								+'<th>站点名称</th>'
 								+'<th>选定</th>'
 							+'</tr>';
 			if(data.jglist != null && data.jglist != 'null' && data.jglist.length>0){

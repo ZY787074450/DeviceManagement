@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -15,15 +16,20 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.context.ServletContextAware;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.sun.org.apache.bcel.internal.generic.GETSTATIC;
+
 import dem.comm.encrypt.SHA;
+import dem.jcxx.model.UserQueryCondition;
 import dem.login.model.Loginner;
+import dem.login.model.QxsjObject;
 import dem.login.service.LoginService;
 
 @Controller
 @RequestMapping("/user")
-public class LoginController {
+public class LoginController{
 
 	private LoginService loginService;
 	
@@ -68,6 +74,7 @@ public class LoginController {
 				request.getSession().setAttribute("session_menulist", null);
 				
 				if (l != null) {
+					
 					request.getSession().setAttribute("session_loginner", l);
 					//人员拥有的菜单权限的代码放入session域
 					List list = loginService.getMenucodeList(l);
@@ -141,4 +148,27 @@ public class LoginController {
 		m.put("name", session_loginner.getMc());
 		return m;
 	}
+	
+	//获取气象数据最新数据的时间
+	@RequestMapping(value = "/qxsjzxsj/cx.do", method = RequestMethod.POST,  produces = "application/json")
+	@ResponseBody
+	public Map<String, Object> rywh_cx(QxsjObject qxsjObject, ModelMap map, HttpServletRequest request, HttpServletResponse response){
+		Map<String, Object> m = new HashMap<String, Object>();
+		try{
+			String userid = ((Loginner)(request.getSession().getAttribute("session_loginner"))).getUserid();
+			if(qxsjObject.getLasttime()==null || "".equals(qxsjObject.getLasttime().trim())){
+				qxsjObject.setLasttime("20150101000000");
+			}
+			if(qxsjObject.getLasttimenotes()==null || "".equals(qxsjObject.getLasttimenotes().trim())){
+				qxsjObject.setLasttimenotes("0");
+			}
+			m = loginService.getNewTimeList(qxsjObject.getLasttime().trim(),qxsjObject.getLasttimenotes().trim(),userid);
+		}catch(Exception e){
+			m.put("code", "888");
+			m.put("info", "查询失败");
+			m.put("newtimelist", null);
+		}
+		return m;
+	}
+
 }

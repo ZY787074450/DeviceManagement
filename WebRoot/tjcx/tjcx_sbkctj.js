@@ -2,7 +2,7 @@
  * 
  */
 $(document).ready(function(){
-	setDatatablePosition($("#top_title").outerHeight(true),0,$("#bottom_pagging").outerHeight(true));
+	setDatatablePosition(41,0,35);
 	queryuserlist();
 	
 });
@@ -49,4 +49,18 @@ function greybackadd(){
 function greyback(){
 	$("#greyground").hide();
 	$("#loading").hide();
+}
+
+//数据导出
+function getfile(){
+	$.ajax({
+		url : "/DeviceManagement/tjcx/getfile/createfile.do",
+		type : "POST",
+		data : "&filetypecode=3",
+		success : function(data){
+			if(data.excelurl){
+				window.open("/DeviceManagement"+data.excelurl);
+			}
+		}
+	});
 }

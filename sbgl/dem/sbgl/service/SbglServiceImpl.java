@@ -12,8 +12,11 @@ import org.springframework.stereotype.Service;
 import dem.comm.dao.BaseDao;
 import dem.comm.util.CommonUtil;
 import dem.comm.util.StringUtils;
+import dem.jcxx.model.SbflwhObject;
+import dem.jcxx.service.JcxxService;
 import dem.sbgl.model.SbcjObject;
 import dem.sbgl.model.SbrkObject;
+import dem.sbgl.model.SbrkQueryCondition;
 import dem.sbgl.model.SbsyHisObject;
 import dem.sbgl.model.SbsyObject;
 
@@ -32,10 +35,41 @@ public class SbglServiceImpl implements SbglService {
 		this.baseDao = baseDao;
 	}
 
+	private JcxxService jcxxService;
+
+	public JcxxService getJcxxService() {
+		return jcxxService;
+	}
+
+	@Resource
+	public void setJcxxService(JcxxService jcxxService) {
+		this.jcxxService = jcxxService;
+	}
+	
 	//设备入库
 	@Override
 	public Map<String, Object> addsbrk(SbrkObject sbrkObject, String userid) {
 		Map<String, Object> map = new HashMap<String, Object>();
+		if(sbrkObject.getSbflid().length()==4){
+			int sum = (Integer)baseDao.selectOne("dem.sbgl.mapper.SbglMapper.addsbrkcountquery", sbrkObject);
+			if(sum<=0){
+				Map<String, Object> map_or = new HashMap<String, Object>();
+				SbflwhObject sbflwhObject = new SbflwhObject();
+				sbflwhObject.setSbcj("3");
+				sbflwhObject.setFsbflid(sbrkObject.getSbflid());
+				sbflwhObject.setSblbmc(sbrkObject.getSbmc());
+				map_or = jcxxService.sblbInsert(sbflwhObject,userid);
+				if(map_or.get("childid")==null || ("".equals(map_or.get("childid")))){
+					map.put("code", "888");
+					map.put("info", "新增失败！");
+					return map;
+				}
+				sbrkObject.setSbflid((map_or.get("childid").toString()).trim());
+			}else{
+				String oldsbflid = (String)baseDao.selectOne("dem.sbgl.mapper.SbglMapper.addsbrksbidquery", sbrkObject);
+				sbrkObject.setSbflid(oldsbflid.trim());
+			}
+		}
 		
 		String newUUID = (CommonUtil.getUUID()).toUpperCase();//产生UUID
 		
@@ -165,10 +199,23 @@ public class SbglServiceImpl implements SbglService {
 	}
 
 	@Override
-	public Map<String, Object> sbrkcx(String userid) {
+	public Map<String, Object> sbrkcx(SbrkQueryCondition sbrkQueryCondition, String userid) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		
-		List list = (List)baseDao.selectList("dem.sbgl.mapper.SbglMapper.sbrkquery","");
+		List list = (List)baseDao.selectList("dem.sbgl.mapper.SbglMapper.sbrkquery", sbrkQueryCondition);
+		int sum = (Integer)baseDao.selectOne("dem.sbgl.mapper.SbglMapper.sbrkcountquery", sbrkQueryCondition);
+		map.put("code", "200");
+		map.put("info", "查询成功！");
+		map.put("jglist", list);
+		map.put("sum", sum);
+
+		return map;
+	}
+	@Override
+	public Map<String, Object> sbrkcx2(SbrkQueryCondition sbrkQueryCondition, String userid) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		
+		List list = (List)baseDao.selectList("dem.sbgl.mapper.SbglMapper.sbrk2query", sbrkQueryCondition);
 		map.put("code", "200");
 		map.put("info", "查询成功！");
 		map.put("jglist", list);

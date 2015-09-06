@@ -3,6 +3,8 @@
  */
 $(document).ready(function(){
 	setDatatablePosition($("#top_title").outerHeight(true),$("#conditionarea").outerHeight(true),$("#bottom_pagging").outerHeight(true));
+	$("#rq_start").val(timeArr[0]);
+	$("#rq_end").val(timeArr[1]);
 	queryuserlist();
 });
 
@@ -12,7 +14,7 @@ function queryuserlist(actionstr){
 	$.ajax({
 		url : "/DeviceManagement/tjcx/sbsytj_sb/cx.do?time="+new Date()+urlparm,
 		type : "POST",
-		data : "&rq_start="+$("#rq_start").val()+"&rq_end="+$("#rq_end").val(),
+		data : "&rq_start="+$("#rq_start").val()+"&rq_end="+$("#rq_end").val()+"&sbcj="+$("input[name='condition_sbcj']:checked").val(),
 		success : function(data){
 			greyback();
 			$("#sum").text(data.sum?data.sum:'0');
@@ -33,7 +35,7 @@ function queryuserlist(actionstr){
 					tablehtml += ('<tr>'
 									+'<td>'+(i + 1 + (parseInt($("#currpage").val())-1) * (parseInt($("#countline").val())))+'</td>'
 									+'<td>'+(sbsyList[i].sblbmc?sbsyList[i].sblbmc:'未知类别名称')+'</td>'
-									+'<td>'+(sbsyList[i].sbcgsl?sbsyList[i].sbcgsl:0)+'</td>'
+									+'<td>'+(sbsyList[i].rksl?sbsyList[i].rksl:0)+'</td>'
 									+'<td>'+(sbsyList[i].sbazsl?sbsyList[i].sbazsl:0)+'</td>'
 									/*+'<td>'+(sbsyList[i].sbcjsl?sbsyList[i].sbcjsl:0)+'</td>'*/
 									+'<td>'+(sbsyList[i].sbbfsl?sbsyList[i].sbbfsl:0)+'</td>'
@@ -57,4 +59,19 @@ function greybackadd(){
 function greyback(){
 	$("#greyground").hide();
 	$("#loading").hide();
+}
+
+//数据导出
+function getfile(){
+	$.ajax({
+		url : "/DeviceManagement/tjcx/getfile/createfile.do",
+		type : "POST",
+		data : "&filetypecode=2"+"&sbcj="+$("input[name='condition_sbcj']:checked").val()+"&rq_start="+$("#rq_start").val()
+				+"&rq_end="+$("#rq_end").val(),
+		success : function(data){
+			if(data.excelurl){
+				window.open("/DeviceManagement"+data.excelurl);
+			}
+		}
+	});
 }

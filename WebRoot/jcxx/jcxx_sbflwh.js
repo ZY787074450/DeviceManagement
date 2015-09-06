@@ -20,6 +20,13 @@ function getUrlParam(){
 		}
 	}
 } 
+function sbmcandxh(sblbmc,rowObj){
+	if(rowObj.sbcj=='3'){
+		return sblbmc+'【'+(rowObj.sbxh?rowObj.sbxh:'未知型号')+'、'+(rowObj.sccj?rowObj.sccj:'未知厂家')+'、'+(rowObj.ccbh?rowObj.ccbh:'未知编号')+'】';
+	}else{
+		return sblbmc;
+	}
+}
 
 //获取数据(已失效、废除，最新方法queryuserlist_for_easyui())
 function queryuserlist(){
@@ -136,7 +143,7 @@ function loadpicture(url){
 }
 //打开新增区域div
 function addsblb(fsbflid,sbcj){
-	if(sbcj==''||sbcj=='3' || parseInt(sbcj)>3){
+	if(sbcj==''||sbcj=='2' || parseInt(sbcj)>2){
 		alert("当前设备层级已达上限，不可添加子类！");
 		return;
 	}
@@ -296,16 +303,32 @@ function drawsixlevel_cz(sblbList){
 	return list1;
 }
 
-function checkpic(sbtpdz){
-	return '<a href="#" title="点击查看大图" onclick="loadpicture(\''+(sbtpdz?sbtpdz:'')+'\')">点击查看大图</a>';
+function checkpic(sbtpdz,rowObj){
+	if(rowObj.sbcj && rowObj.sbcj=='3'){
+		return '';
+	}else{
+		return '<a href="#" title="点击查看图片" onclick="loadpicture(\''+(sbtpdz?sbtpdz:'')+'\')">点击查看图片</a>';
+	}
 }
 function cz(sbflid,rowObj){
-	return  ('<a href="#" title="修改类名" onclick="updatesblb(\''+(sbflid?sbflid:'')+'\',\''+(rowObj.sblbmc?rowObj.sblbmc:'')+'\')">'
-			+'<i class="icon-edit"></i></a>&nbsp; &nbsp;') 
-			+('<a href="#" title="添加子类" onclick="addsblb(\''+(sbflid?sbflid:'')+'\',\''+(rowObj.sbcj?rowObj.sbcj:'')+'\')">'
-			+'<i class="icon-plus-sign"></i></a>&nbsp; &nbsp;')
-			+('<a href="#" title="删除该类" onclick="removesblb(\''+(sbflid?sbflid:'')+'\',\''+(rowObj.sblbmc?rowObj.sblbmc:'')+'\')">'
-			+'<i class="icon-minus-sign"></i></a>');
+	if(rowObj.sbcj && rowObj.sbcj=='1'){
+		return ('<a href="#" title="修改" onclick="updatesblb(\''+(sbflid?sbflid:'')+'\',\''+(rowObj.sblbmc?rowObj.sblbmc:'')+'\')">'
+				+'<i class="icon-edit"></i></a>&nbsp; &nbsp;') 
+				+('<a href="#" title="添加子类" onclick="addsblb(\''+(sbflid?sbflid:'')+'\',\''+(rowObj.sbcj?rowObj.sbcj:'')+'\')">'
+				+'<i class="icon-plus-sign"></i></a>&nbsp; &nbsp;')
+				+('<a href="#" title="删除" onclick="removesblb(\''+(sbflid?sbflid:'')+'\',\''+(rowObj.sblbmc?rowObj.sblbmc:'')+'\')">'
+				+'<i class="icon-minus-sign"></i></a>');
+	}else if(rowObj.sbcj && rowObj.sbcj=='2'){
+		return ('<a href="#" title="修改" onclick="updatesblb(\''+(sbflid?sbflid:'')+'\',\''+(rowObj.sblbmc?rowObj.sblbmc:'')+'\')">'
+				+'<i class="icon-edit"></i></a>&nbsp; &nbsp;') 
+				+('<i class="icon-plus-sign icon-white" style="background-color: rgb(215, 214, 214);"></i>&nbsp; &nbsp;')
+				+('<a href="#" title="删除" onclick="removesblb(\''+(sbflid?sbflid:'')+'\',\''+(rowObj.sblbmc?rowObj.sblbmc:'')+'\')">'
+				+'<i class="icon-minus-sign"></i></a>');
+	}else{
+		return ('<i class="icon-edit icon-white" style="background-color: rgb(215, 214, 214);"></i>&nbsp; &nbsp;') 
+				+('<i class="icon-plus-sign icon-white" style="background-color: rgb(215, 214, 214);"></i>&nbsp; &nbsp;')
+				+('<i class="icon-minus-sign icon-white" style="background-color: rgb(215, 214, 214);"></i>');
+	}
 }
 function sfzl(sfzl){
 	return (sfzl=='1'?'是':'否');

@@ -20,13 +20,18 @@ function addjgxx(){
 		alert("站点编号、站点名称、站点类型、站点所属区不能为空！");
 		return;
 	}
+	if(trimspace($("#addlrrq").val())=='' || trimspace($("#addqyrq").val())==''){
+		alert("安装日期和启用日期不能为空！");
+		return;
+	}
 	$.ajax({
 		url : "/DeviceManagement/jcxx/qxzdjbmwh/add.do",
 		type : "POST",
 		data : "&mc="+$("#addmc").val()+"&jglx="+$("#addjglx").val()+"&jgjd="+$("#addjgjd").val()
 				+"&jghb="+$("#addjghb").val()+"&jgdz="+$("#addjgdz").val()+"&note="+$("#addnote").val()+"&jglxr="+$("#addjglxr").val()
 				+"&jglxdh="+$("#addjglxdh").val()+"&jgqy="+$("#addjgqy").val()+"&jgwd="+$("#addjgwd").val()+"&jgid="+$("#addjgid").val()
-				+"&jgys="+$("#addjgys").val()+"&azr="+$("#addazr").val()+"&lrrq="+$("#addlrrq").val(),
+				+"&jgys="+$("#addjgys").val()+"&azr="+$("#addazr").val()+"&lrrq="+$("#addlrrq").val()+"&qycgqhb="+$("#addqycgqhb").val()
+				+"&qyrq="+$("#addqyrq").val(),
 		success : function(data){
 			if(data.mc && data.jgid){
 				alert("新增站点 ["+data.mc+"] 的成功！");

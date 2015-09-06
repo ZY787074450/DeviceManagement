@@ -2,9 +2,112 @@
  * 
  */
 $(document).ready(function(){
+	setDatatablePosition(41,85,35);
+	$("#condition_rkrq_start").val(timeArr[0]);
+	$("#condition_rkrq_end").val(timeArr[1]);
+	queryuserlist();
+	rkrqset();
+});
+function rkrqset(){
 	var datestr = new Date();
 	$("#addrkrq").val(datestr.getFullYear()+"-"+(datestr.getMonth()+1)+"-"+datestr.getDate());
-});
+}
+
+FormOp = {
+		sbflid : "",
+		sblbmc : "",
+		rkrq_start : "",
+		rkrq_end : "",
+	};
+
+function initCondition(){
+	FormOp.sbflid = trimspace($("#condition_sbflid").val());
+	FormOp.sblbmc = trimspace($("#condition_sblbmc").val());
+	FormOp.rkrq_start = trimspace($("#condition_rkrq_start").val());
+	FormOp.rkrq_end = trimspace($("#condition_rkrq_end").val());
+}
+
+function queryuserlist(actionstr){
+	greybackadd();
+	initCondition();
+	var urlparm = commask(actionstr,"rkrq");
+	$.ajax({
+		url : "/DeviceManagement/sbgl/sbrk/cx.do?time="+new Date()+urlparm,
+		type : "POST",
+		data : FormOp,
+		success : function(data){
+			greyback();
+			$("#sum").text(data.sum?data.sum:'0');
+			disOrEnable();
+			var tablehtml = '<tr>'
+								+'<th>设备编号</th>'
+								+'<th>设备分类</th>'
+								+'<th>设备名称</th>'
+								+'<th>设备型号</th>'
+								+'<th>生产厂家</th>'
+								+'<th>出厂编号</th>'
+								+'<th>设备采购人</th>'
+								+'<th>采购日期</th>'
+								+'<th>入库日期</th>'
+								+'<th>入库数量</th>'
+								+'<th>备注</th>'
+							+'</tr>';
+			if(data.jglist != null && data.jglist != 'null' && data.jglist.length>0){
+				var jglist = data.jglist;
+				for(var i=0;i<jglist.length;i++){
+					tablehtml += ('<tr>'
+									+'<td>'+(jglist[i].sbflid?jglist[i].sbflid:'未知编号')+'</td>'
+									+'<td>'+(jglist[i].fsblbmc?jglist[i].fsblbmc:'未知')+'</td>'
+									+'<td>'+(jglist[i].sbmc?jglist[i].sbmc:'未知')+'</td>'
+									+'<td>'+(jglist[i].sbxh?jglist[i].sbxh:'未知')+'</td>'
+									+'<td>'+(jglist[i].sccj?jglist[i].sccj:'未知')+'</td>'
+									+'<td>'+(jglist[i].ccbh?jglist[i].ccbh:'未知')+'</td>'
+									+'<td>'+(jglist[i].cgr?jglist[i].cgr:'未知')+'</td>'
+									+'<td>'+(jglist[i].cgrq?jglist[i].cgrq:'未知')+'</td>'
+									+'<td>'+(jglist[i].rkrq?jglist[i].rkrq:'未知')+'</td>'
+									+'<td>'+(jglist[i].rksl?jglist[i].rksl:'0')+'</td>'
+									+'<td>'+(jglist[i].note?jglist[i].note:'')+'</td>'
+								+'</tr>');
+				}
+			}
+			$("#data_table").html(tablehtml);
+			
+		}
+	});
+}
+
+//屏幕遮罩
+function greybackadd(){
+	$("#greyground").show();
+	$("#loading").show();
+}
+//屏幕遮罩移除，并移除非原始状态div
+function greyback(){
+	$("#greyground").hide();
+	$("#loading").hide();
+	$("#add").hide();
+	$("#update").hide();
+	$("#remove").hide();
+}
+
+//打开添加记录div
+function addsbsy(){
+	greybackadd();
+	$("#add").show();
+	
+	$("#addsbflid").val("");
+	$("#addsbmc").val("");
+	$("#addsbxh").val("");
+	$("#addsccj").val("");
+	$("#addccbh").val("");
+	$("#addcgr").val("");
+	$("#addcgrq").val("");
+	$("#addrkrq").val("");
+	$("#addcgsl").val("1");
+	$("#addnote").val("");
+	rkrqset();
+}
+
 function addsbrkxx(){
 	if($("#addsbmc").val()=='' || $("#addsbflid").val()==''){
 		alert("设备分类ID和设备名称不能为空！");
@@ -21,6 +124,7 @@ function addsbrkxx(){
 	if(!checknumber()){
 		return;
 	}
+	$("#add").hide();
 	$.ajax({
 		url: "/DeviceManagement/sbgl/sbrk/add.do",
 		type: "POST",
@@ -32,7 +136,10 @@ function addsbrkxx(){
 			}else{
 				alert("数据处理异常，请联系系统管理员！");
 			}
+			greyback();
 			resetform();
+			queryuserlist();
+			getsbflid();
 		}
 	});
 }
@@ -129,9 +236,18 @@ function drawsixlevel_cz(sblbList){
 function sfzl(sfzl){
 	return (sfzl=='1'?'是':'否');
 }
+function sbmcandxh(sblbmc,rowObj){
+	if(rowObj.sbcj=='3'){
+		return sblbmc+'【'+(rowObj.sbxh?rowObj.sbxh:'未知型号')+'】';
+	}else{
+		return sblbmc;
+	}
+}
 function selectsbflid(sbflid,rowObj){
-	if(rowObj.sfzl=='1'){
-		return ('<input type="radio" name="sbflid_add" title="'+rowObj.sblbmc+'" value="'+sbflid+'" onchange="treegrid_radio_change_add(\'addsbflid\',\''+sbflid+'\',\''+rowObj.sblbmc+'\')" />');
+	if(rowObj.sbcj=='3'){
+		return ('<input type="radio" name="sbflid_add" title="'+(rowObj.sbmc?rowObj.sbmc:'')+'@,@'+(rowObj.sbxh?rowObj.sbxh:'')+'@,@'+(rowObj.sccj?rowObj.sccj:'')+'@,@'+(rowObj.ccbh?rowObj.ccbh:'')+'" value="'+sbflid+'" onchange="treegrid_radio_change_add(\'addsbflid\',\''+sbflid+'\',\''+rowObj.sblbmc+'\')" />');
+	}else if(rowObj.sbcj=='2'){
+		return ('<input type="radio" name="sbflid_add" title="'+rowObj.sbmc+'" value="'+sbflid+'" onchange="treegrid_radio_change_add(\'addsbflid\',\''+sbflid+'\',\'\')" />');
 	}else{
 		return "";
 	}
@@ -181,7 +297,37 @@ function treegrid_radio_change_add(idstr,sbflid,sblbmc){
 	$("#addsbmc").val("");
 	
 	$("#"+idstr).val($("input[name='sbflid_add']:checked").val());
-	$("#addsbmc").val($("input[name='sbflid_add']:checked").attr("title"));
+	if($("input[name='sbflid_add']:checked").val().length==4){
+		$(".isfl").show();
+		$('#addsbmc').attr("readonly",false);
+		$('#addsbxh').attr("readonly",false);
+		$('#addsccj').attr("readonly",false);
+		$("#addccbh").attr("readonly",false);
+		$("#addsbmc").val("");
+		$("#addsbxh").val("");
+		$("#addsccj").val("");
+		$("#addccbh").val("");
+	}else if($("input[name='sbflid_add']:checked").val().length==10){
+		$(".isfl").hide();
+		$("#addsbmc").val(($("input[name='sbflid_add']:checked").attr("title").split('@,@')[0]));
+		$("#addsbxh").val(($("input[name='sbflid_add']:checked").attr("title").split('@,@')[1]));
+		$("#addsccj").val(($("input[name='sbflid_add']:checked").attr("title").split('@,@')[2]));
+		$("#addccbh").val(($("input[name='sbflid_add']:checked").attr("title").split('@,@')[3]));
+		$("#addsbmc").attr("readonly","readonly");
+		$("#addsbxh").attr("readonly","readonly");
+		$("#addsccj").attr("readonly","readonly");
+		$("#addccbh").attr("readonly","readonly");
+	}else{
+		$(".isfl").show();
+		$("#addsbmc").val("");
+		$("#addsbxh").val("");
+		$("#addsccj").val("");
+		$("#addccbh").val("");
+		$("#addsbmc").attr("readonly","readonly");
+		$("#addsbxh").attr("readonly","readonly");
+		$("#addsccj").attr("readonly","readonly");
+		$("#addccbh").attr("readonly","readonly");
+	}
 	
 	powerClose();
 }

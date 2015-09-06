@@ -2,7 +2,7 @@
  * 
  */
 $(document).ready(function(){
-	setDatatablePosition($("#top_title").outerHeight(true),0,$("#bottom_pagging").outerHeight(true));
+	setDatatablePosition(41,0,35);
 	queryuserlist();
 	
 });
@@ -29,12 +29,13 @@ function queryuserlist(actionstr){
 				var sbsyList = data.sbsylist;
 				for(var i=0;i<sbsyList.length;i++){
 					var sbkc = ((sbsyList[i].sbrksl?parseInt(sbsyList[i].sbrksl):0)-(sbsyList[i].sbsysl?parseInt(sbsyList[i].sbsysl):0)-(sbsyList[i].sbcjsl?parseInt(sbsyList[i].sbcjsl):0));//设备库存
+					var kcsum = (sbsyList[i].sbyjz?(parseInt(sbsyList[i].sbyjz)):0)-sbkc;
 					tablehtml += ('<tr>'
 									+'<td>'+(i + 1 + (parseInt($("#currpage").val())-1) * (parseInt($("#countline").val())))+'</td>'
 									+'<td>'+(sbsyList[i].sblbmc?sbsyList[i].sblbmc:'未知类别')+'</td>'
 									+'<td>'+sbkc+'</td>'
 									+'<td>'+(sbsyList[i].sbyjz?parseInt(sbsyList[i].sbyjz):'未设置预警值')+'</td>'
-									+'<td>'+(sbkc>=(sbsyList[i].sbyjz?parseInt(sbsyList[i].sbyjz):0)?'库存充裕':((sbsyList[i].sbyjz?parseInt(sbsyList[i].sbyjz):0)-sbkc))+'</td>'
+									+'<td>'+(sbkc>=(sbsyList[i].sbyjz?parseInt(sbsyList[i].sbyjz):0)?'库存充裕':('<font color="red">'+kcsum+'</font>'))+'</td>'
 								+'</tr>');
 				}
 			}

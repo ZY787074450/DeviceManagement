@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import dem.login.model.Loginner;
 import dem.login.model.PagingAction;
+import dem.sbgl.model.SbsyHisObject;
+import dem.tjcx.model.FileTypeObject;
 import dem.tjcx.model.TimeFrameObject;
 import dem.tjcx.service.TjcxService;
 import dem.yjgl.service.YjglService;
@@ -77,7 +79,7 @@ public class TjcxController {
 		}
 		return m;
 	}
-	//设备使用统计（站点）查询
+	//设备使用统计（设备）查询
 	@RequestMapping(value = "/sbsytj_sb/cx.do", method = RequestMethod.POST,  produces = "application/json")
 	@ResponseBody
 	public Map<String, Object> getsbsytj_sblist(TimeFrameObject timeFrameObject, ModelMap map, HttpServletRequest request, HttpServletResponse response) {	
@@ -89,6 +91,21 @@ public class TjcxController {
 			m.put("code", "888");
 			m.put("info", "查询失败");
 			m.put("sbsylist", null);
+		}
+		return m;
+	}
+	
+	//数据导出功能(产生文件并回复文件地址)
+	@RequestMapping(value = "/getfile/createfile.do", method = RequestMethod.POST,  produces = "application/json")
+	@ResponseBody
+	public Map<String, Object> createFile(FileTypeObject fileTypeObject, SbsyHisObject sbsyHisObject, ModelMap map, HttpServletRequest request, HttpServletResponse response) {	
+		Map<String, Object> m = new HashMap<String, Object>();
+		try {
+			String userid = ((Loginner)(request.getSession().getAttribute("session_loginner"))).getUserid();
+			m = tjcxService.createExcelFile(fileTypeObject,sbsyHisObject,userid);	
+		} catch (Exception e) {
+			m.put("code", "888");
+			m.put("info", "操作失败");
 		}
 		return m;
 	}

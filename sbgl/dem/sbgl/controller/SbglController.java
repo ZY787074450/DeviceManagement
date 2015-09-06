@@ -20,6 +20,7 @@ import dem.login.model.Loginner;
 import dem.login.model.PagingAction;
 import dem.sbgl.model.SbcjObject;
 import dem.sbgl.model.SbrkObject;
+import dem.sbgl.model.SbrkQueryCondition;
 import dem.sbgl.model.SbsyHisObject;
 import dem.sbgl.model.SbsyObject;
 import dem.sbgl.service.SbglService;
@@ -85,11 +86,26 @@ public class SbglController {
 	//设备入库信息查询
 	@RequestMapping(value = "/sbrk/cx.do", method = RequestMethod.POST,  produces = "application/json")
 	@ResponseBody
-	public Map<String, Object> sbrk_cx(HttpServletRequest request, HttpServletResponse response){
+	public Map<String, Object> sbrk_cx(SbrkQueryCondition sbrkQueryCondition, HttpServletRequest request, HttpServletResponse response){
 		Map<String, Object> map = new HashMap<String, Object>();
 		try{
 			String userid = ((Loginner)(request.getSession().getAttribute("session_loginner"))).getUserid();
-			map = sbglService.sbrkcx(userid);
+			map = sbglService.sbrkcx(sbrkQueryCondition,userid);
+		}catch(Exception e){
+			map.put("code", "888");
+			map.put("info", "查询失败");
+			map.put("jglist", null);
+		}
+		return map;
+	}
+	//设备入库信息查询
+	@RequestMapping(value = "/sbrk/cx2.do", method = RequestMethod.POST,  produces = "application/json")
+	@ResponseBody
+	public Map<String, Object> sbrk_cx2(SbrkQueryCondition sbrkQueryCondition, HttpServletRequest request, HttpServletResponse response){
+		Map<String, Object> map = new HashMap<String, Object>();
+		try{
+			String userid = ((Loginner)(request.getSession().getAttribute("session_loginner"))).getUserid();
+			map = sbglService.sbrkcx2(sbrkQueryCondition,userid);
 		}catch(Exception e){
 			map.put("code", "888");
 			map.put("info", "查询失败");

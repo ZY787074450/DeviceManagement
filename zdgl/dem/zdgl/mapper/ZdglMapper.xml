@@ -25,6 +25,9 @@
 	<if test="sjd_end != null and sjd_end != ''">
 		and qxsjsj_2 &lt; #{sjd_end}
 	</if>
+	<if test="qxsj != null and qxsj != ''">
+		and qxsjsj_2 = #{qxsj}
+	</if>
 	${sql_paging_sort}
 </select>
 <select id="qxsjCount" parameterType="dem.zdgl.model.ZdglQxsjdrObject" resultType="int">
@@ -50,5 +53,112 @@
 	insert into zdgl_qxsj(uuid,jgid,qxsjsj_1,qxsjsj_2,fx,fs,yl,wd,sd,qy) 
 	values(#{uuid},#{jgid},#{qxsjsj_1},#{qxsjsj_2},#{fx},#{fs},#{yl},#{wd},#{sd},#{qy})
 </insert>
+
+<select id="zdwhlist" parameterType="dem.jcxx.model.JgQueryCondition" resultType="Map">
+	select s1.jgid jgid,s1.mc mc,s1.jglx jglx,s2.mc jglxmc,s1.jgqy jgqy,s3.mc jgqymc,jgdz,s1.jgzt jgzt,s7.whr whr,s7.whrq whrq,s7.note note
+	from ss_jg s1 left join ss_jglx s2 on s1.jglx=s2.jglx
+				  left join ss_jgqy s3 on s1.jgqy=s3.jgqy
+				  right join (select jgid,whr,date_format(whrq,'%Y年%m月%d日') as whrq,note 
+							from zdgl_jgwh 
+							where 1=1
+							<if test="rq_start != null and rq_start != ''">
+								and whrq &gt; #{rq_start} 
+							</if>
+							<if test="rq_end != null and rq_end != ''">
+								and whrq &lt; #{rq_end} 
+							</if>
+							<if test="jgid != null and jgid != ''">
+								and s1.jgid like "%"#{jgid}"%" 
+							</if>
+							group by uuid) s7 on s1.jgid=s7.jgid 
+	where 1=1 
+	<if test="jgid != null and jgid != ''">
+		and s1.jgid like "%"#{jgid}"%" 
+	</if>
+	<if test="jgzt != null and jgzt != ''">
+		and jgzt = #{jgzt} 
+	</if>
+	and s1.jglx != '0' and s1.jglx != '3'
+	${sql_paging_sort}
+</select>
+<select id="zdwhlistcount" parameterType="dem.jcxx.model.JgQueryCondition" resultType="int">
+	select count(*)
+	from ss_jg s1 left join ss_jglx s2 on s1.jglx=s2.jglx
+				  left join ss_jgqy s3 on s1.jgqy=s3.jgqy
+				  right join (select jgid,whr,date_format(whrq,'%Y年%m月%d日') as whrq,note 
+							from zdgl_jgwh 
+							where 1=1
+							<if test="rq_start != null and rq_start != ''">
+								and whrq &gt; #{rq_start} 
+							</if>
+							<if test="rq_end != null and rq_end != ''">
+								and whrq &lt; #{rq_end} 
+							</if>
+							<if test="jgid != null and jgid != ''">
+								and s1.jgid like "%"#{jgid}"%" 
+							</if>
+							group by uuid) s7 on s1.jgid=s7.jgid 
+	where 1=1 
+	<if test="jgid != null and jgid != ''">
+		and s1.jgid like "%"#{jgid}"%" 
+	</if>
+	<if test="jgzt != null and jgzt != ''">
+		and jgzt = #{jgzt} 
+	</if>
+	and s1.jglx != '0' and s1.jglx != '3'
+</select>
+<select id="zdwxlist" parameterType="dem.jcxx.model.JgQueryCondition" resultType="Map">
+	select s1.jgid jgid,s1.mc mc,s1.jglx jglx,s2.mc jglxmc,s1.jgqy jgqy,s3.mc jgqymc,jgdz,s1.jgzt jgzt,s7.wxr wxr,s7.wxrq wxrq,s7.note note,s7.gzyy gzyy
+	from ss_jg s1 left join ss_jglx s2 on s1.jglx=s2.jglx
+				  left join ss_jgqy s3 on s1.jgqy=s3.jgqy
+				  right join (select jgid,wxr,date_format(wxrq,'%Y年%m月%d日') as wxrq,note,gzyy
+							from zdgl_jgwx 
+							where 1=1
+							<if test="rq_start != null and rq_start != ''">
+								and wxrq &gt; #{rq_start} 
+							</if>
+							<if test="rq_end != null and rq_end != ''">
+								and wxrq &lt; #{rq_end} 
+							</if>
+							<if test="jgid != null and jgid != ''">
+								and s1.jgid like "%"#{jgid}"%" 
+							</if>
+							group by uuid) s7 on s1.jgid=s7.jgid 
+	where 1=1 
+	<if test="jgid != null and jgid != ''">
+		and s1.jgid like "%"#{jgid}"%" 
+	</if>
+	<if test="jgzt != null and jgzt != ''">
+		and jgzt = #{jgzt} 
+	</if>
+	and s1.jglx != '0' and s1.jglx != '3'
+	${sql_paging_sort}
+</select>
+<select id="zdwxlistcount" parameterType="dem.jcxx.model.JgQueryCondition" resultType="int">
+	select count(*)
+	from ss_jg s1 left join ss_jglx s2 on s1.jglx=s2.jglx
+				  left join ss_jgqy s3 on s1.jgqy=s3.jgqy
+				  right join (select jgid,wxr,date_format(wxrq,'%Y年%m月%d日') as wxrq,note,gzyy
+							from zdgl_jgwx 
+							where 1=1
+							<if test="rq_start != null and rq_start != ''">
+								and wxrq &gt; #{rq_start} 
+							</if>
+							<if test="rq_end != null and rq_end != ''">
+								and wxrq &lt; #{rq_end} 
+							</if>
+							<if test="jgid != null and jgid != ''">
+								and s1.jgid like "%"#{jgid}"%" 
+							</if>
+							group by uuid) s7 on s1.jgid=s7.jgid 
+	where 1=1 
+	<if test="jgid != null and jgid != ''">
+		and s1.jgid like "%"#{jgid}"%" 
+	</if>
+	<if test="jgzt != null and jgzt != ''">
+		and jgzt = #{jgzt} 
+	</if>
+	and s1.jglx != '0' and s1.jglx != '3'
+</select>
 
 </mapper>

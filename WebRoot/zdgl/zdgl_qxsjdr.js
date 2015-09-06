@@ -1,5 +1,7 @@
 $(document).ready(function(){
 	setDatatablePosition($("#top_title").outerHeight(true),$("#conditionarea").outerHeight(true),$("#bottom_pagging").outerHeight(true));
+	$("#sjd_start").val(timeArr[0]);
+	$("#sjd_end").val(timeArr[1]);
 	queryuserlist();
 	getdeparments();
 });

@@ -11,7 +11,21 @@ public class JgQueryCondition extends PagingAction {
 	private String jgzt;//机构状态
 	private String lrrq;//录入日期
 	
+	private String rq_start;//查询起始时间
+	private String rq_end;//查询终止时间
 	
+	public String getRq_start() {
+		return rq_start;
+	}
+	public void setRq_start(String rq_start) {
+		this.rq_start = rq_start;
+	}
+	public String getRq_end() {
+		return rq_end;
+	}
+	public void setRq_end(String rq_end) {
+		this.rq_end = rq_end;
+	}
 	public String getJglx() {
 		return jglx;
 	}
