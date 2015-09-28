@@ -27,6 +27,73 @@ public class FileCreateObject {
 	private String czrq="未知";//操作日期
 	private String note="未知";//操作备注
 	
+	private String sbxh;//设备型号
+	private String sbzt;//设备状态
+	private String jdrq;//上次检定日期
+	private String yjz;//预警值
+	private String jdrqcz;//检定日期差值
+	private String ccyjz;//超出预警值
+	
+	private String sccj;//生产厂家
+	private String ccbh;//出厂编号
+	
+	
+	public String getSccj() {
+		return sccj;
+	}
+	public void setSccj(String sccj) {
+		this.sccj = sccj;
+	}
+	public String getCcbh() {
+		return ccbh;
+	}
+	public void setCcbh(String ccbh) {
+		this.ccbh = ccbh;
+	}
+	public String getSbxh() {
+		return sbxh;
+	}
+	public void setSbxh(String sbxh) {
+		this.sbxh = sbxh;
+	}
+	public String getSbzt() {
+		return sbzt;
+	}
+	public void setSbzt(String sbzt) {
+		if("0".equals(sbzt)){
+			this.sbzt = "使用中";
+		}else{
+			this.sbzt = "非使用中";
+		}
+	}
+	public String getJdrq() {
+		return jdrq;
+	}
+	public void setJdrq(String jdrq) {
+		this.jdrq = jdrq;
+	}
+	public String getYjz() {
+		return yjz;
+	}
+	public void setYjz(String yjz) {
+		this.yjz = yjz;
+	}
+	public String getJdrqcz() {
+		return jdrqcz;
+	}
+	public void setJdrqcz(String jdrqcz) {
+		this.jdrqcz = jdrqcz;
+	}
+	public String getCcyjz() {
+		if("".equals(jdrqcz) || jdrqcz==null){
+			return "尚未检定记录";
+		}else{
+			return ((Integer.parseInt(jdrqcz)-Integer.parseInt(yjz))<0?"未超过":((Integer.parseInt(jdrqcz)-Integer.parseInt(yjz))+""));
+		}
+	}
+	public void setCcyjz(String ccyjz) {
+		this.ccyjz = ccyjz;
+	}
 	public String getSbazsl() {
 		return sbazsl;
 	}
@@ -124,6 +191,8 @@ public class FileCreateObject {
 			str = "检定";
 		}else if("4".equals(sbsylx.trim())){
 			str = "维护";
+		}else if("0".equals(sbsylx.trim())){
+			str = "安装";
 		}
 		this.sbsylx = str;
 	}

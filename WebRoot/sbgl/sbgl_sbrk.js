@@ -30,7 +30,7 @@ function initCondition(){
 function queryuserlist(actionstr){
 	greybackadd();
 	initCondition();
-	var urlparm = commask(actionstr,"rkrq");
+	var urlparm = commask(actionstr,"rkrq,sbflid");
 	$.ajax({
 		url : "/DeviceManagement/sbgl/sbrk/cx.do?time="+new Date()+urlparm,
 		type : "POST",
@@ -41,32 +41,25 @@ function queryuserlist(actionstr){
 			disOrEnable();
 			var tablehtml = '<tr>'
 								+'<th>设备编号</th>'
-								+'<th>设备分类</th>'
 								+'<th>设备名称</th>'
 								+'<th>设备型号</th>'
-								+'<th>生产厂家</th>'
 								+'<th>出厂编号</th>'
-								+'<th>设备采购人</th>'
-								+'<th>采购日期</th>'
+								+'<th>生产厂家</th>'
 								+'<th>入库日期</th>'
-								+'<th>入库数量</th>'
-								+'<th>备注</th>'
+								+'<th>详情(可编辑)</th>'
 							+'</tr>';
 			if(data.jglist != null && data.jglist != 'null' && data.jglist.length>0){
 				var jglist = data.jglist;
 				for(var i=0;i<jglist.length;i++){
 					tablehtml += ('<tr>'
 									+'<td>'+(jglist[i].sbflid?jglist[i].sbflid:'未知编号')+'</td>'
-									+'<td>'+(jglist[i].fsblbmc?jglist[i].fsblbmc:'未知')+'</td>'
 									+'<td>'+(jglist[i].sbmc?jglist[i].sbmc:'未知')+'</td>'
 									+'<td>'+(jglist[i].sbxh?jglist[i].sbxh:'未知')+'</td>'
-									+'<td>'+(jglist[i].sccj?jglist[i].sccj:'未知')+'</td>'
 									+'<td>'+(jglist[i].ccbh?jglist[i].ccbh:'未知')+'</td>'
-									+'<td>'+(jglist[i].cgr?jglist[i].cgr:'未知')+'</td>'
-									+'<td>'+(jglist[i].cgrq?jglist[i].cgrq:'未知')+'</td>'
+									+'<td>'+(jglist[i].sccj?jglist[i].sccj:'未知')+'</td>'
 									+'<td>'+(jglist[i].rkrq?jglist[i].rkrq:'未知')+'</td>'
-									+'<td>'+(jglist[i].rksl?jglist[i].rksl:'0')+'</td>'
-									+'<td>'+(jglist[i].note?jglist[i].note:'')+'</td>'
+									+'<td><a href="#" title="更多信息" onclick="updatediv(\''+(jglist[i].fsblbmc?jglist[i].fsblbmc:'未知')+'\',\''+(jglist[i].sbflid?jglist[i].sbflid:'未知编号')+'\',\''+(jglist[i].sbmc?jglist[i].sbmc:'未知')+'\',\''+(jglist[i].sbxh?jglist[i].sbxh:'未知')+'\',\''+(jglist[i].sccj?jglist[i].sccj:'未知')+'\',\''+(jglist[i].ccbh?jglist[i].ccbh:'未知')+'\',\''+(jglist[i].cgr?jglist[i].cgr:'未知')+'\',\''+(jglist[i].cgrq?jglist[i].cgrq:'未知')+'\',\''+(jglist[i].rkrq?jglist[i].rkrq:'未知')+'\',\''+(jglist[i].rksl?jglist[i].rksl:'0')+'\',\''+(jglist[i].note?jglist[i].note:'')+'\',\''+(jglist[i].rkid?jglist[i].rkid:'0')+'\')">'
+									+'详细信息</a></td>'
 								+'</tr>');
 				}
 			}
@@ -106,6 +99,31 @@ function addsbsy(){
 	$("#addcgsl").val("1");
 	$("#addnote").val("");
 	rkrqset();
+	$("input[name='sbflid_add']").each(function(){
+		$(this).removeAttr("checked");
+	});
+}
+
+//打开信息查看div
+function updatediv(fsblbmc,sbflid,sbmc,sbxh,sccj,ccbh,cgr,cgrq,rkrq,cgsl,note,rkid){
+	greybackadd();
+	$("#update").show();
+	
+	$("#updatefsblbmc").val(fsblbmc);
+	$("#updatesbflid").val(sbflid);
+	$("#updatesbmc").val(sbmc);
+	$("#updatesbxh").val(sbxh);
+	$("#updatesccj").val(sccj);
+	$("#updateccbh").val(ccbh);
+	$("#updatecgr").val(cgr);
+	$("#updatecgrq").val(timeFormRight(cgrq));
+	$("#updaterkrq").val(timeFormRight(rkrq));
+	$("#updatecgsl").val(cgsl);
+	$("#updatenote").val(note);
+	$("#updaterkid").val(rkid);
+}
+function timeFormRight(rq){//时间格式规范化
+	return rq.substring(0,4)+'-'+rq.substring(5,7)+'-'+rq.substring(8,10);
 }
 
 function addsbrkxx(){
@@ -143,6 +161,44 @@ function addsbrkxx(){
 		}
 	});
 }
+function updatesbrkxx(){
+	if($("#updatesbmc").val()=='' || $("#updatesbflid").val()==''){
+		alert("设备分类ID和设备名称不能为空！");
+		return;
+	}
+	if($("#updatecgrq").val()==''){
+		alert("请填写设备采购时间，否则设备使用统计将无法统计此次采购数量！");
+		return;
+	}
+	if($("#updaterkrq").val()==''){
+		alert("设备入库日期不能为空！");
+		return;
+	}
+	$("#update").hide();
+	$.ajax({
+		url: "/DeviceManagement/sbgl/sbrk/update.do",
+		type: "POST",
+		data: "&sbflid="+$("#updatesbflid").val()+"&sbmc="+$("#updatesbmc").val()+"&sbxh="+$("#updatesbxh").val()+"&sccj="+$("#updatesccj").val()
+			 +"&ccbh="+$("#updateccbh").val()+"&cgr="+$("#updatecgr").val()+"&cgrq="+$("#updatecgrq").val()+"&rkrq="+$("#updaterkrq").val()
+			 +"&rksl="+$("#updatecgsl").val()+"&note="+$("#updatenote").val()+"&rkid="+$("#updaterkid").val(),
+		success: function(data){
+			if(data.sbmc){
+				alert(data.sbmc+"设备入库信息修改成功！");
+			}else{
+				if(data.cannot){
+					alert(data.cannot);
+				}else{
+					alert("数据处理异常，请联系系统管理员！");
+				}
+			}
+			greyback();
+			resetform();
+			queryuserlist();
+			getsbflid();
+		}
+	});
+}
+
 var isloadtree = false;
 //加载设备分类ID可选树
 function getsbflid(){
@@ -225,6 +281,7 @@ function drawsixlevel_cz(sblbList){
 				}
 			}
 			sblblist2[b].children = list3;
+			sblblist2[b].state = 'closed';
 			list2.push(sblblist2[b]);
 			}
 		}
@@ -238,7 +295,7 @@ function sfzl(sfzl){
 }
 function sbmcandxh(sblbmc,rowObj){
 	if(rowObj.sbcj=='3'){
-		return sblbmc+'【'+(rowObj.sbxh?rowObj.sbxh:'未知型号')+'】';
+		return sblbmc+'【'+(rowObj.ccbh?rowObj.ccbh:'未知编号')+'】';
 	}else{
 		return sblbmc;
 	}
@@ -263,6 +320,9 @@ function resetform(){
 	$("#addcgrq").val("");
 	$("#addcgsl").val("");
 	$("#addnote").val("");
+	$("input[name='sbflid_add']").each(function(){
+		$(this).removeAttr("checked");
+	});
 }
 
 var ismouseondiv = false;

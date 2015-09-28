@@ -84,48 +84,48 @@
 		<div style="background-color: #A7E8FA;height: 30px;padding: 5px 10px 0px 10px;"><span style="float: left;"><font color="#0088CC" size="+1">设备入库</font></span><span style="text-align: right;float: right;"><a href="#" onclick="greyback()"><img src="../commstyle/close_pic.png"></a></span></div>
 		<div style="padding: 10px 15px 10px 15px;">
 			<table>
-					<tr>
-						<td width="20%" align="right">设备<font class="isfl" color="red">上级分类</font>编号：</td>
-						<td width="20%"><input type="text" placeholder="点击展开设备分类选项" class="nav-search-input handsel" id="addsbflid" autocomplete="off" onfocus="open_append('add')" onblur="close_append()" readonly="readonly" /></td>
-						<td width="15%" align="right"><font class="isfl" color="red">新</font>设备名称：</td>
-						<td width="20%"><input type="text" placeholder="设备名称" class="nav-search-input" id="addsbmc" autocomplete="off" /></td>
-						<td width="10%"></td>
-					</tr>
-					<tr>
-						<td align="right">设备型号：</td>
-						<td><input type="text" placeholder="设备型号" class="nav-search-input" id="addsbxh" autocomplete="off" /></td>
-						<td align="right">生产厂家：</td>
-						<td><input type="text" placeholder="生产厂家" class="nav-search-input" id="addsccj" autocomplete="off" /></td>
-						<td></td>
-					</tr>
-					<tr>
-						<td align="right">出厂编号：</td>
-						<td><input type="text" placeholder="出厂编号" class="nav-search-input" id="addccbh" autocomplete="off" /></td>
-						<td align="right">设备采购人：</td>
-						<td><input type="text" placeholder="设备采购人" class="nav-search-input" id="addcgr" autocomplete="off" /></td>
-						<td></td>
-					</tr>
-					<tr>
-						<td align="right">采购日期：</td>
-						<td>
-							<input size="10" placeholder="点击展开时间编辑器" class="handsel" id="addcgrq" type="text" onclick="laydate({istime: true, format: 'YYYY-MM-DD'})" readonly="readonly">
-						</td>
-						<td align="right">入库日期：</td>
-						<td><input size="10" placeholder="点击展开时间编辑器" class="handsel" id="addrkrq" type="text" onclick="laydate({istime: true, format: 'YYYY-MM-DD'})" readonly="readonly"></td>
-						<td></td>
-					</tr>
-					<tr>
-						<td align="right">采购数量：</td>
-						<td><input type="text" placeholder="采购量" class="nav-search-input" id="addcgsl" autocomplete="off" value="1" onblur="checknumber()" /></td>
-						<td align="right">备注：</td>
-						<td><input type="text" placeholder="..." class="nav-search-input" id="addnote" autocomplete="off" /></td>
-						<td></td>
-					</tr>
-					<tr>
-						<td colspan="4" style="text-align: center"><a href="#" class="btn btn-primary" onclick="addsbrkxx()">保存</a>&nbsp; &nbsp;<a href="#" class="btn btn-primary" onclick="resetform()">重置</a></td>
-						<td></td>
-					</tr>
-				</table>
+				<tr>
+					<td width="20%" align="right">设备<font class="isfl" color="red">上级分类</font>编号：</td>
+					<td width="20%"><input type="text" placeholder="点击展开设备分类选项" class="nav-search-input handsel" id="addsbflid" autocomplete="off" onfocus="open_append('add')" onblur="close_append()" readonly="readonly" /></td>
+					<td width="15%" align="right"><font class="isfl" color="red">新</font>设备名称：</td>
+					<td width="20%"><input type="text" placeholder="设备名称" class="nav-search-input" id="addsbmc" autocomplete="off" /></td>
+					<td width="10%"></td>
+				</tr>
+				<tr>
+					<td align="right">设备型号：</td>
+					<td><input type="text" placeholder="设备型号" class="nav-search-input" id="addsbxh" autocomplete="off" /></td>
+					<td align="right">生产厂家：</td>
+					<td><input type="text" placeholder="生产厂家" class="nav-search-input" id="addsccj" autocomplete="off" /></td>
+					<td></td>
+				</tr>
+				<tr>
+					<td align="right">出厂编号：</td>
+					<td><input type="text" placeholder="出厂编号" class="nav-search-input" id="addccbh" autocomplete="off" /></td>
+					<td align="right">设备采购人：</td>
+					<td><input type="text" placeholder="设备采购人" class="nav-search-input" id="addcgr" autocomplete="off" /></td>
+					<td></td>
+				</tr>
+				<tr>
+					<td align="right">采购日期：</td>
+					<td>
+						<input size="10" placeholder="点击展开时间编辑器" class="handsel" id="addcgrq" type="text" onclick="laydate({istime: true, format: 'YYYY-MM-DD'})" readonly="readonly">
+					</td>
+					<td align="right">入库日期：</td>
+					<td><input size="10" placeholder="点击展开时间编辑器" class="handsel" id="addrkrq" type="text" onclick="laydate({istime: true, format: 'YYYY-MM-DD'})" readonly="readonly"></td>
+					<td></td>
+				</tr>
+				<tr>
+					<td align="right">采购数量：</td>
+					<td><input type="text" placeholder="采购量" class="nav-search-input" id="addcgsl" autocomplete="off" value="1" onblur="checknumber()" /></td>
+					<td align="right">备注：</td>
+					<td><input type="text" placeholder="..." class="nav-search-input" id="addnote" autocomplete="off" /></td>
+					<td></td>
+				</tr>
+				<tr>
+					<td colspan="4" style="text-align: center"><a href="#" class="btn btn-primary" onclick="addsbrkxx()">保存</a>&nbsp; &nbsp;<a href="#" class="btn btn-primary" onclick="resetform()">重置</a></td>
+					<td></td>
+				</tr>
+			</table>
 		</div>
 	</div>
 
@@ -144,13 +144,69 @@
 		            ">
 		        <thead>
 		            <tr>
-		                <th data-options="field:'sblbmc'" width="40%" formatter="sbmcandxh">设备类别名称【型号】</th>
+		                <th data-options="field:'sblbmc'" width="40%" formatter="sbmcandxh">设备类别名称【出厂编号】</th>
 		                <th data-options="field:'sbcj'" width="10%" align="center">设备层级</th>
 		                <th data-options="field:'sfzl'" width="15%" align="center" formatter="sfzl">是否最底层子类</th>
 		                <th data-options="field:'sbflid'" width="10%" align="center" formatter="selectsbflid">选择</th>
 		            </tr>
 		        </thead>
 		    </table>
+		</div>
+	</div>
+	
+	<div class="floatarea" id="update">
+		<div style="background-color: #A7E8FA;height: 30px;padding: 5px 10px 0px 10px;"><span style="float: left;"><font color="#0088CC" size="+1">设备详细信息</font></span><span style="text-align: right;float: right;"><a href="#" onclick="greyback()"><img src="../commstyle/close_pic.png"></a></span></div>
+		<div style="padding: 10px 15px 10px 15px;">
+			<table>
+				<tr>
+					<td width="20%" align="right">设备所属分类：</td>
+					<td width="20%"><input type="text" placeholder="设备分类" class="nav-search-input" id="updatefsblbmc" autocomplete="off" readonly="readonly" /></td>
+					<td width="15%" align="right"></td>
+					<td width="20%"><input type="text" style="display: none;" placeholder="设备分类" class="nav-search-input" id="updaterkid" autocomplete="off" readonly="readonly" /></td>
+					<td width="10%"></td>
+				</tr>
+				<tr>
+					<td width="20%" align="right">设备编号：</td>
+					<td width="20%"><input type="text" placeholder="设备编号" class="nav-search-input" id="updatesbflid" autocomplete="off" readonly="readonly" /></td>
+					<td width="15%" align="right">设备名称：</td>
+					<td width="20%"><input type="text" placeholder="设备名称" class="nav-search-input" id="updatesbmc" autocomplete="off" /></td>
+					<td width="10%"></td>
+				</tr>
+				<tr>
+					<td align="right">设备型号：</td>
+					<td><input type="text" placeholder="设备型号" class="nav-search-input" id="updatesbxh" autocomplete="off" /></td>
+					<td align="right">生产厂家：</td>
+					<td><input type="text" placeholder="生产厂家" class="nav-search-input" id="updatesccj" autocomplete="off" /></td>
+					<td></td>
+				</tr>
+				<tr>
+					<td align="right">出厂编号：</td>
+					<td><input type="text" placeholder="出厂编号" class="nav-search-input" id="updateccbh" autocomplete="off" /></td>
+					<td align="right">设备采购人：</td>
+					<td><input type="text" placeholder="设备采购人" class="nav-search-input" id="updatecgr" autocomplete="off" /></td>
+					<td></td>
+				</tr>
+				<tr>
+					<td align="right">采购日期：</td>
+					<td>
+						<input size="10" placeholder="采购日期" class="handsel" id="updatecgrq" type="text" onclick="laydate({istime: true, format: 'YYYY-MM-DD'})" readonly="readonly">
+					</td>
+					<td align="right">入库日期：</td>
+					<td><input size="10" placeholder="入库日期" class="handsel" id="updaterkrq" type="text" onclick="laydate({istime: true, format: 'YYYY-MM-DD'})" readonly="readonly"></td>
+					<td></td>
+				</tr>
+				<tr>
+					<td align="right">采购数量：</td>
+					<td><input type="text" placeholder="采购量" class="nav-search-input" id="updatecgsl" autocomplete="off" readonly="readonly" /></td>
+					<td align="right">备注：</td>
+					<td><input type="text" placeholder="..." class="nav-search-input" id="updatenote" autocomplete="off" /></td>
+					<td></td>
+				</tr>
+				<tr>
+					<td colspan="4" style="text-align: center"><a href="#" class="btn btn-primary" onclick="updatesbrkxx()">保存</a>&nbsp; &nbsp;<a href="#" class="btn btn-primary" onclick="greyback()">关闭</a></td>
+					<td></td>
+				</tr>
+			</table>
 		</div>
 	</div>
 		

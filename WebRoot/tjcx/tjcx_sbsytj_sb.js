@@ -21,7 +21,7 @@ function queryuserlist(actionstr){
 			disOrEnable();
 			var tablehtml = '<tr>'
 								+'<th>序号</th>'
-								+'<th>设备类别名称</th>'
+								+'<th>'+($("input[name='condition_sbcj']:checked").val()=='2'?'设备类别名称':'设备名称(出厂编号)')+'</th>'
 								+'<th>设备采购数量</th>'
 								+'<th>设备安装数量</th>'
 								/*+'<th>设备出借数量</th>'*/
@@ -34,7 +34,7 @@ function queryuserlist(actionstr){
 				for(var i=0;i<sbsyList.length;i++){
 					tablehtml += ('<tr>'
 									+'<td>'+(i + 1 + (parseInt($("#currpage").val())-1) * (parseInt($("#countline").val())))+'</td>'
-									+'<td>'+(sbsyList[i].sblbmc?sbsyList[i].sblbmc:'未知类别名称')+'</td>'
+									+'<td>'+($("input[name='condition_sbcj']:checked").val()=='2'?(sbsyList[i].sblbmc?sbsyList[i].sblbmc:'未知类别名称'):(sbsyList[i].sbmc?(sbsyList[i].sbmc+'('+(sbsyList[i].ccbh)+')'):'暂无数据'))+'</td>'
 									+'<td>'+(sbsyList[i].rksl?sbsyList[i].rksl:0)+'</td>'
 									+'<td>'+(sbsyList[i].sbazsl?sbsyList[i].sbazsl:0)+'</td>'
 									/*+'<td>'+(sbsyList[i].sbcjsl?sbsyList[i].sbcjsl:0)+'</td>'*/

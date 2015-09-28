@@ -20,7 +20,7 @@ function queryuserlist(actionstr){
 			disOrEnable();
 			var tablehtml = '<tr>'
 								+'<th>序号</th>'
-								+'<th>设备名称</th>'
+								+'<th>设备名称(出厂编号)</th>'
 								+'<th>设备使用站点</th>'
 								+'<th>设备状态</th>'
 								+'<th>上次检定日期</th>'
@@ -37,7 +37,7 @@ function queryuserlist(actionstr){
 
 					tablehtml += ('<tr>'
 									+'<td>'+(i + 1 + (parseInt($("#currpage").val())-1) * (parseInt($("#countline").val())))+'</td>'
-									+'<td><a href="#" title="'+(sbsyList[i].note?sbsyList[i].note:'')+'">'+(sbsyList[i].sbmc?sbsyList[i].sbmc:'暂无数据')+'</a></td>'
+									+'<td>'+(sbsyList[i].sbmc?(sbsyList[i].sbmc+'('+((sbsyList[i].ccbh?sbsyList[i].ccbh:'未知编号'))+')'):'暂无数据')+'</td>'
 									+'<td>'+(sbsyList[i].jgmc?sbsyList[i].jgmc:'未命名')+'</td>'
 									+'<td>'+(sbsyList[i].sbzt=="0"?'使用':(sbsyList[i].sbzt=="1"?'维修':'报废'))+'</td>'
 									+'<td>'+(sbsyList[i].jdrq?sbsyList[i].jdrq:'')+'</td>'
@@ -62,3 +62,23 @@ function greyback(){
 	$("#greyground").hide();
 	$("#loading").hide();
 }
+
+//数据导出
+function getfile(){
+	$.ajax({
+		url : "/DeviceManagement/tjcx/getfile/createfile.do?filetypecode=5",
+		type : "POST",
+		data : "",
+		success : function(data){
+			if(data.excelurl){
+				window.open("/DeviceManagement"+data.excelurl);
+			}else{
+				if(data.code=='201'){
+					alert(data.info);
+				}else{
+					alert("系统异常，请联系管理员！");
+				}
+			}
+		}
+	});
+} 

@@ -294,6 +294,7 @@ function drawsixlevel_cz(sblbList){
 				}
 			}
 			sblblist2[b].children = list3;
+			sblblist2[b].state = 'closed';
 			list2.push(sblblist2[b]);
 			}
 		}

@@ -1,5 +1,6 @@
 package dem.sbgl.service;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -82,6 +83,30 @@ public class SbglServiceImpl implements SbglService {
 
 		return map;
 	}
+	//设备入库信息修改
+	@Override
+	public Map<String, Object> updatesbrk(SbrkObject sbrkObject, String userid) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		
+		baseDao.update("dem.sbgl.mapper.SbglMapper.sbrk2Update",sbrkObject);
+		
+		int sum_sbrk = (Integer)baseDao.selectOne("dem.sbgl.mapper.SbglMapper.sbsyjlqueryone",sbrkObject);
+		if(sum_sbrk>0){
+			map.put("code", "202");
+			map.put("info", "无法修改！");
+			map.put("cannot", "当前设备信息已成为历史数据，存在使用记录，无法修改设备名称、型号、生产厂家、出厂编号！其他信息已修改！");
+			return map;
+		}
+		
+		baseDao.update("dem.sbgl.mapper.SbglMapper.sbrkUpdate",sbrkObject);
+		
+		baseDao.update("dem.sbgl.mapper.SbglMapper.sbflUpdate",sbrkObject);
+		map.put("code", "200");
+		map.put("info", "修改成功！");
+		map.put("sbmc", sbrkObject.getSbmc());
+
+		return map;
+	}
 
 	//设备使用记录查询
 	@Override
@@ -115,6 +140,20 @@ public class SbglServiceImpl implements SbglService {
 			String newUUID = (CommonUtil.getUUID()).toUpperCase();//产生UUID
 			sbsyObject.setXh(newUUID);
 			baseDao.insert("dem.sbgl.mapper.SbglMapper.sbsyinsert", sbsyObject);
+			
+			sbsyhisObject.setSbsylx(czlx);
+			sbsyObject.setSbzt("0");
+			sbsyhisObject.setCzr(sbsyObject.getAzr());
+			SbsyObject sbsyqueryobj = (SbsyObject)baseDao.selectOne("dem.sbgl.mapper.SbglMapper.sbsyqueryone", sbsyObject.getXh());
+			baseDao.update("dem.sbgl.mapper.SbglMapper.sbsyupdate", sbsyObject);//更新sbgl_sbsy使用记录表
+			sbsyhisObject.setXh(newUUID);
+			sbsyhisObject.setRkid(sbsyqueryobj.getRkid());
+			sbsyhisObject.setSbflid(sbsyqueryobj.getSbflid());
+			sbsyhisObject.setSbmc(sbsyqueryobj.getSbmc());
+			sbsyhisObject.setJgid(sbsyqueryobj.getJgid());
+			sbsyhisObject.setSbsylx(czlx);
+			baseDao.insert("dem.sbgl.mapper.SbglMapper.sbczinsert", sbsyhisObject);//sbgl_sbsy_his表添加设备操作记录
+			
 			responsesbmc = sbsyObject.getSbmc();
 		}else if(czlx.equals("5")){//操作类型为5修改，则只更新设备状态
 			SbsyObject sbsyqueryobj = (SbsyObject)baseDao.selectOne("dem.sbgl.mapper.SbglMapper.sbsyqueryone", sbsyObject.getXh());
@@ -176,6 +215,7 @@ public class SbglServiceImpl implements SbglService {
 			return map;
 		}
 		baseDao.delete("dem.sbgl.mapper.SbglMapper.sbsydelete",sbsyObject.getXh());
+		baseDao.delete("dem.sbgl.mapper.SbglMapper.sbsy2delete",sbsyObject.getXh());
 		map.put("code", "200");
 		map.put("info", "删除成功！");
 		map.put("sbmc", sbsyqueryobj.getSbmc());

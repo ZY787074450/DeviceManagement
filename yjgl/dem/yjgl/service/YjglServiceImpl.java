@@ -39,6 +39,20 @@ private BaseDao baseDao;
 		map.put("sum", sum);
 		return map;
 	}
+	
+	//设备库存预警查询
+	@Override
+	public Map<String, Object> sbkcyjlist2Query(PagingAction pagingAction, String userid) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		
+		List list = (List)baseDao.selectList("dem.yjgl.mapper.YjglMapper.sbkcyj2query",pagingAction);
+		int sum = (Integer)baseDao.selectOne("dem.yjgl.mapper.YjglMapper.sbkcyj2countquery", "");
+		map.put("code", "200");
+		map.put("info", "查询成功！");
+		map.put("sbsylist", list);
+		map.put("sum", sum);
+		return map;
+	}
 
 	//设备维护预警查询
 	@Override

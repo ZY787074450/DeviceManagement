@@ -2,15 +2,38 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="dem.yjgl.mapper.YjglMapper">
 <!-- 设备库存预警查询 -->
+<select id="sbkcyj2query" parameterType="dem.login.model.PagingAction" resultType="Map">
+	select sss1.fsbflid sbflid,sss2.sblbmc,sum(sss1.sbrksl) sbrksl,sum(sss1.sbsysl) sbsysl,sum(sss1.sbcjsl) sbcjsl,sss1.sbyjz
+	from (select s1.sbflid sbflid,s2.fsbflid fsbflid,s2.sblbmc sblbmc,s1.rksl sbrksl,s3.sysl sbsysl,s4.cjsl sbcjsl,(select yjz from ss_yjfl where jgid='0000' and yjid='1' limit 0,1) sbyjz
+		from (select sbflid,sum(rksl) rksl from sbgl_sbrk group by sbflid) s1 
+			left join ss_sbfl s2 on s1.sbflid=s2.sbflid
+			left join (select sbflid,count(*) sysl from sbgl_sbsy group by sbflid) s3 on s1.sbflid=s3.sbflid
+			left join (select sbflid,count(*) cjsl from sbgl_sbcj where sbzt='8' group by sbflid) s4 on s1.sbflid=s4.sbflid ) sss1
+		left join ss_sbfl sss2 on sss1.fsbflid=sss2.sbflid
+	group by sbflid
+	${sql_paging_sort}
+</select>
+<!-- 设备库存预警查询计数 -->
+<select id="sbkcyj2countquery" parameterType="String" resultType="int">
+	select count(distinct sss1.fsbflid) 
+	from (select s1.sbflid sbflid,s2.fsbflid fsbflid,s2.sblbmc sblbmc,s1.rksl sbrksl,s3.sysl sbsysl,s4.cjsl sbcjsl,(select yjz from ss_yjfl where jgid='0000' and yjid='1' limit 0,1) sbyjz
+		from (select sbflid,sum(rksl) rksl from sbgl_sbrk group by sbflid) s1 
+			left join ss_sbfl s2 on s1.sbflid=s2.sbflid
+			left join (select sbflid,count(*) sysl from sbgl_sbsy group by sbflid) s3 on s1.sbflid=s3.sbflid
+			left join (select sbflid,count(*) cjsl from sbgl_sbcj where sbzt='8' group by sbflid) s4 on s1.sbflid=s4.sbflid ) sss1
+		left join ss_sbfl sss2 on sss1.fsbflid=sss2.sbflid
+</select>
+
+<!-- 设备库存统计查询 -->
 <select id="sbkcyjquery" parameterType="dem.login.model.PagingAction" resultType="Map">
-	select s1.sbflid sbflid,s2.sblbmc sblbmc,s1.rksl sbrksl,s3.sysl sbsysl,s4.cjsl sbcjsl,(select yjz from ss_yjfl where jgid='0000' and yjid='1' limit 0,1) sbyjz
-	from (select sbflid,sum(rksl) rksl from sbgl_sbrk group by sbflid) s1 
+	select s1.sbflid sbflid,s2.sblbmc sblbmc,s1.sbmc sbmc,s1.sccj sccj,s1.ccbh ccbh,s1.sbxh sbxh,s1.rksl sbrksl,s3.sysl sbsysl,s4.cjsl sbcjsl,(select yjz from ss_yjfl where jgid='0000' and yjid='1' limit 0,1) sbyjz
+	from (select sbflid,sum(rksl) rksl,sbmc,sccj,ccbh,sbxh from sbgl_sbrk group by sbflid) s1 
 		left join ss_sbfl s2 on s1.sbflid=s2.sbflid
 		left join (select sbflid,count(*) sysl from sbgl_sbsy group by sbflid) s3 on s1.sbflid=s3.sbflid
 		left join (select sbflid,count(*) cjsl from sbgl_sbcj where sbzt='8' group by sbflid) s4 on s1.sbflid=s4.sbflid 
 	${sql_paging_sort}
 </select>
-<!-- 设备库存预警查询计数 -->
+<!-- 设备库存统计查询计数 -->
 <select id="sbkcyjcountquery" parameterType="String" resultType="int">
 	select count(*) from (select sbflid,sum(rksl) kcsl from sbgl_sbrk group by sbflid) s1
 </select>
@@ -39,9 +62,20 @@
 
 <!-- 设备检定预警查询 -->
 <select id="sbjdyjquery" parameterType="dem.login.model.PagingAction" resultType="Map">
-	select xh,rkid,sbflid,sbmc,sbgl_sbsy.jgid jgid,ss_jg.mc jgmc,sbsyr,sbzt,date_format(jdrq,'%Y年%m月%d日') jdrq,jdr,(select yjz from ss_yjfl where jgid='0000' and yjid='3' limit 0,1) yjz,TIMESTAMPDIFF(DAY,jdrq,now()) jdrqcz
+	select xh,rkid,sbgl_sbsy.sbflid sbflid,sbmc,sbzt,ss1.sbxh sbxh,ss1.sccj sccj,ss1.ccbh ccbh,sbgl_sbsy.jgid jgid,ss_jg.mc jgmc,sbsyr,sbzt,date_format(jdrq,'%Y年%m月%d日') jdrq,jdr,(select yjz from ss_yjfl where jgid='0000' and yjid='3' limit 0,1) yjz,TIMESTAMPDIFF(DAY,jdrq,now()) jdrqcz,(TIMESTAMPDIFF(DAY,jdrq,now())-(select yjz from ss_yjfl where jgid='0000' and yjid='3' limit 0,1)) ccyjz
 	from sbgl_sbsy left join ss_jg on sbgl_sbsy.jgid=ss_jg.jgid
+					left join (select sbflid,sbxh,sccj,ccbh from sbgl_sbrk group by sbflid) ss1 on ss1.sbflid = sbgl_sbsy.sbflid
 	where sbzt = '0'
+	order by jgid
+	${sql_paging_sort}
+</select>
+<!-- 设备检定预警查询数据导出 -->
+<select id="sbjdmsgquery" parameterType="dem.login.model.PagingAction" resultType="dem.tjcx.model.FileCreateObject">
+	select xh,rkid,sbgl_sbsy.sbflid sbflid,sbmc,sbzt,ss1.sbxh sbxh,ss1.sccj sccj,ss1.ccbh ccbh,sbgl_sbsy.jgid jgid,ss_jg.mc jgmc,sbsyr,sbzt,date_format(jdrq,'%Y年%m月%d日') jdrq,jdr,(select yjz from ss_yjfl where jgid='0000' and yjid='3' limit 0,1) yjz,TIMESTAMPDIFF(DAY,jdrq,now()) jdrqcz,(TIMESTAMPDIFF(DAY,jdrq,now())-(select yjz from ss_yjfl where jgid='0000' and yjid='3' limit 0,1)) ccyjz
+	from sbgl_sbsy left join ss_jg on sbgl_sbsy.jgid=ss_jg.jgid
+					left join (select sbflid,sbxh,sccj,ccbh from sbgl_sbrk group by sbflid) ss1 on ss1.sbflid = sbgl_sbsy.sbflid
+	where sbzt = '0'
+	order by jgid
 	${sql_paging_sort}
 </select>
 <!-- 设备检定预警查询计数 -->

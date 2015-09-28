@@ -38,6 +38,23 @@
 		max-height: 500px;
 		overflow: auto;
 	}
+	#update_msg{
+		position: absolute;
+		top: 20%;
+		left: 20%;
+		transform: translate(-50px, -10px);
+		display:none;
+		background-color: #E0F2F7;
+		filter: Alpha(Opacity=100);
+	 	-moz-opacity:1; 
+	    	opacity:1;
+		z-index:1112;
+		border: 1px solid black;
+		max-width: 800px;
+		max-height: 500px;
+		overflow: auto;
+		border-radius:10px;
+	}
 </style>
 <title>设备使用</title>
 </head>
@@ -100,6 +117,56 @@
 	</div>
 	<div id="greyground"><div></div></div>
 	<div id="loading"><font color="grey">数据正在处理，请稍等...</font></div>
+	
+	<div class="floatarea" id="update_msg">
+		<div style="background-color: #A7E8FA;height: 30px;padding: 5px 10px 0px 10px;"><span style="float: left;"><font color="#0088CC" size="+1">设备详细信息</font></span><span style="text-align: right;float: right;"><a href="#" onclick="greyback()"><img src="../commstyle/close_pic.png"></a></span></div>
+		<div style="padding: 10px 15px 10px 15px;">
+			<table>
+				<tr>
+					<td width="20%" align="right">设备名称：</td>
+					<td width="20%"><input type="text" placeholder="" class="sel" id="msgsbmc" autocomplete="off" readonly="readonly" /></td>
+					<td width="20%" align="right">设备状态：</td>
+					<td width="20%"><input type="text" placeholder="" class="sel" id="msgsbzt" autocomplete="off" readonly="readonly" /></td>
+					<td width="10%"></td>
+				</tr>
+				<tr>
+					<td align="right">使用站点编号：</td>
+					<td><input type="text" placeholder="" class="sel" id="msgjgid" autocomplete="off" readonly="readonly" /></td>
+					<td align="right">使用站点名称：</td>
+					<td><input type="text" placeholder="" class="sel" id="msgjgmc" autocomplete="off" readonly="readonly" /></td>
+					<td></td>
+				</tr>
+				<tr>
+					<td align="right">设备安装人：</td>
+					<td><input type="text" placeholder="" class="sel" id="msgazr" autocomplete="off" readonly="readonly" /></td>
+					<td align="right">安装日期：</td>
+					<td><input type="text" placeholder="" class="sel" id="msgazrq" autocomplete="off" readonly="readonly" /></td>
+					<td></td>
+				</tr>
+				<tr>
+					<td align="right">近期维修人：</td>
+					<td><input type="text" placeholder="" class="sel" id="msgwxr" autocomplete="off" readonly="readonly" /></td>
+					<td align="right">维修日期：</td>
+					<td><input type="text" placeholder="" class="sel" id="msgwxrq" autocomplete="off" readonly="readonly" /></td>
+					<td></td>
+				</tr>
+				<tr>
+					<td align="right">近期检定人：</td>
+					<td><input type="text" placeholder="" class="sel" id="msgjdr" autocomplete="off" readonly="readonly" /></td>
+					<td align="right">检定日期：</td>
+					<td><input type="text" placeholder="" class="sel" id="msgjdrq" autocomplete="off" readonly="readonly" /></td>
+					<td></td>
+				</tr>
+				<tr>
+					<td align="right">报废人：</td>
+					<td><input type="text" placeholder="" class="sel" id="msgbfr" autocomplete="off" readonly="readonly" /></td>
+					<td align="right">报废日期：</td>
+					<td><input type="text" placeholder="" class="sel" id="msgbfrq" autocomplete="off" readonly="readonly" /></td>
+					<td></td>
+				</tr>
+			</table>
+		</div>
+	</div>
 	<div id="greyground2"><div></div></div>
 	<div id="loading2"><font color="grey">数据选择中...</font></div>
 	
@@ -229,6 +296,7 @@
 			</table>
 		</div>
 	</div>
+	
 	<div class="floatarea" id="remove">
 		<div style="background-color: #A7E8FA;height: 30px;padding: 5px 10px 0px 10px;"><span style="float: left;"><font color="#0088CC" size="+1">删除设备使用记录</font></span><span style="text-align: right;float: right;"><a href="#" onclick="greyback()"><img src="../commstyle/close_pic.png"></a></span></div>
 		<div style="padding: 10px 15px 10px 15px;">
@@ -248,6 +316,8 @@
 			</table>
 		</div>
 	</div>
+	
+	
 
 </body>
 </html>

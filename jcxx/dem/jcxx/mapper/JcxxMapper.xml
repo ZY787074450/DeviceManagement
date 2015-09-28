@@ -266,7 +266,7 @@
 	select s1.sbflid sbflid,sbcj,fsbflid,sfzl,sblbmc,sbtpdz,sbxh,sbmc,ccbh,sccj
 	from ss_sbfl s1 left join (select sbflid,sbxh,sbmc,ccbh,sccj from sbgl_sbrk group by sbflid) s2 on s1.sbflid=s2.sbflid
 	where yxbz='Y' 
-	order by sbcj
+	order by sbflid
 </select>
 <!-- 获取当前分类下最大子类序号 -->
 <select id="getLastSbflid" parameterType="dem.jcxx.model.SbflwhObject" resultType="String">

@@ -41,7 +41,7 @@ function queryuserlist(actionstr){
 			disOrEnable();
 			var tablehtml = '<tr>'
 								+'<th>序号</th>'
-								+'<th>设备名称</th>'
+								+'<th>设备名称(出厂编号)</th>'
 								+'<th>设备使用站点</th>'
 								+'<th>设备使用类型</th>'
 								+'<th>设备操作人</th>'
@@ -52,9 +52,9 @@ function queryuserlist(actionstr){
 				for(var i=0;i<sbsyjlList.length;i++){
 					tablehtml += ('<tr>'
 									+'<td>'+(i + 1 + (parseInt($("#currpage").val())-1) * (parseInt($("#countline").val())))+'</td>'
-									+'<td><a href="#" title="'+(sbsyjlList[i].note?sbsyjlList[i].note:'')+'">'+(sbsyjlList[i].sbmc?sbsyjlList[i].sbmc:'暂无数据')+'</a></td>'
+									+'<td><a href="#" title="'+(sbsyjlList[i].note?sbsyjlList[i].note:'')+'">'+(sbsyjlList[i].sbmc?(sbsyjlList[i].sbmc+'('+((sbsyjlList[i].ccbh?sbsyjlList[i].ccbh:'未知编号'))+')'):'暂无数据')+'</a></td>'
 									+'<td>'+(sbsyjlList[i].jgmc?sbsyjlList[i].jgmc:'未命名')+'</td>'
-									+'<td>'+(sbsyjlList[i].sbsylx=="1"?'维修':(sbsyjlList[i].sbsylx=="2"?'报废':(sbsyjlList[i].sbsylx=="3"?'检定':'维护')))+'</td>'
+									+'<td>'+(sbsyjlList[i].sbsylx=="1"?'维修':(sbsyjlList[i].sbsylx=="2"?'报废':(sbsyjlList[i].sbsylx=="3"?'检定':(sbsyjlList[i].sbsylx=="0"?'安装':'维护'))))+'</td>'
 									+'<td>'+(sbsyjlList[i].czr?sbsyjlList[i].czr:'暂无数据')+'</td>'
 									+'<td>'+(sbsyjlList[i].czrq?sbsyjlList[i].czrq:'')+'</td>'
 								+'</tr>');

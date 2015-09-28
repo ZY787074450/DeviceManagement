@@ -16,7 +16,7 @@ $(document).ready(function(){
 
 function queryuserlist(actionstr){
 	greybackadd();
-	var urlparm = commask(actionstr,"jgid");
+	var urlparm = commask(actionstr,"whrq");
 	$.ajax({
 		url : "/DeviceManagement/zdgl/zdwh/cx.do?time="+new Date()+urlparm,
 		type : "POST",
@@ -78,6 +78,9 @@ function addjg(){
 	$("#addwhr").val("");
 	$("#addwhrq").val("");
 	$("#addnote").val("");
+	$("input[name='deparment_add']").each(function(){
+		$(this).removeAttr("checked");
+	});
 }
 function updatejg(jgid,jgmc){//打开更新区div
 	if(jgid == 'none'){

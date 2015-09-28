@@ -14,7 +14,7 @@ $(document).ready(function(){
 });
 function queryuserlist(actionstr){
 	greybackadd();
-	var urlparm = commask(actionstr,"jgid");
+	var urlparm = commask(actionstr,"wxrq");
 	$.ajax({
 		url : "/DeviceManagement/zdgl/zdwx/cx.do?time="+new Date()+urlparm,
 		type : "POST",
@@ -79,6 +79,9 @@ function addjg(){
 	$("#addwxrq").val("");
 	$("#addgzyy").val("");
 	$("#addnote").val("");
+	$("input[name='deparment_add']").each(function(){
+		$(this).removeAttr("checked");
+	});
 }
 function updatejg(jgid,jgmc){//打开更新区div
 	if(jgid == 'none'){

@@ -116,6 +116,9 @@ function openadd(){
 	$("#addwd").val("");
 	$("#addsd").val("");
 	$("#addqy").val("");
+	$("input[name='deparment_add']").each(function(){
+		$(this).removeAttr("checked");
+	});
 }
 
 //请求新增

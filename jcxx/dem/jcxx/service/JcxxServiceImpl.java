@@ -308,7 +308,7 @@ public class JcxxServiceImpl implements JcxxService {
 		String fileName = null;
 		if(sbflwhObject.getSbtpfile()!=null && sbflwhObject.getSbtpfile().getSize()>0){
 
-			if(!sbflwhObject.getSbtpfile().getName().endsWith(".jpg")){
+			if((!sbflwhObject.getSbtpfile().getContentType().endsWith("/jpeg")) && (!sbflwhObject.getSbtpfile().getContentType().endsWith("/jpg"))){
 				map.put("code", "202");
 				map.put("info", "图片格式不符合规定，上传失败！本次操作无效！");
 				map.put("sblbmc", sbflwhObject.getSblbmc());

@@ -20,7 +20,7 @@ function queryuserlist(actionstr){
 			disOrEnable();
 			var tablehtml = ('<tr>'
 								+'<th>序号</th>'
-								+'<th>设备类别名称</th>'
+								+'<th>设备名称(出厂编号)</th>'
 								+'<th>库存数量</th>'
 							+'</tr>');
 			if(data.sbsylist != null && data.sbsylist != 'null' && data.sbsylist.length>0){
@@ -29,7 +29,7 @@ function queryuserlist(actionstr){
 					var sbkc = ((sbsyList[i].sbrksl?parseInt(sbsyList[i].sbrksl):0)-(sbsyList[i].sbsysl?parseInt(sbsyList[i].sbsysl):0)-(sbsyList[i].sbcjsl?parseInt(sbsyList[i].sbcjsl):0));//设备库存
 					tablehtml += ('<tr>'
 									+'<td>'+(i + 1 + (parseInt($("#currpage").val())-1) * (parseInt($("#countline").val())))+'</td>'
-									+'<td>'+(sbsyList[i].sblbmc?sbsyList[i].sblbmc:'未知类别')+'</td>'
+									+'<td>'+(sbsyList[i].sbmc?(sbsyList[i].sbmc+'('+((sbsyList[i].ccbh?sbsyList[i].ccbh:'未知编号'))+')'):'暂无数据')+'</td>'
 									+'<td>'+sbkc+'</td>'
 								+'</tr>');
 				}

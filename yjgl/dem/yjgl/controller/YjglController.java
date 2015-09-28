@@ -41,7 +41,7 @@ public class YjglController {
 		Map<String, Object> m = new HashMap<String, Object>();
 		try {
 			String userid = ((Loginner)(request.getSession().getAttribute("session_loginner"))).getUserid();
-			m = yjglService.sbkcyjlistQuery(pagingAction,userid);	
+			m = yjglService.sbkcyjlist2Query(pagingAction,userid);	
 		} catch (Exception e) {
 			m.put("code", "888");
 			m.put("info", "查询失败");

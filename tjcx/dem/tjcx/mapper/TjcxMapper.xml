@@ -88,8 +88,8 @@
 	<if test='sbcj != "3"'>
 		select ss1.fid sbflid,ss2.sblbmc sblbmc,sum(rksl) rksl,sum(sbazsl) sbazsl,sum(sbcjsl) cjsl,sum(sbbfsl) sbbfsl,sum(sbjdcs) sbjdcs,sum(sbwxcs) sbwxcs from (
 	</if>
-	select s1.sbflid sbflid,substr(s1.sbflid,1,4) fid,s7.sblbmc sblbmc,s1.rksl rksl,ifnull(s2.azsl,0) sbazsl,ifnull(s3.cjsl,0) sbcjsl,ifnull(s4.bfsl,0) sbbfsl,ifnull(s5.jdcs,0) sbjdcs,ifnull(s6.wxcs,0) sbwxcs
-	from (select sbflid,sum(rksl) rksl
+	select s1.sbflid sbflid,substr(s1.sbflid,1,4) fid,s7.sblbmc sblbmc,s1.sbmc sbmc,s1.sccj sccj,s1.ccbh ccbh,s1.sbxh sbxh,s1.rksl rksl,ifnull(s2.azsl,0) sbazsl,ifnull(s3.cjsl,0) sbcjsl,ifnull(s4.bfsl,0) sbbfsl,ifnull(s5.jdcs,0) sbjdcs,ifnull(s6.wxcs,0) sbwxcs
+	from (select sbflid,sum(rksl) rksl,sbmc,sccj,ccbh,sbxh 
 			from sbgl_sbrk 
 			where 1=1 and cgrq is not null 
 			<if test="rq_start != null and rq_start != ''">

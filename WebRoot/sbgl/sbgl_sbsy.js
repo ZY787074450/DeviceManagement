@@ -36,7 +36,7 @@ $(document).ready(function(){
 function queryuserlist(actionstr){
 	greybackadd();
 	initCondition();
-	var urlparm = commask(actionstr,"azrq");
+	var urlparm = commask(actionstr,"azrq,sbflid");
 	$.ajax({
 		url : "/DeviceManagement/sbgl/sbsy/cx.do?time="+new Date()+urlparm,
 		type : "POST",
@@ -47,18 +47,12 @@ function queryuserlist(actionstr){
 			disOrEnable();
 			var tablehtml = '<tr>'
 								+'<th>序号</th>'
-								+'<th>设备名称</th>'
+								+'<th>设备名称(出厂编号)</th>'
 								+'<th>使用站点编号</th>'
 								+'<th>使用站点名称</th>'
 								+'<th>设备状态</th>'
-								+'<th>设备安装人</th>'
 								+'<th>安装时间</th>'
-								+'<th>近期维修人</th>'
-								+'<th>维修时间</th>'
-								+'<th>近期检定人</th>'
-								+'<th>检定时间</th>'
-								+'<th>报废人</th>'
-								+'<th>报废日期</th>'
+								+'<th>详情</th>'
 								+'<th>操作</th>'
 							+'</tr>';
 			if(data.sbsylist != null && data.sbsylist != 'null' && data.sbsylist.length>0){
@@ -66,18 +60,24 @@ function queryuserlist(actionstr){
 				for(var i=0;i<sbsyList.length;i++){
 					tablehtml += ('<tr>'
 									+'<td>'+(i + 1 + (parseInt($("#currpage").val())-1) * (parseInt($("#countline").val())))+'</td>'
-									+'<td>'+(sbsyList[i].sbmc?sbsyList[i].sbmc:'暂无数据')+'</td>'
+									+'<td>'+(sbsyList[i].sbmc?(sbsyList[i].sbmc+'('+((sbsyList[i].ccbh?sbsyList[i].ccbh:'未知编号'))+')'):'暂无数据')+'</td>'
 									+'<td>'+(sbsyList[i].jgid?sbsyList[i].jgid:'未知ID')+'</td>'
 									+'<td>'+(sbsyList[i].jgmc?sbsyList[i].jgmc:'未命名')+'</td>'
 									+'<td>'+(sbsyList[i].sbzt=="0"?'使用':(sbsyList[i].sbzt=="1"?'维修':'报废'))+'</td>'
-									+'<td>'+(sbsyList[i].azr?sbsyList[i].azr:'暂无数据')+'</td>'
 									+'<td>'+(sbsyList[i].azrq?sbsyList[i].azrq:'')+'</td>'
-									+'<td>'+(sbsyList[i].wxr?sbsyList[i].wxr:'')+'</td>'
-									+'<td>'+(sbsyList[i].wxrq?sbsyList[i].wxrq:'')+'</td>'
-									+'<td>'+(sbsyList[i].jdr?sbsyList[i].jdr:'')+'</td>'
-									+'<td>'+(sbsyList[i].jdrq?sbsyList[i].jdrq:'')+'</td>'
-									+'<td>'+(sbsyList[i].bfr?sbsyList[i].bfr:'')+'</td>'
-									+'<td>'+(sbsyList[i].bfrq?sbsyList[i].bfrq:'')+'</td>'
+									+'<td><a href="#" title="更多信息" onclick="updatediv(\''+(sbsyList[i].sbmc?sbsyList[i].sbmc:'暂无数据')+'\',\''
+																						  +(sbsyList[i].jgid?sbsyList[i].jgid:'未知ID')+'\',\''
+																						  +(sbsyList[i].jgmc?sbsyList[i].jgmc:'未命名')+'\',\''
+																						  +(sbsyList[i].sbzt=="0"?'使用':(sbsyList[i].sbzt=="1"?'维修':'报废'))+'\',\''
+																						  +(sbsyList[i].azr?sbsyList[i].azr:'暂无数据')+'\',\''
+																						  +(sbsyList[i].azrq?sbsyList[i].azrq:'')+'\',\''
+																						  +(sbsyList[i].wxr?sbsyList[i].wxr:'')+'\',\''
+																						  +(sbsyList[i].wxrq?sbsyList[i].wxrq:'')+'\',\''
+																						  +(sbsyList[i].jdr?sbsyList[i].jdr:'')+'\',\''
+																						  +(sbsyList[i].jdrq?sbsyList[i].jdrq:'')+'\',\''
+																						  +(sbsyList[i].bfr?sbsyList[i].bfr:'')+'\',\''
+																						  +(sbsyList[i].bfrq?sbsyList[i].bfrq:'')+'\')">'
+									+'详细信息</a></td>'
 									+((sbsyList[i].sbzt=="0"||sbsyList[i].sbzt=="1")?('<td><a href="#" title="修改" onclick="updatesbsy(\''+(sbsyList[i].xh?sbsyList[i].xh:'none')+'\',\''+(sbsyList[i].rkid?sbsyList[i].rkid:'')+'\',\''+(sbsyList[i].sbmc?sbsyList[i].sbmc:'')+'\')">'
 									+'<i class="icon-edit"></i></a> &nbsp;&nbsp; '
 									+'<a href="#" title="删除记录" onclick="removesbsy(\''+(sbsyList[i].xh?sbsyList[i].xh:'none')+'\',\''+(sbsyList[i].sbmc?sbsyList[i].sbmc:'')+'\')">'
@@ -117,6 +117,7 @@ function getsbrkjl(){
 				var jglist = data.jglist;
 				for(var i=0;i<jglist.length;i++){
 					var sbkcsl = (jglist[i].sbkc?jglist[i].sbkc:'0');
+					if(sbkcsl!='0'){
 					tablehtml1 += ('<tr>'
 									+'<td>'+(jglist[i].fsblbmc?jglist[i].fsblbmc:'未知')+'</td>'
 									+'<td>'+(jglist[i].sbmc?jglist[i].sbmc:'未知')+'</td>'
@@ -133,6 +134,7 @@ function getsbrkjl(){
 									+'<td>'+(jglist[i].sbkc?jglist[i].sbkc:'0')+'</td>'
 									+'<td>'+(sbkcsl=='0'?'':'<input type="radio" name="rkid_update" value="'+(jglist[i].rkid?jglist[i].rkid:'')+'" onchange="treegrid_radio_change_update(\''+(jglist[i].rkid?jglist[i].rkid:'')+'\',\''+(jglist[i].sbflid?jglist[i].sbflid:'')+'\',\''+(jglist[i].sbmc?jglist[i].sbmc:'')+'\')" />')+'</td>'
 								+'</tr>');
+					}
 				}
 			}
 			$("#data_table_add").html(tablehtml1);
@@ -195,6 +197,7 @@ function greyback(){
 	$("#add").hide();
 	$("#update").hide();
 	$("#remove").hide();
+	$("#update_msg").hide();
 }
 
 //打开添加记录div
@@ -213,6 +216,24 @@ function addsbsy(){
 	$("#addsbsyr").val("");
 	$("#addazr").val("");
 	$("#addnote").val("");
+}
+//打开详细信息div
+function updatediv(sbmc,jgid,jgmc,sbzt,azr,azrq,wxr,wxrq,jdr,jdrq,bfr,bfrq){
+	greybackadd();
+	$("#update_msg").show();
+	
+	$("#msgsbmc").val(sbmc);
+	$("#msgjgid").val(jgid);
+	$("#msgjgmc").val(jgmc);
+	$("#msgsbzt").val(sbzt);
+	$("#msgazr").val(azr);
+	$("#msgazrq").val(azrq);
+	$("#msgwxr").val(wxr);
+	$("#msgwxrq").val(wxrq);
+	$("#msgjdr").val(jdr);
+	$("#msgjdrq").val(jdrq);
+	$("#msgbfr").val(bfr);
+	$("#msgbfrq").val(bfrq);
 }
 //打开修改记录div
 function updatesbsy(xh,rkid,sbmc){
@@ -322,6 +343,7 @@ function removesbsyjl(){
 			}
 			greyback();
 			queryuserlist();
+			getsbrkjl();
 		}
 	});
 }

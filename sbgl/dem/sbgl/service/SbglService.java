@@ -12,6 +12,8 @@ public interface SbglService {
 
 	//设备入库
 	public Map<String, Object> addsbrk(SbrkObject sbrkObject, String userid);
+	//设备入库信息修改
+	public Map<String, Object> updatesbrk(SbrkObject sbrkObject, String userid);
 	
 	//设备入库记录查询
 	public Map<String, Object> sbrkcx(SbrkQueryCondition sbrkQueryCondition, String userid);

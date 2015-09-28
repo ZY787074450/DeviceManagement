@@ -64,13 +64,14 @@ public class TjcxServiceImpl implements TjcxService {
 	public Map<String, Object> createExcelFile(FileTypeObject fileTypeObject, SbsyHisObject sbsyHisObject, String userid) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		
-		String[] arr1 = {"dem.tjcx.mapper.TjcxMapper.sbsytj_zdquery","dem.tjcx.mapper.TjcxMapper.sbsytj_sbquery","dem.yjgl.mapper.YjglMapper.sbkcquery","dem.sbgl.mapper.SbglMapper.sbsyjldataquery"};//查询语句id数组
-		String[] arr2 = {"设备使用统计（站点）查询","设备使用统计（设备）查询","设备库存统计","设备使用记录"};//查询对应的功能
-		String[] arr3 = {"1","2","3","4"};//查询对应的请求类型数字
+		String[] arr1 = {"dem.tjcx.mapper.TjcxMapper.sbsytj_zdquery","dem.tjcx.mapper.TjcxMapper.sbsytj_sbquery","dem.yjgl.mapper.YjglMapper.sbkcquery","dem.sbgl.mapper.SbglMapper.sbsyjldataquery","dem.yjgl.mapper.YjglMapper.sbjdmsgquery"};//查询语句id数组
+		String[] arr2 = {"设备使用统计（站点）查询","设备使用统计（设备）查询","设备库存统计","设备使用记录","设备检定预警"};//查询对应的功能
+		String[] arr3 = {"1","2","3","4","5"};//查询对应的请求类型数字
 		String[] arr4 = {(this.getClass().getClassLoader().getResource("/").getPath()+"../../tjcx_model/sbsytjzd.xls"),
 						 (this.getClass().getClassLoader().getResource("/").getPath()+"../../tjcx_model/sbsytjsb.xls"),
 						 (this.getClass().getClassLoader().getResource("/").getPath()+"../../tjcx_model/sbkctj.xls"),
-						 (this.getClass().getClassLoader().getResource("/").getPath()+"../../tjcx_model/sbsyjl.xls")};//查询对应表格模板
+						 (this.getClass().getClassLoader().getResource("/").getPath()+"../../tjcx_model/sbsyjl.xls"),
+						 (this.getClass().getClassLoader().getResource("/").getPath()+"../../tjcx_model/sbjdyj.xls")};//查询对应表格模板
 		
 		String outFilePath =  this.getClass().getClassLoader().getResource("/").getPath()+"../../tjcx_xls/";
 		
@@ -78,6 +79,7 @@ public class TjcxServiceImpl implements TjcxService {
 		String asgArray2[] ={"sbflid","sblbmc","rksl","sbazsl","sbbfsl","sbjdcs","sbwxcs"};
 		String asgArray3[] ={"sbflid","sblbmc","sbrksl","sbsysl","sbkc"};
 		String asgArray4[] ={"sbflid","sbmc","jgid","jgmc","sbsylx","czr","czrq","note"};
+		String asgArray5[] ={"sbmc","sbxh","jgid","jgmc","sbzt","jdrq","yjz","ccyjz"};//
 		
 		String basepath = "/tjcx_xls/";
 		String filepath = "";
@@ -104,6 +106,9 @@ public class TjcxServiceImpl implements TjcxService {
 			}else if(arr3[3].equals(fileTypeObject.getFiletypecode())){
 				List<FileCreateObject> list  = baseDao.queryList(arr1[3],sbsyHisObject);
 				filepath = HSSFGenerator.ExcelInAndOutGenerator(arr4[3], outFilePath, asgArray4, list, FileCreateObject.class, 0, 1, 0);
+			}else if(arr3[4].equals(fileTypeObject.getFiletypecode())){
+				List<FileCreateObject> list  = baseDao.queryList(arr1[4],null);
+				filepath = HSSFGenerator.ExcelInAndOutGenerator(arr4[4], outFilePath, asgArray5, list, FileCreateObject.class, 0, 1, 0);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

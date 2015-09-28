@@ -15,6 +15,33 @@
 	insert into sbgl_sbrk(rkid,sbflid,sbmc,sbxh,sccj,ccbh,cgr,cgrq,rkrq,rksl,note) 
 	values(#{rkid},#{sbflid},#{sbmc},#{sbxh},#{sccj},#{ccbh},#{cgr},#{cgrq},#{rkrq},#{rksl},#{note})
 </insert>
+<update id="sbrkUpdate" parameterType="dem.sbgl.model.SbrkObject">
+	update sbgl_sbrk
+	set 
+		sbmc=#{sbmc},
+		sbxh=#{sbxh},
+		sccj=#{sccj},
+		ccbh=#{ccbh} 
+	where sbflid=#{sbflid}
+</update>
+<update id="sbrk2Update" parameterType="dem.sbgl.model.SbrkObject">
+	update sbgl_sbrk
+	set 
+		cgr=#{cgr},
+		cgrq=#{cgrq},
+		rkrq=#{rkrq},
+		rksl=#{rksl},
+		note=#{note} 
+	where rkid=#{rkid}
+</update>
+<update id="sbflUpdate" parameterType="dem.sbgl.model.SbrkObject">
+	update ss_sbfl
+	set sblbmc = #{sbmc}
+	where sbflid = #{sbflid}
+</update>
+<select id="sbsyjlqueryone" parameterType="dem.sbgl.model.SbrkObject" resultType="int">
+	select count(*) from sbgl_sbsy where sbflid = #{sbflid}
+</select>
 <!-- 设备入库记信息查询 -->
 <select id="sbrkquery" parameterType="dem.sbgl.model.SbrkQueryCondition" resultType="Map">
 	select rkid,s1.sbflid sbflid,s2.sblbmc sblbmc,s2.fsblbmc fsblbmc,sbmc,sbxh,sccj,ccbh,cgr,rksl,date_format(cgrq,'%Y年%m月%d日') cgrq,date_format(rkrq,'%Y年%m月%d日') rkrq,note
@@ -67,8 +94,9 @@
 </select>
 <!-- 查询设备使用记录(表sbgl_sbsy中记录) -->
 <select id="sbsyquery" parameterType="dem.sbgl.model.SbsyObject" resultType="Map">
-	select xh,rkid,sbflid,sbmc,sbgl_sbsy.jgid jgid,ss_jg.mc jgmc,sbsyr,sbzt,sbgl_sbsy.azr azr,date_format(sbgl_sbsy.azrq,'%Y年%m月%d日') azrq,jdr,date_format(sbgl_sbsy.jdrq,'%Y年%m月%d日') jdrq,wxr,date_format(sbgl_sbsy.wxrq,'%Y年%m月%d日') wxrq,bfr,date_format(sbgl_sbsy.bfrq,'%Y年%m月%d日') bfrq,whr,date_format(sbgl_sbsy.whrq,'%Y年%m月%d日') whrq,sbgl_sbsy.note note 
+	select xh,rkid,sbgl_sbsy.sbflid sbflid,sbmc,ss1.sccj sccj,ss1.ccbh ccbh,ss1.sbxh sbxh,sbgl_sbsy.jgid jgid,ss_jg.mc jgmc,sbsyr,sbzt,sbgl_sbsy.azr azr,date_format(sbgl_sbsy.azrq,'%Y年%m月%d日') azrq,jdr,date_format(sbgl_sbsy.jdrq,'%Y年%m月%d日') jdrq,wxr,date_format(sbgl_sbsy.wxrq,'%Y年%m月%d日') wxrq,bfr,date_format(sbgl_sbsy.bfrq,'%Y年%m月%d日') bfrq,whr,date_format(sbgl_sbsy.whrq,'%Y年%m月%d日') whrq,sbgl_sbsy.note note 
 	from sbgl_sbsy left join ss_jg on sbgl_sbsy.jgid=ss_jg.jgid
+					left join (select sbflid,sccj,ccbh,sbxh from sbgl_sbrk group by sbflid) ss1 on sbgl_sbsy.sbflid=ss1.sbflid
 	where 1 = 1 
 	<if test="jgid != null and jgid != ''">
 		and sbgl_sbsy.jgid like "%"#{jgid}"%" 
@@ -150,6 +178,10 @@
 <delete id="sbsydelete" parameterType="String">
 	delete from sbgl_sbsy where xh = #{xh}
 </delete>
+<!-- 设备使用历史记录删除 -->
+<delete id="sbsy2delete" parameterType="String">
+	delete from sbgl_sbsy_his where xh = #{xh}
+</delete>
 <!-- 设备操作记录新增，即：添加1维修、4维护、3检定、2报废操作的记录 -->
 <insert id="sbczinsert" parameterType="dem.sbgl.model.SbsyHisObject">
 	insert into sbgl_sbsy_his(xh,rkid,sbflid,sbmc,jgid,sbsylx,czr,czrq,note) 
@@ -158,8 +190,9 @@
 
 <!-- 查询设备使用操作记录(表sbgl_sbsy_his中记录) -->
 <select id="sbsyjlquery" parameterType="dem.sbgl.model.SbsyHisObject" resultType="Map">
-	select sbmc,sbgl_sbsy_his.jgid jgid,ss_jg.mc jgmc,sbsylx,czr,date_format(czrq,'%Y年%m月%d日') czrq,sbgl_sbsy_his.note note 
+	select sbgl_sbsy_his.sbflid sbflid,sbmc,ss1.sccj sccj,ss1.ccbh ccbh,ss1.sbxh sbxh,sbgl_sbsy_his.jgid jgid,ss_jg.mc jgmc,sbsylx,czr,date_format(czrq,'%Y年%m月%d日') czrq,sbgl_sbsy_his.note note 
 	from sbgl_sbsy_his left join ss_jg on sbgl_sbsy_his.jgid=ss_jg.jgid
+						left join (select sbflid,sccj,ccbh,sbxh from sbgl_sbrk group by sbflid) ss1 on sbgl_sbsy_his.sbflid=ss1.sbflid
 	where 1 = 1 
 	<if test="jgid != null and jgid != ''">
 		and sbgl_sbsy_his.jgid like "%"#{jgid}"%" 

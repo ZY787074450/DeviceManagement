@@ -372,7 +372,7 @@ function openSbxxTable(jgid){
 		type : "POST",
 		data : "&jgid="+jgid+"&sbzt=0",
 		success : function(data){
-			var tablehtml = '<table width="100%"><tr><th>设备名称</th>'
+			var tablehtml = '<table width="100%"><tr><th>设备名称(出厂编号)</th>'
 								+'<th>设备使用站点</th>'
 								+'<th>设备状态</th>'
 								+'<th>设备安装人</th>'
@@ -382,7 +382,7 @@ function openSbxxTable(jgid){
 				var sbsyList = data.sbsylist;
 				for(var i=0;i<sbsyList.length;i++){
 					tablehtml += ('<tr>'
-									+'<td>'+(sbsyList[i].sbmc?sbsyList[i].sbmc:'暂无数据')+'</td>'
+									+'<td>'+(sbsyList[i].sbmc?(sbsyList[i].sbmc+'('+((sbsyList[i].ccbh?sbsyList[i].ccbh:'未知编号'))+')'):'暂无数据')+'</td>'
 									+'<td>'+(sbsyList[i].jgmc?sbsyList[i].jgmc:'未命名')+'</td>'
 									+'<td>'+(sbsyList[i].sbzt=="0"?'使用':(sbsyList[i].sbzt=="1"?'维修':'报废'))+'</td>'
 									+'<td>'+(sbsyList[i].azr?sbsyList[i].azr:'暂无数据')+'</td>'

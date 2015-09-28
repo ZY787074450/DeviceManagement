@@ -82,6 +82,20 @@ public class SbglController {
 		}
 		return map;
 	}
+	//设备入库信息修改
+	@RequestMapping(value = "/sbrk/update.do", method = RequestMethod.POST,  produces = "application/json")
+	@ResponseBody
+	public Map<String, Object> sbrk_update(SbrkObject sbrkObject, HttpServletRequest request, HttpServletResponse response){
+		Map<String, Object> map = new HashMap<String, Object>();
+		try{
+			String userid = ((Loginner)(request.getSession().getAttribute("session_loginner"))).getUserid();
+			map = sbglService.updatesbrk(sbrkObject,userid);
+		}catch(Exception e){
+			map.put("code", "888");
+			map.put("info", "修改失败");
+		}
+		return map;
+	}
 	
 	//设备入库信息查询
 	@RequestMapping(value = "/sbrk/cx.do", method = RequestMethod.POST,  produces = "application/json")

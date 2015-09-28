@@ -32,7 +32,7 @@ $(document).ready(function(){
 function queryuserlist(actionstr){
 	greybackadd();
 	initCondition();
-	var urlparm = commask(actionstr,"lrrq@desc");
+	var urlparm = commask(actionstr,"userid,lrrq@desc");
 	$.ajax({
 		url : "/DeviceManagement/jcxx/rywh/cx.do?time="+new Date()+urlparm,
 		type : "POST",

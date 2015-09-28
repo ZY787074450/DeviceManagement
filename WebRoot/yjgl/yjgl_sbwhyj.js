@@ -9,7 +9,7 @@ $(document).ready(function(){
 
 function queryuserlist(actionstr){
 	greybackadd();
-	var urlparm = commask(actionstr,"");
+	var urlparm = commask(actionstr,"jgid");
 	$.ajax({
 		url : "/DeviceManagement/yjgl/sbwhyj/cx.do?time="+new Date()+urlparm,
 		type : "POST",
