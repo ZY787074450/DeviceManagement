@@ -368,7 +368,7 @@ function showJgxx(jgid){
 function openSbxxTable(jgid){
 	$("#sbxxtr").show();
 	$.ajax({
-		url : "/DeviceManagement/sbgl/sbsy/cx.do?time="+new Date(),
+		url : "/DeviceManagement/sbgl/sbsy/cx.do?time="+new Date()+"&sortname=sbflid",
 		type : "POST",
 		data : "&jgid="+jgid+"&sbzt=0",
 		success : function(data){

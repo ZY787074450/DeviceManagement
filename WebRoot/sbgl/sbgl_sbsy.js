@@ -36,7 +36,7 @@ $(document).ready(function(){
 function queryuserlist(actionstr){
 	greybackadd();
 	initCondition();
-	var urlparm = commask(actionstr,"azrq,sbflid");
+	var urlparm = commask(actionstr,"sbflid,azrq");
 	$.ajax({
 		url : "/DeviceManagement/sbgl/sbsy/cx.do?time="+new Date()+urlparm,
 		type : "POST",

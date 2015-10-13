@@ -91,12 +91,12 @@
 	select s1.sbflid sbflid,substr(s1.sbflid,1,4) fid,s7.sblbmc sblbmc,s1.sbmc sbmc,s1.sccj sccj,s1.ccbh ccbh,s1.sbxh sbxh,s1.rksl rksl,ifnull(s2.azsl,0) sbazsl,ifnull(s3.cjsl,0) sbcjsl,ifnull(s4.bfsl,0) sbbfsl,ifnull(s5.jdcs,0) sbjdcs,ifnull(s6.wxcs,0) sbwxcs
 	from (select sbflid,sum(rksl) rksl,sbmc,sccj,ccbh,sbxh 
 			from sbgl_sbrk 
-			where 1=1 and cgrq is not null 
+			where 1=1 and rkrq is not null 
 			<if test="rq_start != null and rq_start != ''">
-				and cgrq &gt; #{rq_start} 
+				and rkrq &gt; #{rq_start} 
 			</if>
 			<if test="rq_end != null and rq_end != ''">
-				and cgrq &lt; #{rq_end} 
+				and rkrq &lt; #{rq_end} 
 			</if>
 			group by sbflid) s1  
 		left join (select sbflid,count(*) azsl
@@ -165,12 +165,12 @@
 		</if>
 		select sbflid,sum(rksl) rksl,substr(sbflid,1,4) fid 
 			from sbgl_sbrk 
-			where 1=1 and cgrq is not null 
+			where 1=1 and rkrq is not null 
 			<if test="rq_start != null and rq_start != ''">
-				and cgrq &gt; #{rq_start} 
+				and rkrq &gt; #{rq_start} 
 			</if>
 			<if test="rq_end != null and rq_end != ''">
-				and cgrq &lt; #{rq_end} 
+				and rkrq &lt; #{rq_end} 
 			</if>
 			group by sbflid
 		<if test='sbcj != "3"'>
